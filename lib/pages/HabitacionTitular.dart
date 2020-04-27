@@ -29,7 +29,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> {
 
   Widget _numeroResrvacion(){
     return Container(
-      margin: EdgeInsets.all(20),
+      margin: EdgeInsets.all(10),
       alignment: Alignment.center,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
