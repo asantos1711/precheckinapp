@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:precheckin/pages/HabitacionTitular.dart';
+import 'package:precheckin/tools/translation.dart';
 
 class CodigoAcceso extends StatefulWidget {
+  String language;
+  CodigoAcceso(this.language);
   @override
   _CodigoAccesoState createState() => _CodigoAccesoState();
 }
@@ -13,9 +16,17 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
   double height;
   double width;
   double space;
+  String _language;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _language = this.widget.language;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     space =height/6;
@@ -65,7 +76,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
             },
             child: Container(
               child: Text(
-                'Ingresar', 
+                Translations.of(context).text('btn_ingresar'), 
                 style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800)
               )
             )
@@ -110,7 +121,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            'Ingrese su código de acceso', 
+            Translations.of(context).text('txt_ingresar'), 
             style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w500)
           )
         ]
@@ -126,7 +137,9 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           InkWell(
-            onTap: (){},
+            onTap: (){
+              Navigator.pop(context);
+            },
             splashColor: Colors.blue.withAlpha(70),
             child: Container(
               margin: EdgeInsets.all(20.0),
@@ -134,12 +147,19 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
                 color: Colors.transparent,
                 shape: BoxShape.circle
               ),
-              child: Image.asset('assets/images/mex_circle.png'),
+              child: _imagenBandera(),
             )
           ),
         ],
       )
     );
+  }
+
+  Widget _imagenBandera(){
+    if(_language == 'es')
+      return Image.asset('assets/images/mex_circle.png');
+    else if(_language == 'en')
+      return Image.asset('assets/images/usa_circle.png');
   }
 
   Widget _logo(){

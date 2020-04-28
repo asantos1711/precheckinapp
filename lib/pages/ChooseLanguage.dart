@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:precheckin/pages/CodigoAcceso.dart';
+import 'package:precheckin/tools/application.dart';
+import 'package:precheckin/tools/translation.dart';
+
+import 'CodigoAcceso.dart';
 
 class ChooseLanguage extends StatefulWidget {
   @override
@@ -8,31 +11,33 @@ class ChooseLanguage extends StatefulWidget {
 }
 
 class _ChooseLanguageState extends State<ChooseLanguage> {
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double space =height/6;
+    
     return Stack(
-      children: <Widget>[
-        Image.asset(
-            "assets/images/background.png",
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
-          ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          body: ListView(
-            physics: ScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: <Widget>[
-              SizedBox(height: space,),
-              _logo(),
-              _banderas()
-          ],
-        )
-      )
-      ],
-    );
+              Image.asset(
+                "assets/images/background.png",
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.cover,
+              ),
+              Scaffold(
+                backgroundColor: Colors.transparent,
+                body: ListView(
+                  physics: ScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  children: <Widget>[
+                    SizedBox(height: space,),
+                    _logo(),
+                    _banderas(),
+                ],
+              )
+            )
+            ],
+          );
     
   }
 
@@ -45,12 +50,13 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
         children: <Widget>[
           InkWell(
             onTap: (){
-              Navigator.push(
+              applic.onLocaleChanged(new Locale('en',''));
+                Navigator.push(
                 context, 
                 PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) => CodigoAcceso(),
+                    pageBuilder: (context, animation1, animation2) => CodigoAcceso('en'),
                 )
-              );
+              );  
             },
             splashColor: Colors.blue.withAlpha(70),
             child: Container(
@@ -64,12 +70,13 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
           ),
           InkWell(
             onTap: (){
-              Navigator.push(
+              applic.onLocaleChanged(new Locale('es',''));
+               Navigator.push(
                 context, 
                 PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) => CodigoAcceso(),
+                    pageBuilder: (context, animation1, animation2) => CodigoAcceso('es'),
                 )
-              );
+              );  
             },
             splashColor: Colors.blue.withAlpha(70),
             child: Container(
@@ -81,6 +88,8 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
               child: Image.asset('assets/images/mex_circle.png'),
             )
           )
+          ,
+          
         ],
       )
     );
