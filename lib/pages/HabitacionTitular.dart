@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:precheckin/pages/InformacionAdicional.dart';
 import 'package:precheckin/tools/translation.dart';
 
 class HabitacionTitular extends StatefulWidget {
@@ -81,7 +82,12 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         padding: EdgeInsets.all(8.0),
         splashColor: Colors.orange,
         onPressed: () {
-          /*...*/
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) => InformacionAdicional(),
+            )
+          );
         },
         child: Text(
           "Continuar",
