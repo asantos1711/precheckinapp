@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/HabitacionTitular.dart';
+import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/tools/translation.dart';
 
 class CodigoAcceso extends StatefulWidget {
@@ -17,11 +19,14 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
   double width;
   double space;
   String _language;
+  TextEditingController _codigoController;
 
   @override
   void initState() {
-    // TODO: implement initState
     _language = this.widget.language;
+    _codigoController = new TextEditingController(text: "2114607",);
+
+
     super.initState();
   }
 
@@ -67,12 +72,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
           InkWell(
             splashColor: Color.fromARGB(100, 255,255,255),
             onTap: (){
-              Navigator.push(
-                context, 
-                PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) => HabitacionTitular(),
-                )
-              );
+              _showReserva(context);
             },
             child: Container(
               child: Text(
@@ -84,6 +84,12 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
         ]
       )
     ); 
+  }
+
+  Future _showReserva(BuildContext contex) async {
+    PMSProvider provider = new PMSProvider(); //Provide PMS Services
+    Reserva infoReserva = await provider.dameReservacion(hotel: "0", idreserva: _codigoController.text);
+    Navigator.pushNamed(context, 'reserva',arguments: infoReserva.result); //Navegacion por nombre pasando argumentos.
   }
 
   Widget _textField(){
@@ -100,6 +106,8 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
                   ),
                   width: width-40,
                   child: TextField(
+                    controller: _codigoController,
+                    textAlign: TextAlign.center,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
