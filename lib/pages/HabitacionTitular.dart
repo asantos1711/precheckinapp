@@ -4,6 +4,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/pages/InformacionAdicional.dart';
 import 'package:precheckin/tools/translation.dart';
 
+import 'package:precheckin/providers/pms_provider.dart';
+import 'package:precheckin/providers/estado_provider.dart';
+import 'package:precheckin/models/reserva_model.dart';
+import 'package:precheckin/widgets/paises_widget.dart';
+import 'package:precheckin/widgets/estados_widget.dart';
+
 class HabitacionTitular extends StatefulWidget {
   @override
   _HabitacionTitularState createState() => _HabitacionTitularState();
@@ -20,19 +26,42 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   TextEditingController _controllerAdultos = new TextEditingController(text: '465');
   TextEditingController _controllerAdolocentes = new TextEditingController(text: '465');
   TextEditingController _controllerNinos = new TextEditingController(text: '465');
-  //TextEditingController _controllerNoReservacion = new TextEditingController(text: '465');
+  TextEditingController _controllerNombre = new TextEditingController();
+  TextEditingController _controllerPais = new TextEditingController();
+  TextEditingController _controllerEstado = new TextEditingController();
+  TextEditingController _controllerCiudad = new TextEditingController();
+  TextEditingController _controllerCP = new TextEditingController();
+  TextEditingController _controllerEmail = new TextEditingController();
+  TextEditingController _controllerTelfono = new TextEditingController();
+
+
   AnimationController _controller;
   static const List<String> _funcionList = const [ "1","2" ];
   Map<String,String> _opcionesFloat = new  Map<String,String>();
 
+
+
+  
+  Result _infoReserva;
+
+
+
   @override
   void initState() {
     super.initState();
+    
     _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+   
   }
   
+
+
+
+
   @override
   Widget build(BuildContext context) {
+    _infoReserva = ModalRoute.of(context).settings.arguments; //Obtiene la informacion que biene de los argumentos.
+    _inicializarDatos();//Inicializa las variables.
 
     _opcionesFloat["1"] = Translations.of(context).text('opcion_duda').toString();
     _opcionesFloat["2"] = Translations.of(context).text('opcion_error').toString();
@@ -50,24 +79,132 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
       child:Scaffold(
         appBar: _appBar(),
         floatingActionButton: _floatButton(),
-        body: ListView(
-          children: <Widget>[
-            _numeroReservacion(),
-            _llegadaSalida(),
-            _huespedes(),
-            _tipoHabitacion(),
-            _planViaje(),
-            _requeEspeciales(),
-            _infoTitular(),
-            _infoContacto(),
-            _infoVuelo(),
-            _buttonContinuar(),
-            Container( height: 30, color: Colors.white,)
-          ],
-        ),
+        body: _body(),
       )
     );
   }
+
+ 
+
+  void _inicializarDatos() {
+
+    _controllerNoReservacion.text = _infoReserva.id.toString();
+    _controllerLlegada.text = _infoReserva.fechaCheckin;
+    _controllerSalida.text = _infoReserva.fechaCheckout;
+    _controllerAdultos.text = _infoReserva.numeroAdultos.toString();
+    _controllerAdolocentes.text = _infoReserva.numeroAdolecentes.toString();
+    _controllerNinos.text = _infoReserva.numeroNinios.toString();
+    _controllerNombre.text = _infoReserva.nombreTitular;
+    _controllerPais.text = _infoReserva.pais;
+    _controllerEstado.text = _infoReserva.estado;
+    _controllerCiudad.text = _infoReserva.ciudad;
+    _controllerCP.text = _infoReserva.codigoPostal;
+    _controllerEmail.text = _infoReserva.email;
+    _controllerTelfono.text = _infoReserva.telefono;
+
+    _pais = (_pais == null) ? _infoReserva.pais : _pais; //Validacion para que cambie el valor del pais
+    _estado = (_estado == null) ? _infoReserva.estado : _estado; //Validacion para que cambie el valor del estado
+    
+
+    return null;
+  }
+
+
+
+  Widget _body() {
+    return ListView(
+      children: <Widget>[
+        _testPaises(),
+        _testEstado(),
+        _numeroReservacion(),
+        _llegadaSalida(),
+        _huespedes(),
+        _tipoHabitacion(),
+        _planViaje(),
+        _requeEspeciales(),
+        _infoTitular(),
+        _infoContacto(),
+        _infoVuelo(),
+        _buttonContinuar(),
+        Container( height: 30, color: Colors.white,)
+      ],
+    );
+
+  }
+
+
+
+
+
+  /*
+  *------------------------------
+  *------------------------------
+    TEST Widget: PaiesesWidget
+  *------------------------------
+  *------------------------------
+  */
+  String _pais;
+
+  Widget _testPaises(){
+    
+    return Container(
+      width: double.infinity,
+      child: PaisesWidget(
+        hotel:"0",
+        valorInicial: _pais,
+        change: (pais){
+          setState(() {
+            _pais = pais;
+          });
+        },
+      ),
+    );
+  }
+  /*
+  *------------------------------
+  *------------------------------
+  *------------------------------
+  *------------------------------
+  *------------------------------
+  *------------------------------
+  */
+
+  /*
+  *------------------------------
+  *------------------------------
+    TEST Widget: EstadosWidget
+  *------------------------------
+  *------------------------------
+  */
+  String _estado;
+
+  Widget _testEstado(){
+    
+    return Container(
+      width: double.infinity,
+      child: EstadosWidget(
+        hotel:"0",
+        pais: _pais,
+        valorInicial: _estado,
+        change: (estado){
+          setState(() {
+            _estado = estado;
+          });
+        },
+      ),
+    );
+  }
+  /*
+  *------------------------------
+  *------------------------------
+  *------------------------------
+  *------------------------------
+  *------------------------------
+  *------------------------------
+  */
+
+
+
 
   Widget _buttonContinuar(){
     return Container(
@@ -199,7 +336,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    child: Text('correo@correo.com',
+                    child: Text(_controllerEmail.text,
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
@@ -230,7 +367,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    child: Text('998155151',
+                    child: Text(_controllerTelfono.text,
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
@@ -284,6 +421,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   padding: EdgeInsets.only(right: 10),
                   width: (width-50)/2,
                   child: TextFormField(
+                    controller: _controllerNombre,
                     decoration: InputDecoration(
                       labelText: "Nombre"
                     ),
@@ -311,6 +449,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   padding: EdgeInsets.only(right: 10),
                   width: (width-50)/2,
                   child: TextFormField(
+                    controller: _controllerPais,
                     decoration: InputDecoration(
                       labelText: "País de residencia"
                     ),
@@ -320,6 +459,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   padding: EdgeInsets.only(left: 10),
                   width: (width-50)/2,
                   child: TextFormField(
+                    controller: _controllerEstado,
                     decoration: InputDecoration(
                       labelText: "Estado"
                     ),
@@ -338,6 +478,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   padding: EdgeInsets.only(right: 10),
                   width: (width-50)/2,
                   child: TextFormField(
+                    controller: _controllerCiudad,
                     decoration: InputDecoration(
                       labelText: "Ciudad"
                     ),
@@ -347,6 +488,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   padding: EdgeInsets.only(left: 10),
                   width: (width-50)/2,
                   child: TextFormField(
+                    controller: _controllerCP,
                     decoration: InputDecoration(
                       labelText: "Código Postal"
                     ),
@@ -384,7 +526,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             alignment: Alignment.centerLeft,
             child: Container(
               padding: EdgeInsets.only(left:10),
-              child: Text('Vista al mar*',
+              child: Text(_infoReserva.requerimientos,
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -393,7 +535,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             alignment: Alignment.centerLeft,
             child: Container(
               padding: EdgeInsets.only(left:10),
-              child: Text('Primer piso*',
+              child: Text(_infoReserva.requerimientos,
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -437,7 +579,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             alignment: Alignment.centerLeft,
             child: Container(
               padding: EdgeInsets.only(left:10),
-              child: Text('All-inclusive',
+              child: Text(_infoReserva.planViaje,
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -471,7 +613,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              child: Text('Two Bedroom',
+              child: Text(_infoReserva.tipoHabitacion,
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -512,7 +654,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerLeft,
                   child: Container(
                     child: Text(
-                      'n Adultos',
+                      '${_infoReserva.numeroAdultos} Adultos',
                       style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
                       )
                   ),
@@ -521,7 +663,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.center,
                   child: Container(
                     child: Text(
-                      'n Adolecentes',
+                      '${_infoReserva.numeroAdolecentes} Adolecentes',
                       style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
                       )
                   ),
@@ -530,7 +672,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerRight,
                   child: Container(
                     child: Text(
-                      'n Niños',
+                      '${_infoReserva.numeroNinios} Niños',
                       style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
                       )
                   ),
@@ -623,7 +765,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerLeft,
                   child: Container(
                     child: Text(
-                      '10/12/2020',
+                      _infoReserva.fechaCheckin,
                       style: TextStyle(fontSize: 18),
                       )
                   ),
@@ -632,7 +774,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerRight,
                   child: Container(
                     child: Text(
-                      '15/12/2020',
+                      _infoReserva.fechaCheckout,
                       style: TextStyle(fontSize: 18),
                       )
                   ),
@@ -669,7 +811,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              child: Text('1415156',
+              child: Text(
+                _infoReserva.id.toString(),
                 style: TextStyle(fontSize: 18),
               ),
             ),

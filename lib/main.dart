@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:precheckin/pages/ChooseLanguage.dart';
+import 'package:precheckin/routes/routes.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'tools/application.dart';
 
@@ -47,7 +48,8 @@ class _MyAppState extends State<MyApp> {
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: applic.supportedLocales(),
-      home: new MyHomePage(),
+      routes: getApplicationRoutes(),
+      initialRoute: "/",
     );
   }
 }
