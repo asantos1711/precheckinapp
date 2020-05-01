@@ -104,7 +104,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
     _pais = (_pais == null) ? _infoReserva.pais : _pais; //Validacion para que cambie el valor del pais
     _estado = (_estado == null) ? _infoReserva.estado : _estado; //Validacion para que cambie el valor del estado
-    
 
     return null;
   }
@@ -114,8 +113,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   Widget _body() {
     return ListView(
       children: <Widget>[
-        _testPaises(),
-        _testEstado(),
+        //_testPaises(),
+        //_testEstado(),
         _numeroReservacion(),
         _llegadaSalida(),
         _huespedes(),
@@ -145,10 +144,11 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   */
   String _pais;
 
-  Widget _testPaises(){
+  Widget _dropdownPaises(){
     
     return Container(
-      width: double.infinity,
+      width: (width-50)/2,
+      padding: EdgeInsets.only(top: 19, right: 10),
       child: PaisesWidget(
         hotel:"0",
         valorInicial: _pais,
@@ -178,10 +178,11 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   */
   String _estado;
 
-  Widget _testEstado(){
+  Widget _dropdownEstado(){
     
     return Container(
-      width: double.infinity,
+      width: (width-50)/2,
+      padding: EdgeInsets.only(top: 19, right: 10),
       child: EstadosWidget(
         hotel:"0",
         pais: _pais,
@@ -206,7 +207,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
 
 
-  Widget _buttonContinuar(){
+  Widget  _buttonContinuar(){
     return Container(
       width: width-20,
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
@@ -445,7 +446,9 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
+                _dropdownPaises(),
+                _dropdownEstado(),
+                /* Container(
                   padding: EdgeInsets.only(right: 10),
                   width: (width-50)/2,
                   child: TextFormField(
@@ -454,8 +457,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                       labelText: "País de residencia"
                     ),
                   )
-                ),
-                Container(
+                ), */
+                /* Container(
                   padding: EdgeInsets.only(left: 10),
                   width: (width-50)/2,
                   child: TextFormField(
@@ -464,7 +467,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                       labelText: "Estado"
                     ),
                   )
-                ),
+                ), */
               ],
             )
           ),

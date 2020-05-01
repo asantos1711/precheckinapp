@@ -1,5 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:precheckin/pages/ViewPoliRegla.dart';
+import 'package:precheckin/pages/ViewPromoInfo.dart';
+import 'package:precheckin/widgets/card_acompanante.dart';
+import 'package:precheckin/widgets/check_text_bold.dart';
+import 'package:precheckin/widgets/custom_signature.dart';
 import 'package:signature/signature.dart';
 
 class InformacionAdicional extends StatefulWidget {
@@ -11,7 +17,10 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   double width;
   double height;
   bool _promoInfoBool=false;
+  bool _recibirInfoBool=false;
   bool _poliReglaBool=false;
+  DateTime dateAco = new DateTime.now();
+  TextEditingController textController = new TextEditingController(text: ''); 
 
   final SignatureController _controller = SignatureController(penStrokeWidth: 5, penColor: Colors.red);
 
@@ -24,6 +33,11 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   _changePromoInfo(){
     setState(() {
       _promoInfoBool=!_promoInfoBool;
+    });
+  }
+  _changeRecibirInfo(){
+    setState(() {
+      _recibirInfoBool=!_recibirInfoBool;
     });
   }
   _changePoliRegla(){
@@ -44,6 +58,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
       },
       child:Scaffold(
+        backgroundColor: Colors.white,
         appBar: _appBar(),
         body: ListView(
             children: <Widget>[
@@ -52,93 +67,119 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
               _signatureTitular(),
               _docuTitular(),
               _tituloAcompa(),
-              _cardAcompa(),
+              _acompanantes(),
+              _agregarAco(),
+              Divider(height: 2,color: Colors.grey,),
+              _recibirInfo(),
+              _buttonFinalizar(),
+              SizedBox(height: 50,)
             ],
           ),
       )
     );
   }
 
-  Widget _cardAcompa(){
-    Color _blue = Color.fromARGB(255,63, 90, 166);
+  
+  Widget  _buttonFinalizar(){
     return Container(
-      child: Column(
+      width: width-20,
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+      color: Colors.white,
+      child:FlatButton(
+        color: Colors.deepOrange,
+        textColor: Colors.white,
+        disabledColor: Colors.grey,
+        disabledTextColor: Colors.black,
+        padding: EdgeInsets.all(8.0),
+        splashColor: Colors.grey,
+        onPressed: () {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) => InformacionAdicional(),
+            )
+          );
+        },
+        child: Text(
+          "Finalizar",
+          style: TextStyle(fontSize: 20.0),
+        ),
+      )
+    );
+  }
+
+  Widget _agregarAco(){
+    return Container(
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 10, bottom: 10),
+      width: width,
+      alignment: Alignment.center,
+      child: MaterialButton(
+        onPressed: () {},
+        color: Colors.blue,
+        textColor: Colors.white,
+        child: Icon(
+          FontAwesomeIcons.plus,
+          size: 24,
+        ),
+        padding: EdgeInsets.all(16),
+        shape: CircleBorder(),
+      )
+    );
+  }
+
+  Widget _recibirInfo(){
+    return Container(
+      //color: Colors.white,
+      margin: EdgeInsets.only(top:10),
+      width: width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(left: 10, right: 10),
-            width: width,
-            color: Colors.white,
-            //decoration: _decoration(),
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: width-30,
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: "No. De Vuelo"
-                    ),
-                  )
-                ),
-                Container(
-                  width: width-20,
-                  child: Row(
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          width: (width-30)/2,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: "Fecha de Salida"
-                            ),
-                          )
-                        )
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          width: (width-30)/2,
-                          child:Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text('Edad', style: TextStyle(fontWeight: FontWeight.w600),),
-                              SizedBox(height: 5,),
-                              Text('20 años')
-                            ],
-                          )
-                        )
-                      )
-                    ],
-                  )
-                ),
-              ],
-            )
+            alignment: Alignment.centerLeft,
+            width: 50,
+            child: Checkbox(
+              activeColor: Colors.blue,
+              value: _recibirInfoBool,
+              onChanged: (bo){
+                _changeRecibirInfo();
+              }
+            ),
           ),
-          _signatureTitular(),
           Container(
-            color: Colors.white,
-            width: width-20,
-            child:Row(
-              children: <Widget>[
-                Container(
-                  width: ((width-20)/3)*2,
-                  child: Text('Documento de identificación',style: TextStyle(color: Colors.blueAccent,fontSize: 18),)
-                ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  width: (width-20)/3,
-                  child: Icon(Icons.camera_alt, color: Colors.deepOrange,size: 30,)
-                )
-              ],
-            )
+            padding: EdgeInsets.only(right: 5),
+            width: width-50,
+            child: Text('Estoy de acuerdo en recibir información y promociones de nuestro Club Vacacional de manera electrónica y/o telefónica',),
           )
         ],
       )
+    );
+  }
+
+
+  Widget _acompanantes(){
+    return Column(
+      children: <Widget>[
+        Container(
+          child: CardAcompanante(
+            controllerText: textController,
+            date: dateAco,
+            signature: CustomSignature(
+              controller: _controller,
+            ),
+          )
+        ),
+         Container(
+          child: CardAcompanante(
+            date: dateAco,
+            controllerText: textController,
+            signature: CustomSignature(
+              controller: _controller,
+            ),
+          )
+        ) 
+      ],
     );
   }
 
@@ -206,7 +247,11 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
                   ),
                   recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    
+                    Navigator.push(context,
+                    PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) => ViewPoliRegla(),
+                      )
+                    );
                   }
                 )
               ]
@@ -218,6 +263,25 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   }
 
   Widget _promoInfo(){
+    /* return CheckTextBold(
+      checkbox:Checkbox(
+        activeColor: Colors.blue,
+        value: _promoInfoBool,
+        onChanged: (bo){
+          _changePromoInfo();
+        }
+      ),
+      text:'Acepto y autorizo el uso de mi correo para  ' ,
+      textBold: 'promociones e información',
+      onTap: (){
+        Navigator.push(
+        context,
+        PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) => ViewPromoInfo(),
+          )
+        );
+      },
+    ); */
     return Container(
       color: Colors.white,
       //padding: EdgeInsets.all(5),
@@ -251,7 +315,11 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
                   ),
                   recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    
+                    Navigator.push(context,
+                    PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) => ViewPromoInfo(),
+                      )
+                    );
                   }
                 )
               ]
@@ -259,7 +327,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
           )
         ],
       )
-    );
+    ); 
   }
 
   Widget _signatureTitular(){
@@ -273,38 +341,9 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
             padding: EdgeInsets.only(left: 10),
             child: Text('Ingresa firma de titular', style: TextStyle(fontSize: 20),)
           ),
-          Container(
-            margin: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 0),
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 2.0,color: Colors.grey
-              ),
-              borderRadius: BorderRadius.all(
-                  Radius.circular(0.0) //         <--- border radius here
-              ),
-            ),
-            child: Signature(
-              controller: _controller, 
-              height :100,
-              width: width-20,
-              backgroundColor: Colors.white
-            ),
-          ),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                FlatButton(
-                  color: Colors.white,
-                  onPressed: () {
-                    setState(() => _controller.clear());
-                  },
-                  child: Text('Limpiar')
-                )
-              ],
-            ),
-          ),
+          CustomSignature(
+            controller: _controller,
+          )
         ],
       )
     );

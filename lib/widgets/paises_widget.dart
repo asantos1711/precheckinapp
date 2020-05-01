@@ -48,6 +48,7 @@ class PaisesWidget extends StatelessWidget {
 
   Widget _crearDropDown() {
     return DropdownButton(
+      isExpanded: true,
       items: _getItems(),
       value: valorInicial,
       onChanged: change,
