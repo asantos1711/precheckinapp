@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/HabitacionTitular.dart';
+import 'package:precheckin/pages/InformacionAdicional.dart';
 import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/tools/translation.dart';
 
@@ -73,6 +74,12 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
             splashColor: Color.fromARGB(100, 255,255,255),
             onTap: (){
               _showReserva(context);
+              /* Navigator.push(
+                context,
+                PageRouteBuilder(
+                    pageBuilder: (context, animation1, animation2) => InformacionAdicional(),
+                )
+              ); */
             },
             child: Container(
               child: Text(
