@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:precheckin/models/commons/acompaniantes_model.dart';
+import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
 import 'package:precheckin/pages/ViewPoliRegla.dart';
 import 'package:precheckin/pages/ViewPromoInfo.dart';
@@ -23,6 +25,9 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   bool _poliReglaBool = false;
   DateTime dateAco = new DateTime.now();
   TextEditingController textController = new TextEditingController(text: '');
+  Reserva _reserva;  
+
+
 
   final SignatureController _controller =
       SignatureController(penStrokeWidth: 5, penColor: Colors.red);
@@ -35,6 +40,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   @override
   Widget build(BuildContext context) {
+    _reserva = ModalRoute.of(context).settings.arguments;
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return GestureDetector(
@@ -133,25 +139,37 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   Widget _acompanantes() {
     return Column(
-      children: <Widget>[
-        Container(
-            child: CardAcompanante(
-          controllerText: textController,
-          date: dateAco,
-          signature: CustomSignature(
-            controller: _controller,
-          ),
-        )),
-        Container(
-            child: CardAcompanante(
-          date: dateAco,
-          controllerText: textController,
-          signature: CustomSignature(
-            controller: _controller,
-          ),
-        ))
-      ],
+      children: _listaAcompaniantes(),
     );
+  }
+
+
+  /*
+  Forma un Widgtet CardAcompaniantes por
+  cada uno de los acompaniantes que bienen
+  del servicio.
+  */
+  List<Widget> _listaAcompaniantes(){
+    List<Widget> widgets = [];
+
+    _reserva.result.acompaniantes.forEach( (acompaniante){
+
+      Widget widget = Container(
+        child: CardAcompanante(
+          date: dateAco,
+          controllerText: textController,
+          signature: CustomSignature(
+            controller: _controller,
+          ),
+        )
+      );
+
+      widgets..add(widget)
+             ..add(Divider(height: 40.0,color: Colors.black,));
+
+    } );
+    
+    return widgets;
   }
 
   Widget _tituloAcompa() {

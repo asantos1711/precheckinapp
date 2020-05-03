@@ -96,7 +96,8 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
   Future _showReserva(BuildContext contex) async {
     PMSProvider provider = new PMSProvider(); //Provide PMS Services
     Reserva infoReserva = await provider.dameReservacionByQR(hotel: "0", qr: _codigoController.text);
-    Navigator.pushNamed(context, 'reserva', arguments: infoReserva); //Navegacion por nombre pasando argumentos.
+    if(infoReserva != null)
+      Navigator.pushNamed(context, 'reserva', arguments: infoReserva); //Navegacion por nombre pasando argumentos.
   }
 
   Widget _textField(){

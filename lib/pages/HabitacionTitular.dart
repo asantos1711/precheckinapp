@@ -801,7 +801,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
 
 
-          Navigator.pushNamed(context, 'InformacionAdicional', arguments: _reserva);
+          Navigator.pushNamed(context, 'infoAdicional', arguments: _reserva);
 
 
          
