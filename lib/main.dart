@@ -47,6 +47,7 @@ class _MyAppState extends State<MyApp> {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
+      debugShowCheckedModeBanner: false,
       supportedLocales: applic.supportedLocales(),
       routes: getApplicationRoutes(),
       initialRoute: "/",

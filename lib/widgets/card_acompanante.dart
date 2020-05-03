@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:signature/signature.dart';
 
+/*
+Concidera cambiar este widget por un StateLess para que se encarge solo de pintar el
+los componentes y la funcionalidad la puedes manejar pasando funciones por rererencia,
+
+Falta el parámetro para poner el nombre.
+El widget para seleccionar aparece en ingles cuando selecciono español.
+*/
+
+
+
+
+
 class CardAcompanante extends StatefulWidget {
 Color primaryColor ;
 Widget signature;
@@ -24,6 +36,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
   Widget _signature;
   DateTime _date = DateTime.now();
   TextEditingController _controllerText;
+
   @override
   void initState() {
     // TODO: implement initState

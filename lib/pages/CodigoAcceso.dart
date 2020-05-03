@@ -25,7 +25,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
   @override
   void initState() {
     _language = this.widget.language;
-    _codigoController = new TextEditingController(text: "2114607",);
+    _codigoController = new TextEditingController(text: "QR1234-0",);
 
 
     super.initState();
@@ -95,8 +95,9 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
 
   Future _showReserva(BuildContext contex) async {
     PMSProvider provider = new PMSProvider(); //Provide PMS Services
-    Reserva infoReserva = await provider.dameReservacion(hotel: "0", idreserva: _codigoController.text);
-    Navigator.pushNamed(context, 'reserva',arguments: infoReserva.result); //Navegacion por nombre pasando argumentos.
+    Reserva infoReserva = await provider.dameReservacionByQR(hotel: "0", qr: _codigoController.text);
+    if(infoReserva != null)
+      Navigator.pushNamed(context, 'reserva', arguments: infoReserva); //Navegacion por nombre pasando argumentos.
   }
 
   Widget _textField(){
