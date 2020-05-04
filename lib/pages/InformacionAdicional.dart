@@ -26,6 +26,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   DateTime dateAco = new DateTime.now();
   TextEditingController textController = new TextEditingController(text: '');
   Reserva _reserva;  
+  Map<Acompaniantes,SignatureController> mapControllerSiganture = Map<Acompaniantes,SignatureController>();
 
 
 
@@ -90,6 +91,8 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
           padding: EdgeInsets.all(8.0),
           splashColor: Colors.grey,
           onPressed: () {
+
+
             print('_poliReglaBool '+_poliReglaBool.toString());            /*  */
             print('_poliReglaBool '+_promoInfoBool.toString());            /*  */
             print('_recibirInfoBool '+_recibirInfoBool.toString());            /*  */
@@ -153,19 +156,18 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     List<Widget> widgets = [];
 
     _reserva.result.acompaniantes.forEach( (acompaniante){
-
-      Widget widget = Container(
-        child: CardAcompanante(
+      SignatureController _controllerSignature = new SignatureController();
+      mapControllerSiganture[acompaniante] = _controllerSignature;
+      Widget widget = CardAcompanante(
           date: dateAco,
-          controllerText: textController,
+          acompaniante: acompaniante,
+          //controllerText: textController,
           signature: CustomSignature(
-            controller: _controller,
+            controller: _controllerSignature,
           ),
-        )
       );
 
-      widgets..add(widget)
-             ..add(Divider(height: 40.0,color: Colors.black,));
+      widgets..add(widget);
 
     } );
     
