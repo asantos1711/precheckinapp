@@ -4,6 +4,7 @@ import 'package:precheckin/styles/styles.dart';
 
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/models/reserva_model.dart';
+import 'package:precheckin/utils/hotel_utils.dart';
 import 'package:precheckin/widgets/paises_widget.dart';
 import 'package:precheckin/widgets/estados_widget.dart';
 
@@ -413,7 +414,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             alignment: Alignment.centerLeft,
             child: Container(
               padding: EdgeInsets.only(left:10),
-              child: Text(_reserva.result.planViaje,
+              child: Text(getClavePlan(_reserva.result.idClub.toString(), _reserva.plana),
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -427,54 +428,37 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   Widget _requeEspeciales(){
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
-      width: (width-40),
-      //decoration: _decoration(),
-      alignment: Alignment.center,
+      width: (width - 40),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(
-                'Requerimientos especiales',
-                style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                )
-            ),
-          ),
-          SizedBox(height: 5,),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: EdgeInsets.only(left:10),
-              child: Text(_reserva.result.requerimientos,
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: EdgeInsets.only(left:10),
-              child: Text(_reserva.result.requerimientos,
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          ),
-          SizedBox(height: 5,),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              //padding: EdgeInsets.only(left:10),
-              child: Text('*Sujeto a disponibilidad',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
-              ),
-            ),
-          ),
-        ],
+        children: _listaEspecialRequest(),
       )
     );
+  }
+
+  List<Widget> _listaEspecialRequest() {
+    List<Widget> widgets = [];
+
+    widgets..add(Text('Requerimientos especiales',style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16)))
+            ..add(SizedBox(height: 10.0));
+
+    _reserva.especialRequest.forEach( (r){
+      Widget widget = Text("${r.subcategoria}*");
+
+      widgets..add(widget)
+              ..add(SizedBox(height: 10.0));
+    });
+
+    widgets.add(
+      Container(
+        width: double.infinity,
+        child: Text('*Sujeto adisponibilidad',style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16), textAlign: TextAlign.end)
+      )
+            
+    );
+
+    return widgets;
   }
 
   Widget _infoTitular(){
