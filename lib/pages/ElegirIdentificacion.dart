@@ -17,7 +17,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
   String nameItem ;
   int idItem ;
   
-  List<TipoDoc> docList = [
+   List<TipoDoc> docList = [
     TipoDoc(
       index: 0,
       name: "Pasaporte",
@@ -97,20 +97,22 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
                     alignment: Alignment.centerRight,
                     child: InkWell(
                       onTap:(){
-                        setState(() {
+                        //setState(() {
                           nameItem = doc.name;
-                          idItem = index;
-                          docList[index].icon = Icon(FontAwesomeIcons.checkCircle);
-                          //setState(() {
-                          /* docList.forEach((d){
-                            if(d.index!=index){
+                          idItem = item;
+                          //docList[idItem].icon = Icon(FontAwesomeIcons.checkCircle);
+                          setState(() {
+                           docList.forEach((d){
+                            if(d.index!=item){
                               d.icon = Icon(FontAwesomeIcons.circle);
+                            }else{
+                              d.icon = Icon(FontAwesomeIcons.checkCircle, color: Colors.green,);
                             }
-                          }); */
+                          }); 
                         });
                       },
                       splashColor: Colors.grey,
-                      child: Icon(FontAwesomeIcons.circle)
+                      child: doc.icon
                     ),
                   ),
                 ],
@@ -173,6 +175,8 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         padding: EdgeInsets.all(8.0),
         splashColor: Colors.orange,
         onPressed: () {
+          print('idItem ${idItem.toString()}');
+          print('idItem ${nameItem.toString()}');
           /* Navigator.push(
             context,
             PageRouteBuilder(
