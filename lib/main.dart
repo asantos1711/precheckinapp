@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:precheckin/pages/ChooseLanguage.dart';
+import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/routes/routes.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'tools/application.dart';
 
 
-void main() => runApp(new MyApp());
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  final qrPersistence = new QRPersistence();
+  await qrPersistence.initPref();
+
+
+  runApp(new MyApp());
+} 
+  
 
 class MyApp extends StatefulWidget {
   @override
@@ -15,16 +25,17 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   SpecificLocalizationDelegate _localeOverrideDelegate;
+  QRPersistence _qrPersistence = new QRPersistence();
 
   @override
   void initState(){
     super.initState();
     _localeOverrideDelegate = new SpecificLocalizationDelegate(null);
-    ///
-    /// Let's save a pointer to this method, should the user wants to change its language
-    /// We would then call: applic.onLocaleChanged(new Locale('en',''));
-    /// 
     applic.onLocaleChanged = onLocaleChange;
+
+
+    
+
   }
 
   onLocaleChange(Locale locale){
@@ -36,6 +47,10 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    print("QR Almacenados ${_qrPersistence.qr}");
+
+
     return new MaterialApp(
       title: 'My Application',
       theme: new ThemeData(
@@ -54,6 +69,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
 
 class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => new _MyHomePageState();

@@ -19,7 +19,7 @@ class PMSProvider {
   Future<Reserva> dameReservacion({String hotel="0", String idreserva}) async {
     final uri      = 'http://10.194.18.59:8081/GroupSunsetPMSProxyServices/pms/dameReservacion';
     final headers  = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8","Accept": "application/json"};
-    final  body    = { 'pnohotel': hotel, 'idreserva': idreserva };
+    final  body    = { 'pnohotel': hotel, 'idreserva': "2114605" };
     Reserva reserva;
 
 
@@ -46,10 +46,10 @@ class PMSProvider {
   ///de la reservación. Requiere de los parámetros: String [hotel], es
   ///el número de hotel que se consulata y String [qr], es
   ///el identificador de la reservación a consultar.
-  Future<Reserva> dameReservacionByQR({String hotel="0", String qr}) async {
+  Future<Reserva> dameReservacionByQR(String qr) async {
     final uri      = 'http://10.194.18.59:8081/GroupSunsetPMSProxyServices/pms/dameReservacionByQrkey';
     final headers  = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8","Accept": "application/json"};
-    final  body    = { 'pnohotel': hotel, 'qrkey': qr };
+    final  body    = {'qrkey': qr };
     Reserva reserva;
 
 
