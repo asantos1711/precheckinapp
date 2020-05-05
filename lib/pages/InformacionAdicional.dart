@@ -90,13 +90,31 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
           disabledTextColor: Colors.black,
           padding: EdgeInsets.all(8.0),
           splashColor: Colors.grey,
-          onPressed: () {
-
-
+          onPressed: () async{
+            //var data, data1;
+            _reserva.result.acompaniantes.forEach( (acompaniante){
+              print("Acompañante");
+              print("Fecha Nac:${acompaniante.fechanac.toString()}");
+              print("Edad:${acompaniante.edad.toString()}");
+            });
             print('_poliReglaBool '+_poliReglaBool.toString());            /*  */
             print('_poliReglaBool '+_promoInfoBool.toString());            /*  */
             print('_recibirInfoBool '+_recibirInfoBool.toString());            /*  */
-            print('_avisoPrivaBool '+_avisoPrivaBool.toString());            /*  */
+            print('_avisoPrivaBool '+_avisoPrivaBool.toString());   
+            
+              
+            /* data = await mapControllerSiganture[_reserva.result.acompaniantes[0]].toPngBytes();
+            data1 = await mapControllerSiganture[_reserva.result.acompaniantes[1]].toPngBytes();
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return Scaffold(
+                    appBar: AppBar(),
+                    body: Center(child: Container(color: Colors.grey[300], child: Column(children: <Widget>[Image.memory(data),Image.memory(data1)],))),
+                  );
+                },
+              ),
+            ); */
           },
           child: Text(
             "Finalizar",
@@ -157,11 +175,10 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
     _reserva.result.acompaniantes.forEach( (acompaniante){
       SignatureController _controllerSignature = new SignatureController();
+      //Mapa de los controllersde las Firmas para cada acompañante
       mapControllerSiganture[acompaniante] = _controllerSignature;
       Widget widget = CardAcompanante(
-          date: dateAco,
           acompaniante: acompaniante,
-          //controllerText: textController,
           signature: CustomSignature(
             controller: _controllerSignature,
           ),

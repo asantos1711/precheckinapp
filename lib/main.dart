@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:precheckin/pages/ChooseLanguage.dart';
+import 'package:precheckin/pages/identificacion/PrimerDocumento.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/routes/routes.dart';
 import 'package:precheckin/tools/translation.dart';
@@ -79,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage>{
   @override
   Widget build(BuildContext context){
     return new Scaffold(
-      body: ChooseLanguage(),
+      body: PrimerDocumento(),
     );
   }
 }

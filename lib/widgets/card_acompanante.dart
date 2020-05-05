@@ -1,3 +1,4 @@
+import 'package:age/age.dart';
 import 'package:flutter/material.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:signature/signature.dart';
@@ -17,12 +18,10 @@ El widget para seleccionar aparece en ingles cuando selecciono español.
 class CardAcompanante extends StatefulWidget {
 Color primaryColor ;
 Widget signature;
-DateTime date;
 Acompaniantes acompaniante;
 TextEditingController controllerText;
 CardAcompanante(
   {
-    this.date,
     @required this.signature,
     this.primaryColor,
     @required this.acompaniante,
@@ -39,8 +38,8 @@ class _CardAcompananteState extends State<CardAcompanante> {
   Widget _signature;
   Acompaniantes _acompaniante;
   DateTime _date = DateTime.now();
-  TextEditingController _controllerText;
-  TextEditingController _controllerFechaEdad;
+  TextEditingController _controllerText= new TextEditingController();
+  TextEditingController _controllerFechaEdad = new TextEditingController();
   DateTime _fecaNac = DateTime.now();
   @override
   void initState() {
@@ -49,7 +48,8 @@ class _CardAcompananteState extends State<CardAcompanante> {
     _acompaniante =  this.widget.acompaniante;
     _fecaNac =  DateTime.parse(_acompaniante.fechanac.replaceAll('-', ""));
     _date =  _fecaNac;
-    
+    _controllerText.text = _acompaniante?.nombre;
+    print("FECHA NACIMIENTO ===" +_fecaNac.toString());
     super.initState();
   }
 
@@ -57,21 +57,23 @@ class _CardAcompananteState extends State<CardAcompanante> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: _fecaNac,
-        firstDate: _date,
+        firstDate: DateTime(1910),
         lastDate: DateTime(2101));
     if (picked != null && picked != _date)
       setState(() {
         _fecaNac = picked;
-        _controllerText.text = _fecaNac.toString();
+        _acompaniante.fechanac =_fecaNac.toString();
+        _acompaniante.edad =Age.dateDifference(fromDate: _fecaNac, toDate: DateTime.now(), includeToDate: false).years.toString(); 
+        print("EDAD==="+_acompaniante.edad);
+        _controllerFechaEdad.text = "${_fecaNac.day.toString()}/${_fecaNac.month.toString()}/${_fecaNac.year.toString()}";
       });
   }
 
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
-    _controllerText = new TextEditingController(text: _acompaniante?.nombre);
-    _controllerFechaEdad = new TextEditingController(text: _fecaNac.toString());
-    print('valor '+_fecaNac.toString());
+    _controllerFechaEdad.text = "${_fecaNac.day.toString()}/${_fecaNac.month.toString()}/${_fecaNac.year.toString()}";
+    //_controllerFechaEdad = new TextEditingController(text: _fecaNac.toString());
     return Container(
       child: Column(
         children: <Widget>[
@@ -84,49 +86,13 @@ class _CardAcompananteState extends State<CardAcompanante> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  width: width-30,
-                  child: TextFormField(
-                    controller: _controllerText,
-                    decoration: InputDecoration(
-                      labelText: 'Nombre'
-                    ),
-                  )
-                ),
+                _nombre(),
                 Container(
                   width: width-20,
                   child: Row(
                     children: <Widget>[
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          width: (width-30)/2,
-                          child: TextFormField(
-                            controller: _controllerFechaEdad,
-                            decoration: InputDecoration(
-                              labelText: "Fecha de nacimiento"
-                            ),
-                            readOnly: true,
-                            onTap:()=> _selectDate(context),
-                          )
-                        )
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          width: (width-30)/2,
-                          child:Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text('Edad ', style: TextStyle(fontWeight: FontWeight.w600),),
-                              SizedBox(height: 5,),
-                              Text('${_acompaniante?.edad??0} años')
-                            ],
-                          )
-                        )
-                      )
+                      _fechaNacimiento(),
+                      _edad()
                     ],
                   )
                 ),
@@ -156,5 +122,51 @@ class _CardAcompananteState extends State<CardAcompanante> {
     );
   }
 
+  Widget _nombre(){
+    return Container(
+      width: width-30,
+      child: TextFormField(
+        controller: _controllerText,
+        decoration: InputDecoration(
+          labelText: 'Nombre'
+        ),
+      )
+    );
+  }
+  Widget _fechaNacimiento(){
+    return Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          width: (width-30)/2,
+          child: TextFormField(
+            controller: _controllerFechaEdad,
+            decoration: InputDecoration(
+              labelText: "Fecha de nacimiento"
+            ),
+            readOnly: true,
+            onTap:()=> _selectDate(context),
+          )
+        )
+      );
+  }
+  
+  Widget _edad(){
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Container(
+        alignment: Alignment.centerRight,
+        width: (width-30)/2,
+        child:Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text('Edad ', style: TextStyle(fontWeight: FontWeight.w600),),
+            SizedBox(height: 5,),
+            Text('${_acompaniante?.edad??0} años')
+          ],
+        )
+      )
+    );
+  }
   
 }

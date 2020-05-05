@@ -30,6 +30,8 @@ dependencies:
   provider: any
   shared_preferences: any
   signature: any
+  age: ^0.0.1
+  mrzflutterplugin: ^0.1.1
 
 dev_dependencies:
   flutter_test:
