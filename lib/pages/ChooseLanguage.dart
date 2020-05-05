@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/tools/application.dart';
 import 'package:precheckin/tools/translation.dart';
 
@@ -11,11 +12,14 @@ class ChooseLanguage extends StatefulWidget {
 }
 
 class _ChooseLanguageState extends State<ChooseLanguage> {
+  QRPersistence _persitence = new QRPersistence();
 
   @override
   Widget build(BuildContext context) {
+
     double height = MediaQuery.of(context).size.height;
     double space =height/6;
+
     
     return Stack(
             children: <Widget>[
@@ -51,12 +55,23 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
           InkWell(
             onTap: (){
               applic.onLocaleChanged(new Locale('en',''));
+
+
+              if(_persitence.qr.isNotEmpty){
+
+                Navigator.pushNamed(context, 'codigosQR', arguments: _persitence.qr);
+
+              } else {
+
                 Navigator.push(
                 context, 
                 PageRouteBuilder(
                     pageBuilder: (context, animation1, animation2) => CodigoAcceso('en'),
                 )
-              );  
+
+                );  
+              }
+
             },
             splashColor: Colors.blue.withAlpha(70),
             child: Container(
@@ -71,12 +86,21 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
           InkWell(
             onTap: (){
               applic.onLocaleChanged(new Locale('es',''));
-               Navigator.push(
-                context, 
-                PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) => CodigoAcceso('es'),
-                )
-              );  
+
+              if(_persitence.qr.isNotEmpty){
+
+                Navigator.pushNamed(context, 'codigosQR', arguments: _persitence.qr);
+
+              } else {
+
+                Navigator.push(
+                  context, 
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) => CodigoAcceso('es'),
+                  )
+                );  
+
+              }
             },
             splashColor: Colors.blue.withAlpha(70),
             child: Container(
