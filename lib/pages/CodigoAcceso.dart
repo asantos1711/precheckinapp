@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:precheckin/models/reserva_model.dart';
-import 'package:precheckin/pages/HabitacionTitular.dart';
-import 'package:precheckin/pages/InformacionAdicional.dart';
+import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/tools/translation.dart';
 
 class CodigoAcceso extends StatefulWidget {
-  String language;
-  CodigoAcceso(this.language);
+
   @override
   _CodigoAccesoState createState() => _CodigoAccesoState();
+
 }
 
 class _CodigoAccesoState extends State<CodigoAcceso> {
+  UserPreferences _usrPref = new UserPreferences();
   final formKey = GlobalKey<FormState>();
   double height;
   double width;
@@ -24,7 +24,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
 
   @override
   void initState() {
-    _language = this.widget.language;
+    _language = _usrPref.idioma;
     _codigoController = new TextEditingController(text: "MC0yMTE0NjA1",);
 
 

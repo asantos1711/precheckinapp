@@ -1,6 +1,7 @@
 {
     "txt_ingresar": "Ingrese su código de acceso",
     "btn_ingresar": "Ingresar",
+    "btn_new_code": "Nuevo Código",
     "opcion_duda":"Tengo una duda con mi reserva",
     "opcion_error":"Tengo un error con mi reserva"
   }

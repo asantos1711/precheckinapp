@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
+import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/tools/application.dart';
-import 'package:precheckin/tools/translation.dart';
-
-import 'CodigoAcceso.dart';
 
 class ChooseLanguage extends StatefulWidget {
   @override
@@ -13,6 +11,7 @@ class ChooseLanguage extends StatefulWidget {
 
 class _ChooseLanguageState extends State<ChooseLanguage> {
   QRPersistence _persitence = new QRPersistence();
+  UserPreferences _usrPref = new UserPreferences();
 
   @override
   Widget build(BuildContext context) {
@@ -56,21 +55,13 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
             onTap: (){
               applic.onLocaleChanged(new Locale('en',''));
 
+              _usrPref.idioma = "en";
 
-              if(_persitence.qr.isNotEmpty){
 
+              if(_persitence.qr.isNotEmpty)
                 Navigator.pushNamed(context, 'codigosQR', arguments: _persitence.qr);
-
-              } else {
-
-                Navigator.push(
-                context, 
-                PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) => CodigoAcceso('en'),
-                )
-
-                );  
-              }
+              else
+                Navigator.pushNamed(context, 'serCodigo');
 
             },
             splashColor: Colors.blue.withAlpha(70),
@@ -87,20 +78,13 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
             onTap: (){
               applic.onLocaleChanged(new Locale('es',''));
 
-              if(_persitence.qr.isNotEmpty){
+              _usrPref.idioma = "es";
 
+              if(_persitence.qr.isNotEmpty)
                 Navigator.pushNamed(context, 'codigosQR', arguments: _persitence.qr);
+              else 
+                Navigator.pushNamed(context, 'serCodigo');
 
-              } else {
-
-                Navigator.push(
-                  context, 
-                  PageRouteBuilder(
-                      pageBuilder: (context, animation1, animation2) => CodigoAcceso('es'),
-                  )
-                );  
-
-              }
             },
             splashColor: Colors.blue.withAlpha(70),
             child: Container(

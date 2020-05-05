@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:precheckin/tools/translation.dart';
 
 class ListaCodigosQR extends StatefulWidget {
   @override
@@ -24,23 +25,31 @@ class _ListaCodigosQRState extends State<ListaCodigosQR> {
   }
 
   Widget _imagenFondo() {
-    return Image.asset(
-      "assets/images/background.png",
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      fit: BoxFit.cover,
+    return Container(
+      height: double.infinity,
+      width: double.infinity,
+      child: Image.asset(
+        "assets/images/background.png",
+        fit: BoxFit.cover,
+      )
     );
   }
 
+
   Widget _contenido(){
-    return ListView(
+    return SafeArea(
+      child: Column(
         children: <Widget>[
           _logo(),
-          _codigosQR(),
+          //_codigosQR(),
+          Expanded(child: _codigosQR(),),
           _btnNuevoCodigo()
         ],
-      );
+      ),
+    );
   }
+
+
 
   Widget _logo(){
     return SvgPicture.asset(
@@ -50,10 +59,11 @@ class _ListaCodigosQRState extends State<ListaCodigosQR> {
     );
   }
 
+
   Widget _codigosQR(){
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical:10.0),
-      child: Column(
+      child: ListView(
         children: _listaCodigos(),
       ),
     );
@@ -87,12 +97,12 @@ class _ListaCodigosQRState extends State<ListaCodigosQR> {
   Widget _btnNuevoCodigo(){
     return Container(
       width: 120.0,
-      color: Color.fromRGBO(255, 255, 255, 0.5),
+      margin: EdgeInsets.symmetric(vertical:14.0),
       child: RaisedButton(
-        child: Text("Nuevo Codigo"),
+        child: Text( Translations.of(context).text('btn_new_code') ), 
         onPressed:(){
 
-          print("PRES");
+          Navigator.pushNamed(context, "serCodigo");
 
         },
       ),

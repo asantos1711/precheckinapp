@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:precheckin/pages/ChooseLanguage.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
+import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/routes/routes.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'tools/application.dart';
@@ -12,6 +13,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final qrPersistence = new QRPersistence();
   await qrPersistence.initPref();
+
+  final usrPref = UserPreferences();
+  await usrPref.initPref();
 
 
   runApp(new MyApp());
