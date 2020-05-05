@@ -18,7 +18,7 @@ class QRPersistence {
 
   }
 
-  get qr {
+  List<String> get qr {
     return _pref.getStringList("listQR") ?? [];
   }
 

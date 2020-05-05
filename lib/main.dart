@@ -25,17 +25,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   SpecificLocalizationDelegate _localeOverrideDelegate;
-  QRPersistence _qrPersistence = new QRPersistence();
 
   @override
   void initState(){
     super.initState();
     _localeOverrideDelegate = new SpecificLocalizationDelegate(null);
     applic.onLocaleChanged = onLocaleChange;
-
-
-    
-
   }
 
   onLocaleChange(Locale locale){
@@ -47,9 +42,6 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
-    print("QR Almacenados ${_qrPersistence.qr}");
-
 
     return new MaterialApp(
       title: 'My Application',
