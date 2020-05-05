@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:precheckin/pages/identificacion/PrimerDocumento.dart';
 
 class ElegirIdentificacion extends StatefulWidget {
   @override
@@ -177,12 +178,12 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         onPressed: () {
           print('idItem ${idItem.toString()}');
           print('idItem ${nameItem.toString()}');
-          /* Navigator.push(
+           Navigator.push(
             context,
             PageRouteBuilder(
-                pageBuilder: (context, animation1, animation2) => InformacionAdicional(),
+                pageBuilder: (context, animation1, animation2) => PrimerDocumento(),
             )
-          ); */
+          ); 
         },
         child: Text(
           "Continuar",

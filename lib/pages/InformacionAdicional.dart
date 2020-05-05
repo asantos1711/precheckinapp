@@ -26,6 +26,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   DateTime dateAco = new DateTime.now();
   TextEditingController textController = new TextEditingController(text: '');
   Reserva _reserva;  
+  Map<Acompaniantes,SignatureController> mapControllerSiganture = Map<Acompaniantes,SignatureController>();
 
 
 
@@ -89,11 +90,31 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
           disabledTextColor: Colors.black,
           padding: EdgeInsets.all(8.0),
           splashColor: Colors.grey,
-          onPressed: () {
+          onPressed: () async{
+            //var data, data1;
+            _reserva.result.acompaniantes.forEach( (acompaniante){
+              print("Acompañante");
+              print("Fecha Nac:${acompaniante.fechanac.toString()}");
+              print("Edad:${acompaniante.edad.toString()}");
+            });
             print('_poliReglaBool '+_poliReglaBool.toString());            /*  */
             print('_poliReglaBool '+_promoInfoBool.toString());            /*  */
             print('_recibirInfoBool '+_recibirInfoBool.toString());            /*  */
-            print('_avisoPrivaBool '+_avisoPrivaBool.toString());            /*  */
+            print('_avisoPrivaBool '+_avisoPrivaBool.toString());   
+            
+              
+            /* data = await mapControllerSiganture[_reserva.result.acompaniantes[0]].toPngBytes();
+            data1 = await mapControllerSiganture[_reserva.result.acompaniantes[1]].toPngBytes();
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return Scaffold(
+                    appBar: AppBar(),
+                    body: Center(child: Container(color: Colors.grey[300], child: Column(children: <Widget>[Image.memory(data),Image.memory(data1)],))),
+                  );
+                },
+              ),
+            ); */
           },
           child: Text(
             "Finalizar",
@@ -153,19 +174,17 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     List<Widget> widgets = [];
 
     _reserva.result.acompaniantes.forEach( (acompaniante){
-
-      Widget widget = Container(
-        child: CardAcompanante(
-          date: dateAco,
-          controllerText: textController,
+      SignatureController _controllerSignature = new SignatureController();
+      //Mapa de los controllersde las Firmas para cada acompañante
+      mapControllerSiganture[acompaniante] = _controllerSignature;
+      Widget widget = CardAcompanante(
+          acompaniante: acompaniante,
           signature: CustomSignature(
-            controller: _controller,
+            controller: _controllerSignature,
           ),
-        )
       );
 
-      widgets..add(widget)
-             ..add(Divider(height: 40.0,color: Colors.black,));
+      widgets..add(widget);
 
     } );
     

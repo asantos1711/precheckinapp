@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:precheckin/pages/ChooseLanguage.dart';
+import 'package:precheckin/pages/identificacion/PrimerDocumento.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/routes/routes.dart';
