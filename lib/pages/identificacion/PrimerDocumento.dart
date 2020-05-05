@@ -46,7 +46,7 @@ class _PrimerDocumentoState extends State<PrimerDocumento> {
       Mrzflutterplugin.setIDActive(true);
       Mrzflutterplugin.setPassportActive(true);
       Mrzflutterplugin.setVisaActive(true);
-      Mrzflutterplugin.scanFromGallery;
+      //Mrzflutterplugin.scanFromGallery;
 
       scannerResult = await Mrzflutterplugin.startScanner;
     } on PlatformException catch (ex) {
