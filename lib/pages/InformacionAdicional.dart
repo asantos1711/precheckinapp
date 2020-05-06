@@ -9,8 +9,6 @@ import 'package:precheckin/pages/ViewPromoInfo.dart';
 import 'package:precheckin/widgets/card_acompanante.dart';
 import 'package:precheckin/widgets/check_text_bold.dart';
 import 'package:precheckin/widgets/custom_signature.dart';
-import 'package:precheckin/widgets/docIdentificacion.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:signature/signature.dart';
 
 class InformacionAdicional extends StatefulWidget {
@@ -61,10 +59,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
               _promoInfo(),
               _poliRegla(),
               _signatureTitular(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: DocIdentificacion()
-              ),
+              _docuTitular(),
               _tituloAcompa(),
               _acompanantes(),
               _agregarAco(),
@@ -135,7 +130,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         width: width,
         alignment: Alignment.center,
         child: MaterialButton(
-          onPressed: () => _onAlertWithCustomContentPressed(context),
+          onPressed: () {},
           color: Colors.blue,
           textColor: Colors.white,
           child: Icon(
@@ -145,39 +140,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
           padding: EdgeInsets.all(16),
           shape: CircleBorder(),
         ));
-  }
-
-  _onAlertWithCustomContentPressed(context) {
-    Acompaniantes _aco = new Acompaniantes();
-    _aco.fechanac = new DateTime.now().toString();
-    print("Alerta fecha "+_aco.fechanac);
-    Alert(
-        context: context,
-        title: "Agregar acompañante",
-        content: Column(
-          children: <Widget>[
-            CardAcompanante(
-              acompaniante: _aco,
-              signature: CustomSignature(controller: new SignatureController(),),
-            ),
-            Row(
-              children: <Widget>[
-                Icon(FontAwesomeIcons.exclamationCircle , color: Colors.red,size: 15, ),
-                Text(' Esta solicitud genera un cargo de  dls', style: TextStyle(color: Colors.red, fontSize: 15),)
-              ],
-            )
-          ],
-        ),
-        buttons: [
-          DialogButton(
-            color: Colors.white,
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              "Agregar",
-              style: TextStyle(color: Colors.blueAccent, fontSize: 20),
-            ),
-          )
-        ]).show();
   }
 
   Widget _recibirInfo() {

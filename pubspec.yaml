@@ -33,7 +33,6 @@ dependencies:
   age: ^0.0.1
   mrzflutterplugin: ^0.1.1
   qr_flutter: ^3.1.0
-  rflutter_alert: ^1.0.3
 
 dev_dependencies:
   flutter_test:

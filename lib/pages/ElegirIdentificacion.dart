@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:io' show Platform;
-import 'package:flutter/services.dart';
-import 'package:mrzflutterplugin/mrzflutterplugin.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/pages/identificacion/PrimerDocumento.dart';
 
@@ -21,7 +17,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
   int index;
   String nameItem ;
   int idItem ;
-  String _result = 'No result yet';
+  
    List<TipoDoc> docList = [
     TipoDoc(
       index: 0,
@@ -182,13 +178,12 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         onPressed: () {
           print('idItem ${idItem.toString()}');
           print('idItem ${nameItem.toString()}');
-          startScanning();
-           /* Navigator.push(
+           Navigator.push(
             context,
             PageRouteBuilder(
                 pageBuilder: (context, animation1, animation2) => PrimerDocumento(),
             )
-          );  */
+          ); 
         },
         child: Text(
           "Continuar",
@@ -196,36 +191,5 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         ),
       )
     );
-  }
-
-  Future<void> startScanning() async {
-    String scannerResult;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      if (Platform.isAndroid) {
-        Mrzflutterplugin.registerWithLicenceKey("android_licence_key");
-      } else if (Platform.isIOS) {
-        Mrzflutterplugin.registerWithLicenceKey("ios_licence_key");
-      }
-
-      Mrzflutterplugin.setIDActive(true);
-      Mrzflutterplugin.setPassportActive(true);
-      Mrzflutterplugin.setVisaActive(true);
-      //Mrzflutterplugin.scanFromGallery;
-
-      scannerResult = await Mrzflutterplugin.startScanner;
-    } on PlatformException catch (ex) {
-      String message = ex.message;
-      scannerResult = 'Scanning failed: $message';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _result = scannerResult;
-    });
   }
 }
