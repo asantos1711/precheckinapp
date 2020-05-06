@@ -1,0 +1,23 @@
+{
+    "nombreApp" : "precheckin",
+    "codigos" : [
+        {
+            "codigo"  : "MC0yMTE0NjA1",
+            "hotel"   : "Hienda Tres Rios",
+            "titular" : "Juan Perez",
+            "cuarto"  : "5"
+        },
+        {
+            "codigo"  : "MC0yMTE0NjA3",
+            "hotel"   : "Hienda Tres Rios",
+            "titular" : "Jose Perez",
+            "cuarto"  : "6"
+        },
+        {
+            "codigo"  : "MC0yMTE0NjAz",
+            "hotel"   : "Hienda Tres Rios",
+            "titular" : "Mario Perez",
+            "cuarto"  : "7"
+        }
+    ]
+}

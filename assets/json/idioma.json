@@ -1,0 +1,15 @@
+{
+    "nombreApp" : "precheckin",
+    "idiomas" : [
+        {
+            "languageCode" : "en",
+            "countryCode" : "EN",
+            "img": "assets/images/usa_circle.png"
+        },
+        {
+            "languageCode" : "es",
+            "countryCode" : "ES",
+            "img": "assets/images/mex_circle.png"
+        }
+    ]
+}

@@ -1,7 +1,9 @@
 {
-    "txt_ingresar": "Enter your access code",
-    "btn_ingresar": "Continue",
-    "btn_new_code": "New Code",
-    "opcion_duda":"I have a question with my reservation",
-    "opcion_error":"I have an error with my reservation"
+    "txt_ingresar" : "Enter your access code",
+    "btn_ingresar" : "Continue",
+    "btn_new_code" : "New Code",
+    "btn_back"     : "Back",
+    "opcion_duda"  : "I have a question with my reservation",
+    "opcion_error" : "I have an error with my reservation",
+    "room"         : "Room"
   }
