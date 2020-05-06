@@ -182,12 +182,12 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           print('idItem ${idItem.toString()}');
           print('idItem ${nameItem.toString()}');
           startScanning();
-           /* Navigator.push(
+          /*Navigator.push(
             context,
             PageRouteBuilder(
                 pageBuilder: (context, animation1, animation2) => PrimerDocumento(),
             )
-          );  */
+          );*/
         },
         child: Text(
           "Continuar",
