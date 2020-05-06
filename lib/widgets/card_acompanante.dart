@@ -1,6 +1,7 @@
 import 'package:age/age.dart';
 import 'package:flutter/material.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
+import 'package:precheckin/widgets/docIdentificacion.dart';
 import 'package:signature/signature.dart';
 
 /*
@@ -58,7 +59,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
         context: context,
         initialDate: _fecaNac,
         firstDate: DateTime(1910),
-        lastDate: DateTime(2101));
+        lastDate: DateTime.now());
     if (picked != null && picked != _date)
       setState(() {
         _fecaNac = picked;
@@ -88,8 +89,8 @@ class _CardAcompananteState extends State<CardAcompanante> {
               children: <Widget>[
                 _nombre(),
                 Container(
-                  width: width-20,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       _fechaNacimiento(),
                       _edad()
@@ -100,23 +101,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
             )
           ),
           _signature,
-          Container(
-            color: Colors.white,
-            width: width-20,
-            child:Row(
-              children: <Widget>[
-                Container(
-                  width: ((width-20)/3)*2,
-                  child: Text('Documento de identificación',style: TextStyle(color: Colors.blueAccent,fontSize: 18),)
-                ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  width: (width-20)/3,
-                  child: Icon(Icons.camera_alt, color: Colors.deepOrange,size: 30,)
-                )
-              ],
-            )
-          ),
+          DocIdentificacion(),
         ],
       )
     );
@@ -155,14 +140,14 @@ class _CardAcompananteState extends State<CardAcompanante> {
       alignment: Alignment.centerRight,
       child: Container(
         alignment: Alignment.centerRight,
-        width: (width-30)/2,
+        //width: (width-30)/2,
         child:Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text('Edad ', style: TextStyle(fontWeight: FontWeight.w600),),
+            Text('Edad ', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
             SizedBox(height: 5,),
-            Text('${_acompaniante?.edad??0} años')
+            Text('${_acompaniante?.edad??0} años',style: TextStyle(fontSize: 15))
           ],
         )
       )
