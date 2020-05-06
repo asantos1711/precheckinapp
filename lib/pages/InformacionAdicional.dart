@@ -193,7 +193,12 @@ _onAlertWithCustomContentPressed(context) {
         buttons: [
           DialogButton(
             color: Colors.white,
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              setState(() {
+              _reserva.result.acompaniantes.add(_aco);
+              });
+              Navigator.pop(context);
+            } ,
             child: Text(
               "Agregar",
               style: TextStyle(color: Colors.blueAccent, fontSize: 20),

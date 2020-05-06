@@ -6,6 +6,7 @@ import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/routes/routes.dart';
 import 'package:precheckin/tools/translation.dart';
+import 'pages/Splash.dart';
 import 'tools/application.dart';
 
 
@@ -76,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage>{
   @override
   Widget build(BuildContext context){
     return new Scaffold(
-      body: ChooseLanguage(),
+      body: SplashPage(),
     );
   }
 }
