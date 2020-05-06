@@ -53,7 +53,7 @@ class Idimonas extends StatelessWidget {
           if(_persitence.qr.isNotEmpty)
             Navigator.pushNamed(context, 'codigosQR', arguments: _persitence.qr);
           else
-            Navigator.pushNamed(context, 'serCodigo');
+            Navigator.pushNamed(context, 'nuevoCodigo');
         },
       );
       widgets.add(widget);
