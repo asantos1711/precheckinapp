@@ -81,12 +81,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     return AppBar(
       backgroundColor: Color(0xFFE87200),
       leading: Container(),
-<<<<<<< HEAD
-      title:Text(Translations.of(context).text('info_reservacion'),  style: appbarTitle)
-=======
-      title:Text('Información de la Reserva', style: appbarTitle),
+      title:Text(Translations.of(context).text('info_reservacion'),  style: appbarTitle),
       centerTitle: true,
->>>>>>> 1cc76108ac51870d44d2ece4d6a46fa75fa9f4b0
     );
   }
 
