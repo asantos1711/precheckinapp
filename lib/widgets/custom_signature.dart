@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:precheckin/tools/translation.dart';
 import 'package:signature/signature.dart';
 
 class CustomSignature extends StatefulWidget {
@@ -63,7 +64,7 @@ class _CustomSignatureState extends State<CustomSignature> {
                   onPressed: () {
                     setState(() => _controller.clear());
                   },
-                  child: Text('Limpiar')
+                  child: Text(Translations.of(context).text('limpiar'))
                 )
               ],
             ),

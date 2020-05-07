@@ -6,6 +6,7 @@ import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
 import 'package:precheckin/pages/ViewPoliRegla.dart';
 import 'package:precheckin/pages/ViewPromoInfo.dart';
+import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/card_acompanante.dart';
 import 'package:precheckin/widgets/check_text_bold.dart';
 import 'package:precheckin/widgets/custom_signature.dart';
@@ -185,7 +186,9 @@ _onAlertWithCustomContentPressed(context) {
             Row(
               children: <Widget>[
                 Icon(FontAwesomeIcons.exclamationCircle , color: Colors.red,size: 15, ),
-                Text(' Esta solicitud genera un cargo de  dls', style: TextStyle(color: Colors.red, fontSize: 15),)
+                Text(
+                  Translations.of(context).text('cargo')+''+Translations.of(context).text('cargo_valor'), 
+                  style: TextStyle(color: Colors.red, fontSize: 15),)
               ],
             )
           ],
@@ -200,7 +203,7 @@ _onAlertWithCustomContentPressed(context) {
               Navigator.pop(context);
             } ,
             child: Text(
-              "Agregar",
+              Translations.of(context).text('agregar'),
               style: TextStyle(color: Colors.blueAccent, fontSize: 20),
             ),
           )
@@ -239,7 +242,7 @@ _onAlertWithCustomContentPressed(context) {
         padding: EdgeInsets.only(left: 10, right: 10),
         width: width - 20,
         child: Text(
-          'Acompañantes',
+          Translations.of(context).text('acompanantes'),
           style: TextStyle(
             fontSize: 25,
           ),
@@ -290,8 +293,8 @@ _onAlertWithCustomContentPressed(context) {
         _poliReglaBool = !_poliReglaBool;
       } ,
       value: _poliReglaBool,
-      text: 'Acepto y estoy de acuerdo con las ',
-      textBold: 'políticas y el reglamento del hotel',
+      text: Translations.of(context).text('acepto_deacuerdo'),
+      textBold: Translations.of(context).text('politicas_procedimientos_bold'),
       onTap: () {
         Navigator.push(
             context,
@@ -311,8 +314,8 @@ _onAlertWithCustomContentPressed(context) {
         });
       } ,
       value: _promoInfoBool,
-      text: 'Acepto y autorizo el uso de mi correo para ',
-      textBold: 'promociones e información',
+      text: Translations.of(context).text('acepto_deacuerdo'),
+      textBold: Translations.of(context).text('reglamento_hotel_bold'),
       onTap: () {
         Navigator.push(
             context,
@@ -354,7 +357,7 @@ _onAlertWithCustomContentPressed(context) {
                 color: Colors.white,
                 padding: EdgeInsets.only(left: 10),
                 child: Text(
-                  'Ingresa firma de titular',
+                  Translations.of(context).text('ingresa_firma_titular'),
                   style: TextStyle(fontSize: 20),
                 )),
             CustomSignature(

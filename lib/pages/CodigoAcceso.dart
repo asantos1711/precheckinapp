@@ -83,7 +83,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
             },
             child: Container(
               child: Text(
-                Translations.of(context).text('btn_ingresar'), 
+                Translations.of(context).text('ingresar'), 
                 style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800)
               )
             )
@@ -139,7 +139,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            Translations.of(context).text('txt_ingresar'), 
+            Translations.of(context).text('ingrese_codigo'), 
             style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w500)
           )
         ]

@@ -63,7 +63,7 @@ class ListaCodigosQR extends StatelessWidget {
       width: 120.0,
       margin: EdgeInsets.symmetric(vertical:14.0),
       child: RaisedButton(
-        child: Text( Translations.of(context).text('btn_new_code') ), 
+        child: Text( Translations.of(context).text('nuevo_code') ), 
         shape: StadiumBorder(),
         color: Color.fromRGBO(255, 255, 255, 0.5),
         elevation: 12.0,

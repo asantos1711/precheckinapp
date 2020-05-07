@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
+import 'package:precheckin/tools/translation.dart';
 
 class DocIdentificacion extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
         children: <Widget>[
           Container(
             // width: ((width-20)/3)*2,
-            child: Text('Documento de identificación',style: TextStyle(color: Colors.blueAccent,fontSize: 18),)
+            child: Text(Translations.of(context).text('doc_identificacion'),style: TextStyle(color: Colors.blueAccent,fontSize: 18),)
           ),
           Container(
             alignment: Alignment.centerRight,

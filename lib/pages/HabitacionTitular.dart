@@ -82,7 +82,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     return AppBar(
       backgroundColor: Color(0xFFE87200),
       leading: Container(),
-      title:Text('Información de reservación', style: appbarTitle)
+      title:Text(Translations.of(context).text('info_reservacion'),  style: appbarTitle)
     );
   }
 
@@ -171,7 +171,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             alignment: Alignment.centerLeft,
             child: Container(
               child: Text(
-                'No. De Reservación',
+                Translations.of(context).text('no_reserva'),
                 style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
                 )
             ),
@@ -210,7 +210,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerLeft,
                   child: Container(
                     child: Text(
-                      'Llegada',
+                      Translations.of(context).text('llegada'),
                       style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
                       )
                   ),
@@ -219,7 +219,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerRight,
                   child: Container(
                     child: Text(
-                      'Salida',
+                      Translations.of(context).text('salida'),
                       style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
                       )
                   ),
@@ -274,7 +274,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
               children: <Widget>[
                 Container(
                   child: Text(
-                    'Huespedes',
+                    Translations.of(context).text('huespedes'),
                     style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
                   )
                 )
@@ -289,7 +289,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerLeft,
                   child: Container(
                     child: Text(
-                      '${_reserva.result.numeroAdultos} Adultos',
+                      '${_reserva.result.numeroAdultos} '+Translations.of(context).text('adultos'),
                       style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
                       )
                   ),
@@ -298,7 +298,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.center,
                   child: Container(
                     child: Text(
-                      '${_reserva.result.numeroAdolecentes} Adolecentes',
+                      '${_reserva.result.numeroAdolecentes} '+Translations.of(context).text('adolecentes'),
                       style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
                       )
                   ),
@@ -307,7 +307,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerRight,
                   child: Container(
                     child: Text(
-                      '${_reserva.result.numeroNinios} Niños',
+                      '${_reserva.result.numeroNinios} '+Translations.of(context).text('ninos'),
                       style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
                       )
                   ),
@@ -370,7 +370,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             alignment: Alignment.centerLeft,
             child: Container(
               child: Text(
-                'Tipo de habitación',
+                Translations.of(context).text('tipo_habitacion'),
                 style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
                 )
             ),
@@ -404,7 +404,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             alignment: Alignment.centerLeft,
             child: Container(
               child: Text(
-                'Plan de viaje',
+                Translations.of(context).text('plan_viaje'),
                 style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
                 )
             ),
@@ -440,7 +440,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   List<Widget> _listaEspecialRequest() {
     List<Widget> widgets = [];
 
-    widgets..add(Text('Requerimientos especiales',style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16)))
+    widgets..add(Text(Translations.of(context).text('reque_especiales'),style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16)))
             ..add(SizedBox(height: 10.0));
 
     _reserva.especialRequest.forEach( (r){
@@ -453,7 +453,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     widgets.add(
       Container(
         width: double.infinity,
-        child: Text('*Sujeto adisponibilidad',style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16), textAlign: TextAlign.end)
+        child: Text(Translations.of(context).text('sujeto_dispo'),style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16), textAlign: TextAlign.end)
       )
             
     );
@@ -480,7 +480,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
               padding: EdgeInsets.only(bottom: 5, left:10),
               width: width-20,
               child: Text(
-                'Información del Titular',
+                Translations.of(context).text('info_titular'),
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -503,7 +503,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   child: TextFormField(
                     controller: _controllerNombre,
                     decoration: InputDecoration(
-                      labelText: "Nombre"
+                      labelText: Translations.of(context).text('nombre')
                     ),
 
                     onChanged: (nombre){
@@ -519,7 +519,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   width: (width-50)/2,
                   child: TextFormField(
                     decoration: InputDecoration(
-                      labelText: "Apellido"
+                      labelText: Translations.of(context).text('apellido')
                     ),
                   )
                 )
@@ -549,7 +549,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   child: TextFormField(
                     controller: _controllerCiudad,
                     decoration: InputDecoration(
-                      labelText: "Ciudad"
+                      labelText: Translations.of(context).text('ciudad')
                     ),
                     onChanged: (ciudad) {
 
@@ -564,7 +564,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   child: TextFormField(
                     controller: _controllerCP,
                     decoration: InputDecoration(
-                      labelText: "Código Postal"
+                      labelText: Translations.of(context).text('cod_postal')
                     ),
                     onChanged: (cp){
                       _reserva.result.codigoPostal = cp;
@@ -634,7 +634,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
               padding: EdgeInsets.only(bottom: 5, left:10),
               width: width-20,
               child: Text(
-                'Información del Contacto',
+                Translations.of(context).text('info_contacto'),
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16
@@ -657,7 +657,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerLeft,
                   child: Container(
                     child: Text(
-                      'Correo Electronico',
+                      Translations.of(context).text('mail'),
                       style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
                       )
                   ),
@@ -688,7 +688,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerLeft,
                   child: Container(
                     child: Text(
-                      'Teléfono',
+                      Translations.of(context).text('telefono'),
                       style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
                       )
                   ),
@@ -729,7 +729,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
               padding: EdgeInsets.only(bottom: 5, left:10),
               width: width-20,
               child: Text(
-                'Agregar Información del vuelo',
+                Translations.of(context).text('agre_info_vuelo'),
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -745,7 +745,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             width: width-30,
             child: TextFormField(
               decoration: InputDecoration(
-                labelText: "No. De Vuelo"
+                labelText: Translations.of(context).text('no_vuelo')
               ),
               onChanged: (numeroVuelo) {
                 //TODO: Falta el número de vuelo en el servicio.
@@ -757,7 +757,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             width: (width-30)/2,
             child: TextFormField(
               decoration: InputDecoration(
-                labelText: "Fecha de Salida"
+                labelText: Translations.of(context).text('fec_salida')
               ),
               onChanged: (fechaVuelo){
                 //TODO: Falta la fecha de vuelo en el servicio.
@@ -791,7 +791,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
          
         },
         child: Text(
-          "Continuar",
+          Translations.of(context).text('continuar'),
           style: TextStyle(fontSize: 20.0),
         ),
       )

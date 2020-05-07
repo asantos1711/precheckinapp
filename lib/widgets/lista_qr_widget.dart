@@ -47,7 +47,7 @@ class ListaQR extends StatelessWidget {
           subtitle: Text(qr['titular']),
           trailing: Column(
             children: <Widget>[
-              Text( Translations.of(context).text('room') ),
+              Text( Translations.of(context).text('habitacion') ),
               Text(qr['cuarto'],style: TextStyle(fontSize: 30.0),),
             ],
           ),

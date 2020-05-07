@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
 import 'package:mrzflutterplugin/mrzflutterplugin.dart';
+import 'package:precheckin/tools/translation.dart';
 class ElegirIdentificacion extends StatefulWidget {
   @override
   _ElegirIdentificacionState createState() => _ElegirIdentificacionState();
@@ -72,7 +73,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             child: Icon(Icons.lock)
           ),
           Expanded(
-            child: Text('No compartiremos tus documentos de identificación con otro usuario')
+            child: Text(Translations.of(context).text('no_compartir'))
           )
         ],
       )
@@ -131,7 +132,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     return Padding(
       padding: EdgeInsets.all(20),
       child: Text(
-        'Selecciona un tipo de documento de identificación para añadir',
+        Translations.of(context).text('selec_tipo_doc'),
         style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600,)
       ),
     );
@@ -141,7 +142,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     return new AppBar(
       backgroundColor: Colors.deepOrange,
       leading: Container(),
-      title: Text('Documentos de Identificación'),
+      title: Text(Translations.of(context).text('doc_identificacion')),
       actions: <Widget>[
         Padding(
           padding: EdgeInsets.only(right: 20.0),
@@ -190,7 +191,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           );*/
         },
         child: Text(
-          "Continuar",
+          Translations.of(context).text('continuar'),
           style: TextStyle(fontSize: 20.0),
         ),
       )

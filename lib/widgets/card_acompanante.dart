@@ -1,6 +1,7 @@
 import 'package:age/age.dart';
 import 'package:flutter/material.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
+import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/docIdentificacion.dart';
 import 'package:signature/signature.dart';
 
@@ -113,7 +114,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
       child: TextFormField(
         controller: _controllerText,
         decoration: InputDecoration(
-          labelText: 'Nombre'
+          labelText: Translations.of(context).text('nombre')
         ),
       )
     );
@@ -126,7 +127,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
           child: TextFormField(
             controller: _controllerFechaEdad,
             decoration: InputDecoration(
-              labelText: "Fecha de nacimiento"
+              labelText: Translations.of(context).text('fec_nacimiento')
             ),
             readOnly: true,
             onTap:()=> _selectDate(context),
@@ -145,9 +146,9 @@ class _CardAcompananteState extends State<CardAcompanante> {
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text('Edad ', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
+            Text(Translations.of(context).text('edad'), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
             SizedBox(height: 5,),
-            Text('${_acompaniante?.edad??0} años',style: TextStyle(fontSize: 15))
+            Text('${_acompaniante?.edad??0} '+Translations.of(context).text('anios'),style: TextStyle(fontSize: 15))
           ],
         )
       )
