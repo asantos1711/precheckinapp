@@ -28,7 +28,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   TextEditingController _controllerCiudad = new TextEditingController();
 
 
-
   AnimationController _controller;
   static const List<String> _funcionList = const [ "1","2" ];
   Map<String,String> _opcionesFloat = new  Map<String,String>();
@@ -82,7 +81,12 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     return AppBar(
       backgroundColor: Color(0xFFE87200),
       leading: Container(),
+<<<<<<< HEAD
       title:Text(Translations.of(context).text('info_reservacion'),  style: appbarTitle)
+=======
+      title:Text('Información de la Reserva', style: appbarTitle),
+      centerTitle: true,
+>>>>>>> 1cc76108ac51870d44d2ece4d6a46fa75fa9f4b0
     );
   }
 
@@ -107,6 +111,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
       ),
       child: Column(
         children: <Widget>[
+          _hotel(),
           _numeroReservacion(),
           _llegadaSalida(),
           _huespedes(),
@@ -117,7 +122,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
       ),
     );
   }
-
+  
   Widget _seccionTitular(){
     return Container(
       width: double.infinity,
@@ -154,6 +159,38 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
           _infoVuelo(),
         ]
       ),
+    );
+  }
+
+  Widget _hotel(){
+    return Container(
+      margin: EdgeInsets.only(left: 10, right: 10, top: 7),
+      width: (width-40),
+      decoration: _boxDecorationDefault,
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              child: Text(
+                'Hotel',
+                style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
+                )
+            ),
+          ),
+          SizedBox(height: 5,),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              child: Text( _reserva.nombreHotel, style: TextStyle(fontSize: 18) ),
+            ),
+          ),
+          SizedBox(height: 5,)
+        ],
+      )
     );
   }
 
