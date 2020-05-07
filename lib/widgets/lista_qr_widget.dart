@@ -30,7 +30,6 @@ class ListaQR extends StatelessWidget {
     );
   }
 
-
   List<Widget> _listaCodigos(BuildContext context){
     List<Widget> widgets= [];
 
@@ -60,6 +59,4 @@ class ListaQR extends StatelessWidget {
 
     return widgets;
   }
-
-  
 }
