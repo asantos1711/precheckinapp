@@ -17,7 +17,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin{
 
   AnimationController _controller;
   Animation<Offset> _offsetFloat; 
-afterSplash() {
+  afterSplash() {
     var duration = Duration(milliseconds: 3000);
     return Timer(duration, nextPage);
   }
@@ -25,7 +25,7 @@ afterSplash() {
 
   // choosing which page to go
   void nextPage() {
-    Navigator.push(
+    Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => 
@@ -46,6 +46,7 @@ afterSplash() {
   }
   @override
   void initState() {
+    _checkPage();
     super.initState();
 
     _controller = AnimationController(

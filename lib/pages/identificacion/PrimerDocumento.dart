@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
@@ -11,7 +12,19 @@ class PrimerDocumento extends StatefulWidget {
 
 class _PrimerDocumentoState extends State<PrimerDocumento> {
   String _result = 'No result yet';
-  
+  String fullImage;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (Platform.isAndroid) {
+      Mrzflutterplugin.registerWithLicenceKey("android_licence_key");
+    } else if (Platform.isIOS) {
+      Mrzflutterplugin.registerWithLicenceKey("C500C89F1E88DC48B05981B3CB55CEB287CB42CEC4886223D30555F0DE9B7C036E6C0BB2563CB6B933376B3590FA5FA52B5AAC55F8FA6F90777EAC1474E360655681C3AA91770BEBC3E2C524BBFB05E8");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,6 +32,7 @@ class _PrimerDocumentoState extends State<PrimerDocumento> {
           child: new Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              (fullImage != null)? Image.memory(base64Decode(fullImage)):Container(),
               new FlatButton(
                 child: Text("Start Scanner"),
                 onPressed: startScanning,
@@ -37,18 +51,24 @@ class _PrimerDocumentoState extends State<PrimerDocumento> {
     String scannerResult;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      if (Platform.isAndroid) {
-        Mrzflutterplugin.registerWithLicenceKey("android_licence_key");
-      } else if (Platform.isIOS) {
-        Mrzflutterplugin.registerWithLicenceKey("ios_licence_key");
-      }
-
       Mrzflutterplugin.setIDActive(true);
       Mrzflutterplugin.setPassportActive(true);
       Mrzflutterplugin.setVisaActive(true);
-      //Mrzflutterplugin.scanFromGallery;
 
-      scannerResult = await Mrzflutterplugin.startScanner;
+      String jsonResultString = await Mrzflutterplugin.startScanner;
+
+      Map<String, dynamic> jsonResult = jsonDecode(jsonResultString);
+      print(jsonResult);
+
+      
+      fullImage = jsonResult['full_image'];
+      
+        
+      scannerResult = jsonResult['document_number'] +
+          '\n ' +
+          jsonResult['given_names_readable'] +
+          ' \n' +
+          jsonResult['surname'];
     } on PlatformException catch (ex) {
       String message = ex.message;
       scannerResult = 'Scanning failed: $message';
