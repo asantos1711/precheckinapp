@@ -855,7 +855,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   child: Container(
                     padding: EdgeInsets.all(10),
                     color: Colors.white,
-                    child: Text(_opcionesFloat[(index+1).toString()], style: TextStyle(fontSize: 18, color: Colors.deepOrange),)
+                    child: Text(_opcionesFloat[(index+1).toString()], style: TextStyle(fontSize: 18, color:  Color(0xFFE87200)),)
                   ),
                 ),
           ),

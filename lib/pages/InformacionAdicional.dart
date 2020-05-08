@@ -90,7 +90,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         color: Colors.white,
         child: FlatButton(
-          color: Colors.deepOrange,
+          color: Color(0xFFE87200),
           textColor: Colors.white,
           disabledColor: Colors.grey,
           disabledTextColor: Colors.black,
@@ -102,6 +102,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
               print("Acompañante");
               print("Fecha Nac:${acompaniante.fechanac.toString()}");
               print("Edad:${acompaniante.edad.toString()}");
+              print("Nombre:${acompaniante.nombre.toString()}");
             });
             print('_poliReglaBool '+_poliReglaBool.toString());            /*  */
             print('_poliReglaBool '+_promoInfoBool.toString());            /*  */
@@ -225,6 +226,7 @@ _onAlertWithCustomContentPressed(context) {
       Widget widget = CardAcompanante(
           acompaniante: acompaniante,
           signature: CustomSignature(
+            
             controller: _controllerSignature,
           ),
       );
@@ -277,7 +279,7 @@ _onAlertWithCustomContentPressed(context) {
                   },
                   child: Icon(
                     Icons.camera_alt,
-                    color: Colors.deepOrange,
+                    color: Color(0xFFE87200),
                     size: 30,
                   )
                 )
@@ -369,7 +371,7 @@ _onAlertWithCustomContentPressed(context) {
 
   Widget _appBar() {
     return AppBar(
-      backgroundColor: Colors.deepOrange,
+      backgroundColor:  Color(0xFFE87200),
       leading: Container(),
       title: Text('Información de reservación'),
     );

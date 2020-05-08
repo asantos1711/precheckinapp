@@ -35,7 +35,7 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
                     )
                   );
                 },
-                child:Icon(Icons.camera_alt, color: Colors.deepOrange,size: 30,)
+                child:Icon(Icons.camera_alt, color:  Color(0xFFE87200),size: 30,)
               )
           )
         ],

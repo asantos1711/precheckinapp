@@ -140,7 +140,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
 
   Widget _appbar() {
     return new AppBar(
-      backgroundColor: Colors.deepOrange,
+      backgroundColor:  Color(0xFFE87200),
       leading: Container(),
       title: Text(Translations.of(context).text('doc_identificacion')),
       actions: <Widget>[
@@ -173,7 +173,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
       color: Colors.white,
       child:FlatButton(
-        color: Colors.deepOrange,
+        color:  Color(0xFFE87200),
         textColor: Colors.white,
         disabledColor: Colors.grey,
         disabledTextColor: Colors.black,
