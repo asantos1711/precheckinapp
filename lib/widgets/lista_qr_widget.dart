@@ -15,7 +15,7 @@ class ListaQR extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: qrProvider.cargarCodigos(),
+      future: qrProvider.validarCodigos(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
 
         if(snapshot.connectionState != ConnectionState.done)
@@ -23,6 +23,9 @@ class ListaQR extends StatelessWidget {
 
         _listaQR = snapshot.data;
 
+        if(_listaQR.isEmpty)
+          return _sinCodigos();
+        
         return ListView(
           children: _listaCodigos(context),
         );
@@ -30,6 +33,8 @@ class ListaQR extends StatelessWidget {
     );
   }
 
+
+  //Genera la lista de códigos a mostrar
   List<Widget> _listaCodigos(BuildContext context){
     List<Widget> widgets= [];
 
@@ -58,5 +63,20 @@ class ListaQR extends StatelessWidget {
     } );
 
     return widgets;
+  }
+
+  //Mensaje que se muestra cuendo no se encuentran códigos a mostrar
+  Widget _sinCodigos() {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(vertical:14.0),
+      padding: EdgeInsets.symmetric(vertical:20.0),
+      child: Center(
+        child: ListTile(
+          leading: Icon(Icons.warning),
+          title: Text("Favor de capturar codigo"),
+        ),
+      ),
+    );
   }
 }

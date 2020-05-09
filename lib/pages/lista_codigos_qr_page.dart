@@ -10,8 +10,6 @@ class ListaCodigosQR extends StatelessWidget {
   Widget build(BuildContext context) {
      _codigos = ModalRoute.of(context).settings.arguments;
 
-     print(_codigos);
-
     return Scaffold(
       body: Stack(
         children: <Widget>[
