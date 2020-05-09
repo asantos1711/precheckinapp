@@ -50,6 +50,9 @@ class Idimonas extends StatelessWidget {
         ),
         onTap: (){
           applic.onLocaleChanged(new Locale(idioma['languageCode'], idioma['countryCode']));
+          
+          //_persitence.qr = ["MC0yMTE0NjA1","MC0yMTE0NjA3","MC0yMTE0NjAz"];
+
           if(_persitence.qr.isNotEmpty)
             Navigator.pushNamed(context, 'codigosQR', arguments: _persitence.qr);
           else
