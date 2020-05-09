@@ -6,7 +6,7 @@ import 'package:precheckin/persitence/qr_persistence.dart';
 class _QRProvider{
   QRPersistence _persitence = new QRPersistence();
   List<dynamic> codigos = [];
-  final String _url = 'http://10.194.18.59:8081/GroupSunsetPMSProxyServices/app';
+  final String _url = 'http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app';
   final String _usr = 'apphotel';
   final String _psw = 'hotel25012018';
 
