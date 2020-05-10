@@ -8,10 +8,8 @@ import 'package:signature/signature.dart';
 
 class CustomSignature extends StatefulWidget {
   SignatureController controller;
-  Acompaniantes acompaniantes;
   CustomSignature({
     this.controller,
-    this.acompaniantes
   });
 
   @override
@@ -19,29 +17,16 @@ class CustomSignature extends StatefulWidget {
 }
 
 class _CustomSignatureState extends State<CustomSignature> {
-  SignatureController _controller ;//= SignatureController(penStrokeWidth: 5, penColor: Colors.red);
-  Acompaniantes _acompaniantes;
+  SignatureController _controller ;
   double width;
 
   @override
   void initState() {
     // TODO: implement initState
     _controller = this.widget.controller;
-    _acompaniantes = this.widget.acompaniantes;
-    /* _controller.addListener(()async{
-      print('Change value');
-      var data = await _controller.toPngBytes();
-      _acompaniantes.imagesign = base64.encode(data);
-      print('Value ${_acompaniantes.imagesign}');
-    }); */
     super.initState();
   }
 
-  _imagenToAco()async{
-    print('Change value');
-    var data = await _controller.toPngBytes();
-    _acompaniantes.imagesign = base64.encode(data);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +78,6 @@ class _CustomSignatureState extends State<CustomSignature> {
                 FlatButton(
                   color: Colors.white,
                   onPressed: () {
-                    _acompaniantes.imagesign = '';
                     setState(() => _controller.clear());
                   },
                   child: Text(Translations.of(context).text('limpiar'))

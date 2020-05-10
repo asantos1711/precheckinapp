@@ -245,7 +245,6 @@ _onAlertWithCustomContentPressed(context) {
       Widget widget = CardAcompanante(
           acompaniante: acompaniante,
           signature: CustomSignature(
-            acompaniantes: acompaniante,
             controller: _controllerSignature,
           ),
       );
