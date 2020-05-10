@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -96,32 +99,35 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
           disabledTextColor: Colors.black,
           padding: EdgeInsets.all(8.0),
           splashColor: Colors.grey,
-          onPressed: () async{
-            //var data, data1;
-            _reserva.result.acompaniantes.forEach( (acompaniante){
-              print("Acompañante");
-              print("Fecha Nac:${acompaniante.fechanac.toString()}");
-              print("Edad:${acompaniante.edad.toString()}");
-              print("Nombre:${acompaniante.nombre.toString()}");
-            });
-            print('_poliReglaBool '+_poliReglaBool.toString());            /*  */
-            print('_poliReglaBool '+_promoInfoBool.toString());            /*  */
-            print('_recibirInfoBool '+_recibirInfoBool.toString());            /*  */
-            print('_avisoPrivaBool '+_avisoPrivaBool.toString());   
-            
-              
-            /* data = await mapControllerSiganture[_reserva.result.acompaniantes[0]].toPngBytes();
-            data1 = await mapControllerSiganture[_reserva.result.acompaniantes[1]].toPngBytes();
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return Scaffold(
-                    appBar: AppBar(),
-                    body: Center(child: Container(color: Colors.grey[300], child: Column(children: <Widget>[Image.memory(data),Image.memory(data1)],))),
-                  );
-                },
-              ),
-            ); */
+          onPressed: (){
+            try{
+              /* mapControllerSiganture.forEach((key, value){
+                SignatureController c = value;
+                FutureBuilder(
+                  future:  c.toPngBytes(),
+                  builder: (BuildContext c,AsyncSnapshot<Uint8List> v){
+                    setState((){  
+                      var data = v.data;
+                      key.imagesign = base64.encode(data);
+                    });
+                });
+              }); */
+              setState((){
+                _reserva.result.acompaniantes.forEach( (acompaniante){
+                  print("Acompañante----");
+                  print("Fecha Nac:${acompaniante.fechanac.toString()}");
+                  print("Edad:${acompaniante.edad.toString()}");
+                  print("Nombre:${acompaniante.nombre.toString()}");
+                  print("Firma:${acompaniante.imagesign.toString()}");
+                });
+                print('_poliReglaBool '+_poliReglaBool.toString());            /*  */
+                print('_poliReglaBool '+_promoInfoBool.toString());            /*  */
+                print('_recibirInfoBool '+_recibirInfoBool.toString());            /*  */
+                print('_avisoPrivaBool '+_avisoPrivaBool.toString());   
+              });
+            } catch (e){
+              print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
+            };
           },
           child: Text(
             "Finalizar",
@@ -175,6 +181,7 @@ _onAlertWithCustomContentPressed(context) {
     Acompaniantes _aco = new Acompaniantes();
     _aco.fechanac = new DateTime.now().toString();
     print("Alerta fecha "+_aco.fechanac);
+    SignatureController _sigController = new SignatureController();
     Alert(
         context: context,
         title: "Agregar acompañante",
@@ -182,7 +189,9 @@ _onAlertWithCustomContentPressed(context) {
           children: <Widget>[
             CardAcompanante(
               acompaniante: _aco,
-              signature: CustomSignature(controller: new SignatureController(),),
+              signature: CustomSignature(
+                controller: _sigController,
+              ),
             ),
             Row(
               children: <Widget>[
@@ -199,7 +208,12 @@ _onAlertWithCustomContentPressed(context) {
             color: Colors.white,
             onPressed: () {
               setState(() {
-              _reserva.result.acompaniantes.add(_aco);
+                mapControllerSiganture[_aco] =_sigController;
+                //mapControllerSiganture[_aco].points = _sigController.points ;
+                //print(( _sigController.points.toList().toString()));
+                //print((mapControllerSiganture[_aco].points.toList().toString()));
+                //print(( _sigController.points.toList().toString()==mapControllerSiganture[_aco].points.toList().toString()));
+                _reserva.result.acompaniantes.add(_aco);
               });
               Navigator.pop(context);
             } ,
@@ -221,12 +235,17 @@ _onAlertWithCustomContentPressed(context) {
 
     _reserva.result.acompaniantes.forEach( (acompaniante){
       SignatureController _controllerSignature = new SignatureController();
-      //Mapa de los controllersde las Firmas para cada acompañante
       mapControllerSiganture[acompaniante] = _controllerSignature;
+      mapControllerSiganture[acompaniante].addListener(()async{
+        print('Change value');
+        var data = await mapControllerSiganture[acompaniante].toPngBytes();
+        acompaniante.imagesign = base64.encode(data);
+        print('Value ${acompaniante.nombre}: ${acompaniante.imagesign}');
+      });
       Widget widget = CardAcompanante(
           acompaniante: acompaniante,
           signature: CustomSignature(
-            
+            acompaniantes: acompaniante,
             controller: _controllerSignature,
           ),
       );

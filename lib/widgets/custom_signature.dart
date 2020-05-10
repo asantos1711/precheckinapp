@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/tools/translation.dart';
@@ -25,7 +28,19 @@ class _CustomSignatureState extends State<CustomSignature> {
     // TODO: implement initState
     _controller = this.widget.controller;
     _acompaniantes = this.widget.acompaniantes;
+    /* _controller.addListener(()async{
+      print('Change value');
+      var data = await _controller.toPngBytes();
+      _acompaniantes.imagesign = base64.encode(data);
+      print('Value ${_acompaniantes.imagesign}');
+    }); */
     super.initState();
+  }
+
+  _imagenToAco()async{
+    print('Change value');
+    var data = await _controller.toPngBytes();
+    _acompaniantes.imagesign = base64.encode(data);
   }
 
   @override
@@ -61,18 +76,20 @@ class _CustomSignatureState extends State<CustomSignature> {
           ),
           Container(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                FlatButton(
+                /* FlatButton(
                   color: Colors.white,
                   onPressed: () {
-                    setState(() {
-                      _acompaniantes.imagesign = _controller.toString();
+                    setState(() async {
+                      var data = await _controller.toPngBytes();
+                      _acompaniantes.imagesign = base64.encode(data);
+                      debugPrint(_acompaniantes.imagesign);
                     });
                   },
                   child: Text(Translations.of(context).text('guardar'))
-                ),
+                ), */
                 FlatButton(
                   color: Colors.white,
                   onPressed: () {
