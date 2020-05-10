@@ -15,7 +15,7 @@ class PaisProvider{
   Future<List<Pais>> getListaPaises( String hotel ) async {
     List<Pais> listaPaises = [];
     Paises paises;
-    final uri      = 'http://10.194.18.59:8081/GroupSunsetPMSProxyServices/pms/getListaPaises';
+    final uri      = 'http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/pms/getListaPaises';
     final headers  = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8","Accept": "application/json"};
     final body     = { 'nohotel': hotel };
 
