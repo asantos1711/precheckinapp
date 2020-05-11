@@ -9,6 +9,7 @@ import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
 import 'package:precheckin/pages/ViewPoliRegla.dart';
 import 'package:precheckin/pages/ViewPromoInfo.dart';
+import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/card_acompanante.dart';
 import 'package:precheckin/widgets/check_text_bold.dart';
@@ -128,6 +129,16 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
             } catch (e){
               print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
             };
+            PMSProvider a= new PMSProvider();
+            FutureBuilder(
+              future: a.actualizaHospedaje(),
+              builder: (contex,a){
+                return Scaffold(
+                  body: Center(child: Text(a.toString()),)
+                );
+              },
+            );
+
           },
           child: Text(
             "Finalizar",
