@@ -49,6 +49,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   @override
   Widget build(BuildContext context) {
     _reserva = ModalRoute.of(context).settings.arguments;
+
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return GestureDetector(

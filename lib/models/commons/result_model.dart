@@ -1,4 +1,5 @@
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
+import 'package:precheckin/models/commons/vuelos_model.dart';
 
 
 class Result {
@@ -20,8 +21,7 @@ class Result {
   String email;
   String telefono;
   List<Acompaniantes> acompaniantes;
-
-  
+  List<Vuelos> vuelos;
 
   Result({
     this.idClub,
@@ -41,7 +41,8 @@ class Result {
     this.codigoPostal,
     this.email,
     this.telefono,
-    this.acompaniantes
+    this.acompaniantes,
+    this.vuelos,
   });
 
   factory Result.fromJson( Map<String,dynamic> json ){
@@ -66,7 +67,8 @@ class Result {
       codigoPostal      : json['cpsocio'],
       email             : json['emailhogar'] ?? "",
       telefono          : json['telefono'] ?? "",
-      acompaniantes     : json['vecaco'] != null ? List<Acompaniantes>.from(json['vecaco'].map( (v) => Acompaniantes.fromJson(v) )) : []
+      acompaniantes     : json['vecaco'] != null ? List<Acompaniantes>.from(json['vecaco'].map( (v) => Acompaniantes.fromJson(v) )) : [],
+      vuelos            : json['vuelos'] != null ? List<Vuelos>.from( json['vuelos'].map( (v) => Vuelos.fromJson(v) ) ) : []
     );
   }
 }

@@ -25,9 +25,9 @@ class Reserva {
       idioma          : json['idioma'] ?? 'EN',
       result          : json['result'] != null ? Result.fromJson( json['result'] ) : null,
       nombreHotel     : json['nombrehotel'] ?? '',
-      tipoHabitacion  : json['tipohabitacion'] != null ? TipoHabitacion.fromJson(json['tipohabitacion']) : null,
+      tipoHabitacion  : json['tipohabitacion']  != null ? TipoHabitacion.fromJson(json['tipohabitacion']) : null,
       especialRequest : json['especialrequest'] != null ? List<EspecialRequest>.from( json['especialrequest'].map( (l)=> EspecialRequest.fromJson(l)) ) : [],
-      plana           : Map.from(json["plana"]).map((k, v) => MapEntry<String, String>(k, v))
+      plana           : Map.from(json["plana"]).map((k, v) => MapEntry<String, String>(k, v)),
     );
   }
 }

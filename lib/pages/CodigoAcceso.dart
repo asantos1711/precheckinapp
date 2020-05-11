@@ -25,7 +25,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
   @override
   void initState() {
     _language = _usrPref.idioma;
-    _codigoController = new TextEditingController(text: "MC0yMTE0NjA1",);
+    _codigoController = new TextEditingController(text: "MC0yMTE0MzU0",);
 
 
     super.initState();

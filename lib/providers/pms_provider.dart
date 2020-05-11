@@ -7,7 +7,8 @@ import 'package:precheckin/models/reserva_model.dart';
 
 /// Clase para proveer los servicios de pms
 class PMSProvider {
-  final String _url = 'http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app';
+  //final String _url = 'http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app';
+  final String _url = 'http://10.194.18.59:8081/GroupSunsetPMSProxyServices/app';
   final String _usr = 'apphotel';
   final String _psw = 'hotel25012018';
   
@@ -79,6 +80,8 @@ class PMSProvider {
       final response = await http.post(uri, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
       final decodedData = json.decode( utf8.decode(response.bodyBytes) );
       reserva = Reserva.formJson(decodedData);
+
+      print(reserva.result.vuelos[0].vuelollegada);
     } 
     catch (e)
     {

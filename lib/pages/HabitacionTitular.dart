@@ -5,6 +5,7 @@ import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/utils/hotel_utils.dart';
+import 'package:precheckin/utils/fecha_util.dart' as futl;
 import 'package:precheckin/widgets/paises_widget.dart';
 import 'package:precheckin/widgets/estados_widget.dart';
 
@@ -26,6 +27,9 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   TextEditingController _controllerNombre = new TextEditingController();
   TextEditingController _controllerCP = new TextEditingController();
   TextEditingController _controllerCiudad = new TextEditingController();
+  TextEditingController _controllerVuelo = new TextEditingController();
+  TextEditingController _controllerVueloFS = new TextEditingController();
+
 
 
   AnimationController _controller;
@@ -64,9 +68,13 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
 
   void _inicializarDatos() {
+    
     _controllerNombre.text = _reserva.result.nombreTitular;
     _controllerCP.text = _reserva.result.codigoPostal;
     _controllerCiudad.text = _reserva.result.ciudad;
+    _controllerVuelo.text = _reserva.result.vuelos[0].vuelollegada;
+    _controllerVueloFS.text = futl.vueloFechaLlegada(_reserva.result.vuelos[0].fechasalida);
+    
     _pais = (_pais == null) ? _reserva.result.pais : _pais; //Validacion para que cambie el valor del pais
     _estado = (_estado == null) ? _reserva.result.estado : _estado; //Validacion para que cambie el valor del estado
 
@@ -777,24 +785,22 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             padding: EdgeInsets.only(left: 10),
             width: width-30,
             child: TextFormField(
+              controller: _controllerVuelo,
               decoration: InputDecoration(
                 labelText: Translations.of(context).text('no_vuelo')
               ),
-              onChanged: (numeroVuelo) {
-                //TODO: Falta el número de vuelo en el servicio.
-              },
+              onChanged: (numeroVuelo) => _reserva.result.vuelos[0].vuelollegada = numeroVuelo,
             )
           ),
           Container(
             padding: EdgeInsets.only(left: 10),
             width: (width-30)/2,
             child: TextFormField(
+              controller: _controllerVueloFS,
               decoration: InputDecoration(
                 labelText: Translations.of(context).text('fec_salida')
               ),
-              onChanged: (fechaVuelo){
-                //TODO: Falta la fecha de vuelo en el servicio.
-              },
+              onChanged: (fechaVuelo) => _reserva.result.vuelos[0].fechallegada = fechaVuelo,
             )
           )
         ],
