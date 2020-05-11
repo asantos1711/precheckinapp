@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Platform;
-
+import 'package:precheckin/models/ScanerModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mrzflutterplugin/mrzflutterplugin.dart';
@@ -12,6 +12,7 @@ class PrimerDocumento extends StatefulWidget {
 
 class _PrimerDocumentoState extends State<PrimerDocumento> {
   String _result = 'No result yet';
+  ScanerModel _scanerModel = new ScanerModel();
   String fullImage;
 
   @override
@@ -39,7 +40,7 @@ class _PrimerDocumentoState extends State<PrimerDocumento> {
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Text('Result: $_result'),
+                child: Text('Result: $_result  ${_scanerModel.surname}'),
               ),
             ],
           ),
@@ -49,6 +50,7 @@ class _PrimerDocumentoState extends State<PrimerDocumento> {
 
   Future<void> startScanning() async {
     String scannerResult;
+    ScanerModel res;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       Mrzflutterplugin.setIDActive(true);
@@ -58,17 +60,16 @@ class _PrimerDocumentoState extends State<PrimerDocumento> {
       String jsonResultString = await Mrzflutterplugin.startScanner;
 
       Map<String, dynamic> jsonResult = jsonDecode(jsonResultString);
+       dynamic a = jsonDecode(jsonResultString);
+       res = ScanerModel.fromJson(jsonResult);
       print(jsonResult);
 
       
       fullImage = jsonResult['full_image'];
-      
         
-      scannerResult = jsonResult['document_number'] +
-          '\n ' +
-          jsonResult['given_names_readable'] +
-          ' \n' +
-          jsonResult['surname'];
+      scannerResult = jsonResult.toString();
+      
+      print(scannerResult);
     } on PlatformException catch (ex) {
       String message = ex.message;
       scannerResult = 'Scanning failed: $message';
@@ -80,6 +81,7 @@ class _PrimerDocumentoState extends State<PrimerDocumento> {
     if (!mounted) return;
 
     setState(() {
+      _scanerModel = res;
       _result = scannerResult;
     });
   }

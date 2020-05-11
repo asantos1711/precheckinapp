@@ -240,7 +240,10 @@ _onAlertWithCustomContentPressed(context) {
         print('Change value');
         var data = await mapControllerSiganture[acompaniante].toPngBytes();
         acompaniante.imagesign = base64.encode(data);
-        print('Value ${acompaniante.nombre}: ${acompaniante.imagesign}');
+        //acompaniante.imagesign.split('').forEach((word) => print("" + word));
+        print('Value ${acompaniante.nombre}: ${acompaniante.imagesign.substring(0,1000)}');
+        print('${acompaniante.imagesign.substring(1000,2000)}');
+        print('${acompaniante.imagesign.substring(3000,4000)}');
       });
       Widget widget = CardAcompanante(
           acompaniante: acompaniante,
