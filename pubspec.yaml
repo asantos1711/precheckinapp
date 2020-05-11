@@ -34,6 +34,7 @@ dependencies:
   mrzflutterplugin: any
   qr_flutter: ^3.1.0
   rflutter_alert: ^1.0.3
+  fluttertoast: any
 
 dev_dependencies:
   flutter_test:

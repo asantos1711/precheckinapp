@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
@@ -26,6 +27,7 @@ class InformacionAdicional extends StatefulWidget {
 class _InformacionAdicionalState extends State<InformacionAdicional> {
   double width;
   double height;
+  bool _enableButton = false;
   bool _promoInfoBool = false;
   bool _avisoPrivaBool = false;
   bool _recibirInfoBool = false;
@@ -44,6 +46,12 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   void initState() {
     super.initState();
     _controller.addListener(() => print("Value changed"));
+  }
+
+  _botonDisable(){
+    setState(() {
+      _enableButton = _poliReglaBool && _promoInfoBool & _avisoPrivaBool ;
+    });
   }
 
   @override
@@ -90,62 +98,63 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   }
 
   Widget _buttonFinalizar() {
-    return Container(
-        width: width - 20,
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-        color: Colors.white,
-        child: FlatButton(
-          color: Color(0xFFE87200),
-          textColor: Colors.white,
-          disabledColor: Colors.grey,
-          disabledTextColor: Colors.black,
-          padding: EdgeInsets.all(8.0),
-          splashColor: Colors.grey,
-          onPressed: (){
-            try{
-              /* mapControllerSiganture.forEach((key, value){
-                SignatureController c = value;
+    if(_enableButton){
+      return Container(
+          width: width - 20,
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+          color: Colors.white,
+          child: FlatButton(
+            color: Color(0xFFE87200),
+            textColor: Colors.white,
+            disabledColor: Colors.grey,
+            disabledTextColor: Colors.black,
+            padding: EdgeInsets.all(8.0),
+            splashColor: Colors.grey,
+            onPressed: (){
+                PMSProvider a= new PMSProvider();
                 FutureBuilder(
-                  future:  c.toPngBytes(),
-                  builder: (BuildContext c,AsyncSnapshot<Uint8List> v){
-                    setState((){  
-                      var data = v.data;
-                      key.imagesign = base64.encode(data);
-                    });
-                });
-              }); */
-              setState((){
-                _reserva.result.acompaniantes.forEach( (acompaniante){
-                 /* print("Acompañante----");
-                  print("Fecha Nac:${acompaniante.fechanac.toString()}");
-                  print("Edad:${acompaniante.edad.toString()}");
-                  print("Nombre:${acompaniante.nombre.toString()}");
-                  print("Firma:${acompaniante.imagesign.toString()}");*/
-                });
-                /*print('_poliReglaBool '+_poliReglaBool.toString());            /*  */
-                print('_poliReglaBool '+_promoInfoBool.toString());            /*  */
-                print('_recibirInfoBool '+_recibirInfoBool.toString());            /*  */
-                print('_avisoPrivaBool '+_avisoPrivaBool.toString()); */  
-              });
-            } catch (e){
-              print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
-            };
-            PMSProvider a= new PMSProvider();
-            FutureBuilder(
-              future: a.actualizaHospedaje(_reserva),
-              builder: (contex,a){
-                return Scaffold(
-                  body: Center(child: Text(a.toString()),)
+                  future: a.actualizaHospedaje(_reserva),
+                  builder: (contex,a){
+                    return Scaffold(
+                        body: Center(child: Text(a.toString()),)
+                    );
+                  },
                 );
-              },
-            );
 
-          },
-          child: Text(
-            "Finalizar",
-            style: TextStyle(fontSize: 20.0),
-          ),
-        ));
+            },
+            child: Text(
+              Translations.of(context).text('finalizar'),
+              style: TextStyle(fontSize: 20.0),
+            ),
+          ));
+    }else{
+      return Container(
+          width: width - 20,
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+          color: Colors.white,
+          child: FlatButton(
+            color: Colors.grey,
+            textColor: Colors.white,
+            disabledColor: Colors.grey,
+            disabledTextColor: Colors.black,
+            padding: EdgeInsets.all(8.0),
+            splashColor: Colors.grey,
+            onPressed: (){
+              Fluttertoast.showToast(
+                  msg: Translations.of(context).text('mensaje_casillas'),
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  textColor: Colors.white,
+                  fontSize: 18.0
+              );
+            },
+            child: Text(
+              Translations.of(context).text('finalizar'),
+              style: TextStyle(fontSize: 20.0),
+            ),
+          ));
+    }
   }
 
   Widget _agregarAco() {
@@ -325,7 +334,10 @@ _onAlertWithCustomContentPressed(context) {
     return CheckTextBold(
       width: width,
       onChange:(boo){
-        _poliReglaBool = !_poliReglaBool;
+        setState(() {
+          _poliReglaBool = !_poliReglaBool;
+        });
+        _botonDisable();
       } ,
       value: _poliReglaBool,
       text: Translations.of(context).text('acepto_deacuerdo'),
@@ -347,6 +359,7 @@ _onAlertWithCustomContentPressed(context) {
         setState(() {
           _promoInfoBool = !_promoInfoBool;
         });
+        _botonDisable();
       } ,
       value: _promoInfoBool,
       text: Translations.of(context).text('acepto_deacuerdo'),
@@ -368,6 +381,7 @@ _onAlertWithCustomContentPressed(context) {
         setState(() {
           _avisoPrivaBool = !_avisoPrivaBool;
         });
+        _botonDisable();
       } ,
       value: _avisoPrivaBool,
       text: 'Acepto y estoy de acuerdo con el ',

@@ -27,9 +27,13 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   TextEditingController _controllerNombre = new TextEditingController();
   TextEditingController _controllerCP = new TextEditingController();
   TextEditingController _controllerCiudad = new TextEditingController();
+  TextEditingController _controllerAerolinea = new TextEditingController();
   TextEditingController _controllerVuelo = new TextEditingController();
   TextEditingController _controllerVueloFS = new TextEditingController();
+  TextEditingController _controllerFechaVuelo = new TextEditingController();
 
+  //DateTime _date = DateTime.now();
+  DateTime _fechaVuelo = DateTime.now();
 
 
   AnimationController _controller;
@@ -40,7 +44,9 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   @override
   void initState() {
     super.initState();
-    
+
+    _fechaVuelo = DateTime.parse(_reserva.result.vuelos[0].fechallegada.replaceAll('-', ""));
+    _controllerFechaVuelo.text = "${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}";
     _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
   }
 
@@ -71,6 +77,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     
     _controllerNombre.text = _reserva.result.titular.nombre;
     _controllerCP.text = _reserva.result.codigoPostal;
+    _controllerAerolinea.text = _reserva.result.vuelos[0].aerolinea1 ;
     _controllerCiudad.text = _reserva.result.titular.ciudad;
     _controllerVuelo.text = _reserva.result.vuelos[0].vuelollegada;
     _controllerVueloFS.text = futil.splitFecha(_reserva.result.vuelos[0].fechasalida);
@@ -791,28 +798,67 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             padding: EdgeInsets.only(left: 10),
             width: width-30,
             child: TextFormField(
-              controller: _controllerVuelo,
+              controller: _controllerAerolinea,
               decoration: InputDecoration(
-                labelText: Translations.of(context).text('no_vuelo')
+                labelText: Translations.of(context).text('aerolinea')
               ),
               onChanged: (numeroVuelo) => _reserva.result.vuelos[0].vuelollegada = numeroVuelo,
             )
           ),
-          Container(
-            padding: EdgeInsets.only(left: 10),
-            width: (width-30)/2,
-            child: TextFormField(
-              controller: _controllerVueloFS,
-              decoration: InputDecoration(
-                labelText: Translations.of(context).text('fec_salida')
+          Row(
+            children: <Widget>[
+              Container(
+                  padding: EdgeInsets.only(left: 10),
+                  width: (width-30)/2,
+                  child: TextFormField(
+                    controller: _controllerFechaVuelo,
+                    decoration: InputDecoration(
+                        labelText: Translations.of(context).text('fec_salida')),
+                    readOnly: true,
+                    onTap: () => _selectDate(context),
+                  ),
+//                  child: TextFormField(
+//                    controller: _controllerVueloFS,
+//                    decoration: InputDecoration(
+//                        labelText: Translations.of(context).text('fec_salida')
+//                    ),
+//                    onChanged: (fechaVuelo) => _reserva.result.vuelos[0].fechallegada = fechaVuelo,
+//                  )
               ),
-              onChanged: (fechaVuelo) => _reserva.result.vuelos[0].fechallegada = fechaVuelo,
-            )
-          )
+              Container(
+                  padding: EdgeInsets.only(left: 10),
+                  width: (width-30)/2,
+                  child: TextFormField(
+                    controller: _controllerVuelo,
+                    decoration: InputDecoration(
+                        labelText: Translations.of(context).text('no_vuelo')
+                    ),
+                    onChanged: (numeroVuelo) => _reserva.result.vuelos[0].vuelollegada = numeroVuelo,
+                  )
+              )
+            ],
+          ),
         ],
       )
     );
   }
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _fechaVuelo,
+        firstDate: DateTime(1910),
+        lastDate: DateTime.now());
+    if (picked != null && picked != _fechaVuelo) {
+      setState(() {
+        _fechaVuelo = picked;
+        print(_fechaVuelo.toString());
+        _reserva.result.vuelos[0].fechallegada = _fechaVuelo.toString();
+        _controllerFechaVuelo.text ="${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}";
+      });
+    }
+  }
+
 
   Widget  _buttonContinuar(){
     return Container(
