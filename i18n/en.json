@@ -51,5 +51,8 @@
   "selec_tipo_doc": "Select one type of ID.",
   "pasaporte": "Passport",
   "doc_identidad": "Other ID",
-  "no_compartir": "We will not share your ID with any other user."
+  "no_compartir": "We will not share your ID with any other user.",
+  "aerolinea": "Airline",
+  "mensaje_casillas": "Check the missing boxes",
+  "finalizar": "Finish"
 }

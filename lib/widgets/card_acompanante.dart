@@ -34,9 +34,9 @@ class _CardAcompananteState extends State<CardAcompanante> {
   Widget _signature;
   Acompaniantes _acompaniante;
   DateTime _date = DateTime.now();
+  DateTime _fecaNac = DateTime.now();
   TextEditingController _controllerText = new TextEditingController();
   TextEditingController _controllerFechaEdad = new TextEditingController();
-  DateTime _fecaNac = DateTime.now();
   @override
   void initState() {
     // TODO: implement initState
@@ -131,7 +131,9 @@ class _CardAcompananteState extends State<CardAcompanante> {
                   labelText: Translations.of(context).text('fec_nacimiento')),
               readOnly: true,
               onTap: () => _selectDate(context),
-            )));
+            )
+        )
+    );
   }
 
   Widget _edad() {

@@ -33,7 +33,7 @@
   "continuar": "Continuar",
   "acepto_deacuerdo": "Acepto y estoy de acuerdo con ",
   "reglamento_hotel_bold": "el reglamento del hotel.",
-  "politicas_procediientos_bold": "las politicas y procedimientos del check in. ",
+  "politicas_procedimientos_bold": "las politicas y procedimientos del check in. ",
   "ingresa_firma_titular": "Ingresa firma del titular ",
   "limpiar": "Limpiar",
   "doc_identificacion": "Documento de identificación",
@@ -53,5 +53,8 @@
   "doc_identidad": "Documento de identidad",
   "no_compartir": "No compartiremos tu documento de identificación con ningún otro usuario.",
   "opcion_duda": "Tengo dudas con mi reservación",
-  "opcion_error": "Tengo errores con mi reservación"
+  "opcion_error": "Tengo errores con mi reservación",
+  "aerolinea": "Aerolinea",
+  "mensaje_casillas": "Marque las casillas faltantes",
+  "finalizar": "Finalizar"
 }
