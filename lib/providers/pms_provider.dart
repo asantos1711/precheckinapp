@@ -98,7 +98,9 @@ class PMSProvider {
 
 
 
-
+  ///Actualiza la información de la reserva
+  ///
+  ///
   Future<dynamic> actualizaHospedaje(Reserva reserva) async {
     String uri           = '$_url/actualizaHospedajeJson';
     String authorization = 'Basic '+base64Encode(utf8.encode('$_usr:$_psw'));
