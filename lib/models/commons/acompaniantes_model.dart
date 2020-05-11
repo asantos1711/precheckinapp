@@ -17,11 +17,14 @@ class Acompaniantes{
   String imagefront;
   String imageback;
   String imagesign;
+  String pais;
   String sexo;
   String idcard;
   String documenttype;
   String documentexpdate;
   bool istitular;
+  String estado;
+  String codigoPostal;
 
   Acompaniantes({
     this.club,
@@ -42,11 +45,14 @@ class Acompaniantes{
     this.imagefront,
     this.imageback,
     this.imagesign,
+    this.pais,
     this.sexo,
     this.idcard,
     this.documenttype,
     this.documentexpdate,
     this.istitular,
+    this.estado,
+    this.codigoPostal,
   });
 
   factory Acompaniantes.fromJson(Map<String,dynamic> json){
@@ -70,12 +76,14 @@ class Acompaniantes{
       imagefront      : json['imagefront'],
       imageback       : json['imageback'],
       imagesign       : json['imagesign'],
+      pais            : json['pais'],
       sexo            : json['sexo'],
       idcard          : json['idcard'],
       documenttype    : json['documenttype'],
       documentexpdate : json['documentexpdate'],
       istitular       : json['istitular'] ?? false,
+      estado          : json['estado'] ?? '',
+      codigoPostal    : json['cpsocio'] ?? '',
     );
-
   }
 }

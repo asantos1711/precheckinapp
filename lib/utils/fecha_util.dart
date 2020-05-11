@@ -1,5 +1,5 @@
 
-String vueloFechaLlegada(String fecha){
+String splitFecha(String fecha){
 
   if(fecha == null || fecha.isEmpty)
     return "";

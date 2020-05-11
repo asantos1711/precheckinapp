@@ -111,43 +111,15 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
             padding: EdgeInsets.all(8.0),
             splashColor: Colors.grey,
             onPressed: (){
-              try{
-                /* mapControllerSiganture.forEach((key, value){
-                SignatureController c = value;
+                PMSProvider a= new PMSProvider();
                 FutureBuilder(
-                  future:  c.toPngBytes(),
-                  builder: (BuildContext c,AsyncSnapshot<Uint8List> v){
-                    setState((){
-                      var data = v.data;
-                      key.imagesign = base64.encode(data);
-                    });
-                });
-              }); */
-                setState((){
-                  _reserva.result.acompaniantes.forEach( (acompaniante){
-                    print("Acompañante----");
-                    print("Fecha Nac:${acompaniante.fechanac.toString()}");
-                    print("Edad:${acompaniante.edad.toString()}");
-                    print("Nombre:${acompaniante.nombre.toString()}");
-                    print("Firma:${acompaniante.imagesign.toString()}");
-                  });
-                  print('_poliReglaBool '+_poliReglaBool.toString());            /*  */
-                  print('_poliReglaBool '+_promoInfoBool.toString());            /*  */
-                  print('_recibirInfoBool '+_recibirInfoBool.toString());            /*  */
-                  print('_avisoPrivaBool '+_avisoPrivaBool.toString());
-                });
-              } catch (e){
-                print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
-              };
-              PMSProvider a= new PMSProvider();
-              FutureBuilder(
-                future: a.actualizaHospedaje(),
-                builder: (contex,a){
-                  return Scaffold(
-                      body: Center(child: Text(a.toString()),)
-                  );
-                },
-              );
+                  future: a.actualizaHospedaje(_reserva),
+                  builder: (contex,a){
+                    return Scaffold(
+                        body: Center(child: Text(a.toString()),)
+                    );
+                  },
+                );
 
             },
             child: Text(
@@ -183,7 +155,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
             ),
           ));
     }
-
   }
 
   Widget _agregarAco() {

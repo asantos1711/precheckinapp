@@ -5,7 +5,7 @@ import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/utils/hotel_utils.dart';
-import 'package:precheckin/utils/fecha_util.dart' as futl;
+import 'package:precheckin/utils/fecha_util.dart' as futil;
 import 'package:precheckin/widgets/paises_widget.dart';
 import 'package:precheckin/widgets/estados_widget.dart';
 
@@ -75,14 +75,14 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
   void _inicializarDatos() {
     
-    _controllerNombre.text = _reserva.result.nombreTitular;
+    _controllerNombre.text = _reserva.result.titular.nombre;
     _controllerCP.text = _reserva.result.codigoPostal;
-    _controllerCiudad.text = _reserva.result.ciudad;
     _controllerAerolinea.text = _reserva.result.vuelos[0].aerolinea1 ;
+    _controllerCiudad.text = _reserva.result.titular.ciudad;
     _controllerVuelo.text = _reserva.result.vuelos[0].vuelollegada;
-    _controllerVueloFS.text = futl.vueloFechaLlegada(_reserva.result.vuelos[0].fechasalida);
-
-    _pais = (_pais == null) ? _reserva.result.pais : _pais; //Validacion para que cambie el valor del pais
+    _controllerVueloFS.text = futil.splitFecha(_reserva.result.vuelos[0].fechasalida);
+    
+    _pais = (_pais == null) ? _reserva.result.titular.pais : _pais; //Validacion para que cambie el valor del pais
     _estado = (_estado == null) ? _reserva.result.estado : _estado; //Validacion para que cambie el valor del estado
 
     _opcionesFloat["1"] = Translations.of(context).text('opcion_duda').toString();
@@ -555,8 +555,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                     ),
 
                     onChanged: (nombre){
-
                       _reserva.result.nombreTitular = nombre;
+                      _reserva.result.titular.nombre = nombre;
 
                     },
 
@@ -602,6 +602,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                     onChanged: (ciudad) {
 
                       _reserva.result.ciudad = ciudad;
+                      _reserva.result.titular.ciudad = ciudad;
 
                     },
                   )
@@ -615,7 +616,10 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                       labelText: Translations.of(context).text('cod_postal')
                     ),
                     onChanged: (cp){
+
                       _reserva.result.codigoPostal = cp;
+                      _reserva.result.titular.codigoPostal = cp;
+
                     },
 
                   )
@@ -640,6 +644,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
           setState(() {
             _pais = pais;
             _reserva.result.pais = pais;
+            _reserva.result.titular.pais = pais;
           });
         },
       ),
@@ -659,6 +664,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
           setState(() {
             _estado = estado;
             _reserva.result.estado = estado;
+            _reserva.result.titular.estado = estado;
           });
         },
       ),
