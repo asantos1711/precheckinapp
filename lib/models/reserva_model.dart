@@ -2,7 +2,6 @@ import 'package:precheckin/models/commons/especial_request_model.dart';
 import 'package:precheckin/models/commons/tipo_habitacion_model.dart';
 import 'package:precheckin/models/commons/result_model.dart';
 
-
 class Reserva {
   String idioma;
   Result result;

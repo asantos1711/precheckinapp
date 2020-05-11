@@ -116,23 +116,23 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
               }); */
               setState((){
                 _reserva.result.acompaniantes.forEach( (acompaniante){
-                  print("Acompañante----");
+                 /* print("Acompañante----");
                   print("Fecha Nac:${acompaniante.fechanac.toString()}");
                   print("Edad:${acompaniante.edad.toString()}");
                   print("Nombre:${acompaniante.nombre.toString()}");
-                  print("Firma:${acompaniante.imagesign.toString()}");
+                  print("Firma:${acompaniante.imagesign.toString()}");*/
                 });
-                print('_poliReglaBool '+_poliReglaBool.toString());            /*  */
+                /*print('_poliReglaBool '+_poliReglaBool.toString());            /*  */
                 print('_poliReglaBool '+_promoInfoBool.toString());            /*  */
                 print('_recibirInfoBool '+_recibirInfoBool.toString());            /*  */
-                print('_avisoPrivaBool '+_avisoPrivaBool.toString());   
+                print('_avisoPrivaBool '+_avisoPrivaBool.toString()); */  
               });
             } catch (e){
               print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
             };
             PMSProvider a= new PMSProvider();
             FutureBuilder(
-              future: a.actualizaHospedaje(),
+              future: a.actualizaHospedaje(_reserva),
               builder: (contex,a){
                 return Scaffold(
                   body: Center(child: Text(a.toString()),)
