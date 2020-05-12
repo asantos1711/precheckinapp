@@ -237,15 +237,12 @@ _onAlertWithCustomContentPressed(context) {
             color: Colors.white,
             onPressed: () {
               setState(() {
-<<<<<<< HEAD
-=======
                 mapControllerSiganture[_aco] =_sigController;
                 _aco.istitular = false;
                 //mapControllerSiganture[_aco].points = _sigController.points ;
                 //print(( _sigController.points.toList().toString()));
                 //print((mapControllerSiganture[_aco].points.toList().toString()));
                 //print(( _sigController.points.toList().toString()==mapControllerSiganture[_aco].points.toList().toString()));
->>>>>>> lruiz
                 _reserva.result.acompaniantes.add(_aco);
                 mapControllerSiganture[_aco] =_sigController;
                 print('add');
