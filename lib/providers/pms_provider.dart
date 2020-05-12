@@ -83,6 +83,12 @@ class PMSProvider {
       final response    = await http.post(uri, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
       final decodedData = json.decode( utf8.decode(response.bodyBytes) );
       reserva           = Reserva.formJson(decodedData);
+
+      if(reserva.result.titular == null)
+        reserva = null;
+
+      if(reserva.result.status.toString().trim().toLowerCase() != "r")
+        reserva = null;
     } 
     catch (e)
     {

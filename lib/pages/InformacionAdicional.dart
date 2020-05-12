@@ -1,9 +1,6 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
@@ -36,6 +33,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   bool _poliReglaBool = false;
   bool _bloquear = false;
   QRPersistence _persistence = new QRPersistence();
+  List<String> _qr;
 
   DateTime dateAco = new DateTime.now();
   TextEditingController textController = new TextEditingController(text: '');
@@ -44,13 +42,13 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
 
 
-  final SignatureController _controller =
-      SignatureController(penStrokeWidth: 5, penColor: Colors.red);
+  final SignatureController _controller = SignatureController(penStrokeWidth: 5, penColor: Colors.red);
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(() => print("Value changed"));
+    _qr = _persistence.qr;
   }
 
   _botonDisable(){
@@ -118,7 +116,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
       color: Colors.white,
       child: FlatButton(
-        color: Color(0xFFE87200),
+        color: Theme.of(context).primaryColor,
         textColor: Colors.white,
         disabledColor: Colors.grey,
         disabledTextColor: Colors.black,
@@ -141,7 +139,11 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     _bloquearPantalla(false);
 
     if(status){
-      _persistence.qr = [_reserva.codigo];
+      if(!_qr.contains(_reserva.codigo))
+        _qr.add(_reserva.codigo);
+
+      _persistence.qr = _qr;
+
       Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
     }
     else {
@@ -235,6 +237,15 @@ _onAlertWithCustomContentPressed(context) {
             color: Colors.white,
             onPressed: () {
               setState(() {
+<<<<<<< HEAD
+=======
+                mapControllerSiganture[_aco] =_sigController;
+                _aco.istitular = false;
+                //mapControllerSiganture[_aco].points = _sigController.points ;
+                //print(( _sigController.points.toList().toString()));
+                //print((mapControllerSiganture[_aco].points.toList().toString()));
+                //print(( _sigController.points.toList().toString()==mapControllerSiganture[_aco].points.toList().toString()));
+>>>>>>> lruiz
                 _reserva.result.acompaniantes.add(_aco);
                 mapControllerSiganture[_aco] =_sigController;
                 print('add');
@@ -419,7 +430,6 @@ _onAlertWithCustomContentPressed(context) {
 
   Widget _appBar() {
     return AppBar(
-      backgroundColor:  Color(0xFFE87200),
       leading: Container(),
       title: Text('Información de reservación'),
     );
