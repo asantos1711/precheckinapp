@@ -163,7 +163,11 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         width: width,
         alignment: Alignment.center,
         child: MaterialButton(
-          onPressed: () => _onAlertWithCustomContentPressed(context),
+          onPressed: () {
+            setState(() {
+              _onAlertWithCustomContentPressed(context);
+            });
+          },
           color: Colors.blue,
           textColor: Colors.white,
           child: Icon(
@@ -203,6 +207,9 @@ _onAlertWithCustomContentPressed(context) {
     print("Alerta fecha "+_aco.fechanac);
     SignatureController _sigController = new SignatureController();
     Alert(
+        closeFunction:(){
+          print('Se cerró la alerta');
+        } ,
         context: context,
         title: "Agregar acompañante",
         content: Column(
@@ -228,12 +235,9 @@ _onAlertWithCustomContentPressed(context) {
             color: Colors.white,
             onPressed: () {
               setState(() {
-                mapControllerSiganture[_aco] =_sigController;
-                //mapControllerSiganture[_aco].points = _sigController.points ;
-                //print(( _sigController.points.toList().toString()));
-                //print((mapControllerSiganture[_aco].points.toList().toString()));
-                //print(( _sigController.points.toList().toString()==mapControllerSiganture[_aco].points.toList().toString()));
                 _reserva.result.acompaniantes.add(_aco);
+                mapControllerSiganture[_aco] =_sigController;
+                print('add');
               });
               Navigator.pop(context);
             } ,
@@ -255,20 +259,18 @@ _onAlertWithCustomContentPressed(context) {
 
     _reserva.result.acompaniantes.forEach( (acompaniante){
       SignatureController _controllerSignature = new SignatureController();
-      mapControllerSiganture[acompaniante] = _controllerSignature;
+      if(mapControllerSiganture[acompaniante]==null){print('signatureNulo');mapControllerSiganture[acompaniante] = _controllerSignature;}
       mapControllerSiganture[acompaniante].addListener(()async{
         print('Change value');
         var data = await mapControllerSiganture[acompaniante].toPngBytes();
         acompaniante.imagesign = base64.encode(data);
         //acompaniante.imagesign.split('').forEach((word) => print("" + word));
-        print('Value ${acompaniante.nombre}: ${acompaniante.imagesign.substring(0,1000)}');
-        print('${acompaniante.imagesign.substring(1000,2000)}');
-        print('${acompaniante.imagesign.substring(3000,4000)}');
+        print('Valor de firma asignado');
       });
       Widget widget = CardAcompanante(
           acompaniante: acompaniante,
           signature: CustomSignature(
-            controller: _controllerSignature,
+            controller: mapControllerSiganture[acompaniante],
           ),
       );
 
