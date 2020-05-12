@@ -44,7 +44,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   @override
   void initState() {
     super.initState();
-
    
     _controllerFechaVuelo.text = "${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}";
     _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
@@ -56,44 +55,35 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     _reserva = ModalRoute.of(context).settings.arguments; //Obtiene la informacion que biene de los argumentos.
     _inicializarDatos();//Inicializa las variables.
 
-    return GestureDetector(
-      onTap: () {
-
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus)
-          currentFocus.unfocus();
-      },
-      child:Scaffold(
+    return Scaffold(
         appBar: _appBar(),
-        floatingActionButton: _floatButton(),
         body: _body(),
-      )
-    );
+        floatingActionButton: _floatButton(),
+      );
   }
 
 
   void _inicializarDatos() {
     
-    _controllerNombre.text    =  _reserva.result.titular.nombre ?? "";
-    _controllerCP.text        =  _reserva.result.codigoPostal ?? "";
-    _controllerAerolinea.text =  _reserva.result.vuelos[0].aerolinea1 ?? "";
-    _controllerCiudad.text    =  _reserva.result.titular.ciudad ?? "";
-    _controllerVuelo.text     =  _reserva.result.vuelos[0].vuelollegada ?? "";
-    _controllerVueloFS.text   =  futil.splitFecha(_reserva.result.vuelos[0].fechasalida ?? "");
-    _fechaVuelo = DateTime.parse(_reserva.result.vuelos[0].fechallegada.replaceAll('-', ""));
+    _controllerNombre.text    = _reserva.result.titular.nombre ?? "";
+    _controllerCP.text        = _reserva.result.codigoPostal ?? "";
+    _controllerAerolinea.text = _reserva.result.vuelos[0].aerolinea1 ?? "";
+    _controllerCiudad.text    = _reserva.result.titular.ciudad ?? "";
+    _controllerVuelo.text     = _reserva.result.vuelos[0].vuelollegada ?? "";
+    _controllerVueloFS.text   = futil.splitFecha(_reserva.result.vuelos[0].fechasalida ?? "");
+    _fechaVuelo               = DateTime.parse(_reserva.result.vuelos[0].fechallegada.replaceAll('-', ""));
     
-    _pais = (_pais == null) ? _reserva.result.titular.pais : _pais; //Validacion para que cambie el valor del pais
-    _estado = (_estado == null) ? _reserva.result.estado : _estado; //Validacion para que cambie el valor del estado
+    _pais                     = (_pais == null) ? _reserva.result.titular.pais : _pais; //Validacion para que cambie el valor del pais
+    _estado                   = (_estado == null) ? _reserva.result.estado : _estado; //Validacion para que cambie el valor del estado
 
-    _opcionesFloat["1"] = Translations.of(context).text('opcion_duda').toString();
-    _opcionesFloat["2"] = Translations.of(context).text('opcion_error').toString();
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
+    _opcionesFloat["1"]       = Translations.of(context).text('opcion_duda').toString();
+    _opcionesFloat["2"]       = Translations.of(context).text('opcion_error').toString();
+    height                    = MediaQuery.of(context).size.height;
+    width                     = MediaQuery.of(context).size.width;
   }
 
   Widget _appBar(){
     return AppBar(
-      backgroundColor: Color(0xFFE87200),
       leading: Container(),
       title:Text(Translations.of(context).text('info_reservacion'),  style: appbarTitle),
       centerTitle: true,
@@ -546,7 +536,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(right: 10),
-                  width: (width-50)/2,
+                  width: (width)/1.2,
                   child: TextFormField(
                     controller: _controllerNombre,
                     decoration: InputDecoration(
@@ -561,15 +551,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
                   )
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 10),
-                  width: (width-50)/2,
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: Translations.of(context).text('apellido')
-                    ),
-                  )
-                )
+                
               ],
             )
           ),
@@ -816,13 +798,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                     readOnly: true,
                     onTap: () => _selectDate(context),
                   ),
-//                  child: TextFormField(
-//                    controller: _controllerVueloFS,
-//                    decoration: InputDecoration(
-//                        labelText: Translations.of(context).text('fec_salida')
-//                    ),
-//                    onChanged: (fechaVuelo) => _reserva.result.vuelos[0].fechallegada = fechaVuelo,
-//                  )
               ),
               Container(
                   padding: EdgeInsets.only(left: 10),
@@ -865,21 +840,13 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
       color: Colors.white,
       child:FlatButton(
-        color: Color(0xFFE87200),
         textColor: Colors.white,
         disabledColor: Colors.grey,
         disabledTextColor: Colors.black,
+        color: Theme.of(context).primaryColor,
         padding: EdgeInsets.all(8.0),
         splashColor: Colors.orange,
-        onPressed: () {
-
-
-
-          Navigator.pushNamed(context, 'infoAdicional', arguments: _reserva);
-
-
-         
-        },
+        onPressed: () => Navigator.pushNamed(context, 'infoAdicional', arguments: _reserva),
         child: Text(
           Translations.of(context).text('continuar'),
           style: TextStyle(fontSize: 20.0),
