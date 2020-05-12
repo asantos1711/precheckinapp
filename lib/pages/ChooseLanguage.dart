@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/widgets/idiomas_widget.dart';
+import 'package:precheckin/utils/tools_util.dart';
 
 class ChooseLanguage extends StatelessWidget {
 

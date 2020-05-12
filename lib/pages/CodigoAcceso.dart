@@ -5,6 +5,7 @@ import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/tools/translation.dart';
+import 'package:precheckin/utils/tools_util.dart' as tools;
 
 class CodigoAcceso extends StatefulWidget {
 
@@ -21,6 +22,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
   double space;
   String _language;
   TextEditingController _codigoController;
+  bool _bloquear = false;
 
   @override
   void initState() {
@@ -55,10 +57,12 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
               _bandera(),
               _textoIngresa(),
               _textField(),
-              _ingresar()
+              _ingresar(),
+              
           ],
         )
-      )
+      ),
+      tools.bloqueaPantalla(_bloquear),
       ],
     );
   }
@@ -73,13 +77,9 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
           InkWell(
             splashColor: Color.fromARGB(100, 255,255,255),
             onTap: (){
+
               _showReserva(context);
-              /* Navigator.push(
-                context,
-                PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) => InformacionAdicional(),
-                )
-              ); */
+             
             },
             child: Container(
               child: Text(
@@ -94,12 +94,25 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
   }
 
   Future _showReserva(BuildContext contex) async {
+    _bloquearPantalla(true);
+
     PMSProvider provider = new PMSProvider(); //Provide PMS Services
     Reserva infoReserva = await provider.dameReservacionByQR( _codigoController.text);
 
-    if(infoReserva != null)
+    _bloquearPantalla(false);
+
+    if(infoReserva == null) 
+      tools.showAlert(context, "Código invalido");
+    else {
+      infoReserva.codigo = _codigoController.text;
       Navigator.pushNamed(context, 'reserva', arguments: infoReserva); //Navegacion por nombre pasando argumentos.
-      
+    }
+  }
+
+
+  void _bloquearPantalla(bool status){
+    _bloquear = status;
+      setState(() {});
   }
 
   Widget _textField(){

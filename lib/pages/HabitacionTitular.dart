@@ -45,7 +45,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   void initState() {
     super.initState();
 
-    _fechaVuelo = DateTime.parse(_reserva.result.vuelos[0].fechallegada.replaceAll('-', ""));
+   
     _controllerFechaVuelo.text = "${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}";
     _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
   }
@@ -54,7 +54,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   @override
   Widget build(BuildContext context) {
     _reserva = ModalRoute.of(context).settings.arguments; //Obtiene la informacion que biene de los argumentos.
-
     _inicializarDatos();//Inicializa las variables.
 
     return GestureDetector(
@@ -75,12 +74,13 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
   void _inicializarDatos() {
     
-    _controllerNombre.text = _reserva.result.titular.nombre;
-    _controllerCP.text = _reserva.result.codigoPostal;
-    _controllerAerolinea.text = _reserva.result.vuelos[0].aerolinea1 ;
-    _controllerCiudad.text = _reserva.result.titular.ciudad;
-    _controllerVuelo.text = _reserva.result.vuelos[0].vuelollegada;
-    _controllerVueloFS.text = futil.splitFecha(_reserva.result.vuelos[0].fechasalida);
+    _controllerNombre.text    =  _reserva.result.titular.nombre ?? "";
+    _controllerCP.text        =  _reserva.result.codigoPostal ?? "";
+    _controllerAerolinea.text =  _reserva.result.vuelos[0].aerolinea1 ?? "";
+    _controllerCiudad.text    =  _reserva.result.titular.ciudad ?? "";
+    _controllerVuelo.text     =  _reserva.result.vuelos[0].vuelollegada ?? "";
+    _controllerVueloFS.text   =  futil.splitFecha(_reserva.result.vuelos[0].fechasalida ?? "");
+    _fechaVuelo = DateTime.parse(_reserva.result.vuelos[0].fechallegada.replaceAll('-', ""));
     
     _pais = (_pais == null) ? _reserva.result.titular.pais : _pais; //Validacion para que cambie el valor del pais
     _estado = (_estado == null) ? _reserva.result.estado : _estado; //Validacion para que cambie el valor del estado
@@ -92,7 +92,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   }
 
   Widget _appBar(){
-    //TODO: Cambiar el texto por la etiqueta de ingles español
     return AppBar(
       backgroundColor: Color(0xFFE87200),
       leading: Container(),

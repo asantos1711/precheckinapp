@@ -6,6 +6,7 @@ class Reserva {
   String idioma;
   Result result;
   String nombreHotel;
+  String codigo;
   TipoHabitacion tipoHabitacion;
   List<EspecialRequest> especialRequest;
   Map<String,String> plana;
@@ -14,6 +15,7 @@ class Reserva {
     this.idioma,
     this.result,
     this.nombreHotel,
+    this.codigo,
     this.tipoHabitacion,
     this.especialRequest,
     this.plana,
@@ -24,6 +26,7 @@ class Reserva {
       idioma          : json['idioma'] ?? 'EN',
       result          : json['result'] != null ? Result.fromJson( json['result'] ) : null,
       nombreHotel     : json['nombrehotel'] ?? '',
+      codigo          : "",
       tipoHabitacion  : json['tipohabitacion']  != null ? TipoHabitacion.fromJson(json['tipohabitacion']) : null,
       especialRequest : json['especialrequest'] != null ? List<EspecialRequest>.from( json['especialrequest'].map( (l)=> EspecialRequest.fromJson(l)) ) : [],
       plana           : Map.from(json["plana"]).map((k, v) => MapEntry<String, String>(k, v)),

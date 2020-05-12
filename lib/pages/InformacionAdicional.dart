@@ -10,6 +10,7 @@ import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
 import 'package:precheckin/pages/ViewPoliRegla.dart';
 import 'package:precheckin/pages/ViewPromoInfo.dart';
+import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/card_acompanante.dart';
@@ -18,6 +19,7 @@ import 'package:precheckin/widgets/custom_signature.dart';
 import 'package:precheckin/widgets/docIdentificacion.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:signature/signature.dart';
+import 'package:precheckin/utils/tools_util.dart' as tools;
 
 class InformacionAdicional extends StatefulWidget {
   @override
@@ -32,6 +34,9 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   bool _avisoPrivaBool = false;
   bool _recibirInfoBool = false;
   bool _poliReglaBool = false;
+  bool _bloquear = false;
+  QRPersistence _persistence = new QRPersistence();
+
   DateTime dateAco = new DateTime.now();
   TextEditingController textController = new TextEditingController(text: '');
   Reserva _reserva;  
@@ -70,91 +75,85 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: _appBar(),
-          body: ListView(
+          body: Stack(
             children: <Widget>[
-              _promoInfo(),
-              _poliRegla(),
-              _signatureTitular(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: DocIdentificacion()
+              ListView(
+                children: <Widget>[
+                  _promoInfo(),
+                  _poliRegla(),
+                  _signatureTitular(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: DocIdentificacion()
+                  ),
+                  _tituloAcompa(),
+                  _acompanantes(),
+                  _agregarAco(),
+                  Divider(
+                    height: 2,
+                    color: Colors.grey,
+                  ),
+                  _avisoPriva(),
+                  _recibirInfo(),
+                  _buttonFinalizar(),
+                  SizedBox(
+                    height: 50,
+                  )
+                ],
               ),
-              _tituloAcompa(),
-              _acompanantes(),
-              _agregarAco(),
-              Divider(
-                height: 2,
-                color: Colors.grey,
-              ),
-              _avisoPriva(),
-              _recibirInfo(),
-              _buttonFinalizar(),
-              SizedBox(
-                height: 50,
-              )
+              tools.bloqueaPantalla(_bloquear)
+
             ],
-          ),
+          )
+          
+          
         ));
   }
 
-  Widget _buttonFinalizar() {
-    if(_enableButton){
-      return Container(
-          width: width - 20,
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-          color: Colors.white,
-          child: FlatButton(
-            color: Color(0xFFE87200),
-            textColor: Colors.white,
-            disabledColor: Colors.grey,
-            disabledTextColor: Colors.black,
-            padding: EdgeInsets.all(8.0),
-            splashColor: Colors.grey,
-            onPressed: (){
-                PMSProvider a= new PMSProvider();
-                FutureBuilder(
-                  future: a.actualizaHospedaje(_reserva),
-                  builder: (contex,a){
-                    return Scaffold(
-                        body: Center(child: Text(a.toString()),)
-                    );
-                  },
-                );
+ 
 
-            },
-            child: Text(
-              Translations.of(context).text('finalizar'),
-              style: TextStyle(fontSize: 20.0),
-            ),
-          ));
-    }else{
-      return Container(
-          width: width - 20,
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-          color: Colors.white,
-          child: FlatButton(
-            color: Colors.grey,
-            textColor: Colors.white,
-            disabledColor: Colors.grey,
-            disabledTextColor: Colors.black,
-            padding: EdgeInsets.all(8.0),
-            splashColor: Colors.grey,
-            onPressed: (){
-              Fluttertoast.showToast(
-                  msg: Translations.of(context).text('mensaje_casillas'),
-                  toastLength: Toast.LENGTH_LONG,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  textColor: Colors.white,
-                  fontSize: 18.0
-              );
-            },
-            child: Text(
-              Translations.of(context).text('finalizar'),
-              style: TextStyle(fontSize: 20.0),
-            ),
-          ));
+  Widget _buttonFinalizar() {
+    return Container(
+      width: width - 20,
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+      color: Colors.white,
+      child: FlatButton(
+        color: Color(0xFFE87200),
+        textColor: Colors.white,
+        disabledColor: Colors.grey,
+        disabledTextColor: Colors.black,
+        padding: EdgeInsets.all(8.0),
+        splashColor: Colors.grey,
+        onPressed: _enableButton == false ? null : () =>_saveData(),
+        child: Text(
+          Translations.of(context).text('finalizar'),
+          style: TextStyle(fontSize: 20.0),
+        ),
+      ));
+  }
+
+  Future _saveData() async {
+    _bloquearPantalla(true);
+
+    PMSProvider p = new PMSProvider();
+    bool status = await p.actualizaHospedaje(_reserva);
+
+    _bloquearPantalla(false);
+
+    if(status){
+      _persistence.qr = [_reserva.codigo];
+      Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
     }
+    else {
+      tools.showAlert(context, "No se logro guardar los datos");
+    }
+
+  }
+
+
+  void _bloquearPantalla(bool status){
+    _bloquear = status;
+      setState(() {});
   }
 
   Widget _agregarAco() {

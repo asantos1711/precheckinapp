@@ -39,9 +39,9 @@ class PMSProvider {
 
     try
     {
-      final response = await http.post(uri, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
+      final response    = await http.post(uri, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
       final decodedData = json.decode( utf8.decode(response.bodyBytes) );
-      reserva = Reserva.formJson(decodedData);
+      reserva           = Reserva.formJson(decodedData);
 
      
     }
@@ -80,9 +80,9 @@ class PMSProvider {
 
     try
     {
-      final response = await http.post(uri, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
+      final response    = await http.post(uri, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
       final decodedData = json.decode( utf8.decode(response.bodyBytes) );
-      reserva = Reserva.formJson(decodedData);
+      reserva           = Reserva.formJson(decodedData);
     } 
     catch (e)
     {
@@ -92,16 +92,14 @@ class PMSProvider {
     return reserva;
   }
 
-  
-  
 
-
-
-
-  ///Actualiza la información de la reserva
+  ///Actualiza la infromacion de la reservacion
   ///
-  ///
+  ///realiza la consulta al servicio actualizaHospedajeJson para 
+  ///actualizar los datos de la reserva requiere de parametro
+  ///[reserva], que es del tipo [Reserva]
   Future<dynamic> actualizaHospedaje(Reserva reserva) async {
+    bool status          = true;
     String uri           = '$_url/actualizaHospedajeJson';
     String authorization = 'Basic '+base64Encode(utf8.encode('$_usr:$_psw'));
 
@@ -114,25 +112,22 @@ class PMSProvider {
     try
     {
       SaveData saveModel = SaveData.fromReserva(reserva);
-      final body = saveModel.toJson();
-
-      final response = await http.post(
+      final body         = saveModel.toJson();
+      final response     = await http.post(
         uri, 
         headers: headers, 
         body: jsonEncode(body),
         encoding: Encoding.getByName("utf-8")
       );
 
-      final decodedData = json.decode(response.body);
-      print(decodedData.runtimeType);
-      print(    decodedData);
-
+      status = json.decode(response.body);
     } 
     catch (e)
     {
       print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
+      status = false;
     }
     
-    return reserva;
+    return status;
   }
 }
