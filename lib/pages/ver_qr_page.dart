@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/qr_widget.dart';
 
 class VerQR extends StatelessWidget {

@@ -230,8 +230,16 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 _onAlertWithCustomContentPressed(context) {
     Acompaniantes _aco = new Acompaniantes();
     _aco.fechanac = new DateTime.now().toString();
+    _aco.club = _reserva.result.idClub;
+    _aco.idcliente = _reserva.result.idCliente;
+    _aco.idacompaniantes = 0;
+    _aco.istitular = false;
     print("Alerta fecha "+_aco.fechanac);
     SignatureController _sigController = new SignatureController();
+    _sigController.addListener(() async {
+        var data = await _sigController.toPngBytes();
+        _aco.imagesign = base64.encode(data);
+    });
     Alert(
         closeFunction:(){
           print('Se cerró la alerta');
@@ -261,6 +269,8 @@ _onAlertWithCustomContentPressed(context) {
             color: Colors.white,
             onPressed: () {
               setState(() {
+                
+
                 mapControllerSiganture[_aco] =_sigController;
                 _aco.istitular = false;
                 _reserva.result.acompaniantes.add(_aco);
@@ -298,7 +308,7 @@ _onAlertWithCustomContentPressed(context) {
         signature:  Container(
           margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
           child: SignatureWidget(
-            img: acompaniante.imagesign,
+            img: acompaniante.imagesign ?? "",
             title:"",
             controller: _controllerSignature,
           )

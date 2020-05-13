@@ -54,6 +54,7 @@ class _SignatureWidgetState extends State<SignatureWidget> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           Container(
+            decoration: BoxDecoration(border: Border.all(width: 2.0, color: Colors.grey)),
             width: _width - 20.0,
             height: 100.0,
             child: Image.memory(base64.decode(widget.img)),

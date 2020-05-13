@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/models/save_data_model.dart';
+import 'dart:developer' as dev;
 
 
 
@@ -95,7 +96,7 @@ class PMSProvider {
       print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
     }
 
-    print(reserva.result.titular.imagesign);
+    //print(reserva.result.titular.imagesign);
 
     return reserva;
   }
@@ -111,6 +112,7 @@ class PMSProvider {
 
     /*print(reserva.result.titular.imagesign);
     return  null;*/
+     
 
 
 
