@@ -32,6 +32,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   bool _poliReglaBool = false;
   bool _bloquear = false;
   QRPersistence _persistence = new QRPersistence();
+  List<String> _qr;
 
   DateTime dateAco = new DateTime.now();
   TextEditingController textController = new TextEditingController(text: '');
@@ -40,13 +41,13 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
 
 
-  final SignatureController _controller =
-      SignatureController(penStrokeWidth: 5, penColor: Colors.red);
+  final SignatureController _controller = SignatureController();
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(() => print("Value changed"));
+    _qr = _persistence.qr;
   }
 
   _botonDisable(){
@@ -114,7 +115,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
       color: Colors.white,
       child: FlatButton(
-        color: Color(0xFFE87200),
+        color: Theme.of(context).primaryColor,
         textColor: Colors.white,
         disabledColor: Colors.grey,
         disabledTextColor: Colors.black,
@@ -130,14 +131,18 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   Future _saveData() async {
     _bloquearPantalla(true);
-
+    print("frma titu"+_reserva.result.titular.imagesign);
     PMSProvider p = new PMSProvider();
     bool status = await p.actualizaHospedaje(_reserva);
 
     _bloquearPantalla(false);
 
     if(status){
-      _persistence.qr = [_reserva.codigo];
+      if(!_qr.contains(_reserva.codigo))
+        _qr.add(_reserva.codigo);
+
+      _persistence.qr = _qr;
+
       Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
     }
     else {
@@ -231,6 +236,12 @@ _onAlertWithCustomContentPressed(context) {
             color: Colors.white,
             onPressed: () {
               setState(() {
+                mapControllerSiganture[_aco] =_sigController;
+                _aco.istitular = false;
+                //mapControllerSiganture[_aco].points = _sigController.points ;
+                //print(( _sigController.points.toList().toString()));
+                //print((mapControllerSiganture[_aco].points.toList().toString()));
+                //print(( _sigController.points.toList().toString()==mapControllerSiganture[_aco].points.toList().toString()));
                 _reserva.result.acompaniantes.add(_aco);
                 mapControllerSiganture[_aco] =_sigController;
                 print('add');
@@ -257,10 +268,8 @@ _onAlertWithCustomContentPressed(context) {
       SignatureController _controllerSignature = new SignatureController();
       if(mapControllerSiganture[acompaniante]==null){print('signatureNulo');mapControllerSiganture[acompaniante] = _controllerSignature;}
       mapControllerSiganture[acompaniante].addListener(()async{
-        print('Change value');
         var data = await mapControllerSiganture[acompaniante].toPngBytes();
         acompaniante.imagesign = base64.encode(data);
-        //acompaniante.imagesign.split('').forEach((word) => print("" + word));
         print('Valor de firma asignado');
       });
       Widget widget = CardAcompanante(
@@ -408,6 +417,12 @@ _onAlertWithCustomContentPressed(context) {
   }
 
   Widget _signatureTitular() {
+    _controller.addListener(()async{
+      //setState(()async{
+        var data = await _controller.toPngBytes();
+        _reserva.result.titular.imagesign = base64.encode(data);
+      //});
+    });
     return Container(
         color: Colors.white,
         child: Column(
@@ -429,7 +444,6 @@ _onAlertWithCustomContentPressed(context) {
 
   Widget _appBar() {
     return AppBar(
-      backgroundColor:  Color(0xFFE87200),
       leading: Container(),
       title: Text('Información de reservación'),
     );

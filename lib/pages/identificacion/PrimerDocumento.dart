@@ -33,7 +33,7 @@ class _PrimerDocumentoState extends State<PrimerDocumento> {
           child: new Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              if (fullImage != null) Image.memory(base64Decode(fullImage)),
+              //if (fullImage != null) Image.memory(base64Decode(fullImage)),
               new FlatButton(
                 child: Text("Start Scanner"),
                 onPressed: startScanning,
