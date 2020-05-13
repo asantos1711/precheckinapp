@@ -156,12 +156,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   Future _saveData() async {
     _bloquearPantalla(true);
-<<<<<<< HEAD
-    _reserva.result.acompaniantes.forEach((element) {
-      print('${element.documenttype} - ${element.idcard}');
-    });
-=======
->>>>>>> 3dd7082e9318a717477a250f6735e0e0b2502c10
     
     PMSProvider p = new PMSProvider();
     bool status = await p.actualizaHospedaje(_reserva);
