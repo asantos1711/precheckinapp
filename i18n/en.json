@@ -38,6 +38,8 @@
   "politicas_procedimientos_url": "https://stackoverflow.com/questions/45588300/can-i-use-a-tabbar-and-tabbarview-as-an-in-page-widget",
   "ingresa_firma_titular": "Add holder's signature ",
   "limpiar": "Clear",
+  "cancel":"Cancel",
+  "change":"Change",
   "doc_identificacion": "ID",
   "acompanantes": "Companion",
   "fec_nacimiento": "Date of birth",

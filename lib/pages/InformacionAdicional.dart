@@ -82,20 +82,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
             children: <Widget>[
               ListView(
                 children: <Widget>[
-
-
-                    SignatureWidget(
-                      img:_reserva.result.titular.imagesign,
-                      capturar: _capturar,
-                      onPressed: () {
-                        print("tap");
-                        setState(() {
-                          _capturar = !_capturar;
-                        });
-                      } ,
-                    ),
-
-
                   _promoInfo(),
                   _poliRegla(),
                   _signatureTitular(),
@@ -125,6 +111,24 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
           
           
         ));
+  }
+
+
+  //Agrega la firma del titular
+  Widget _signatureTitular() {
+    _controller.addListener(() async {
+        var data = await _controller.toPngBytes();
+        _reserva.result.titular.imagesign = base64.encode(data);
+    });
+
+    return Container(
+      margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
+      child: SignatureWidget(
+        img:_reserva.result.titular.imagesign,
+        title:Translations.of(context).text('ingresa_firma_titular'),
+        controller: _controller,
+      ),
+    );
   }
 
  
@@ -258,10 +262,6 @@ _onAlertWithCustomContentPressed(context) {
               setState(() {
                 mapControllerSiganture[_aco] =_sigController;
                 _aco.istitular = false;
-                //mapControllerSiganture[_aco].points = _sigController.points ;
-                //print(( _sigController.points.toList().toString()));
-                //print((mapControllerSiganture[_aco].points.toList().toString()));
-                //print(( _sigController.points.toList().toString()==mapControllerSiganture[_aco].points.toList().toString()));
                 _reserva.result.acompaniantes.add(_aco);
                 mapControllerSiganture[_aco] =_sigController;
                 print('add');
@@ -281,22 +281,27 @@ _onAlertWithCustomContentPressed(context) {
   cada uno de los acompaniantes que bienen
   del servicio.
   */
-  List<Widget> _listaAcompaniantes(){
+  List<Widget> _listaAcompaniantes() {
     List<Widget> widgets = [];
 
     _reserva.result.acompaniantes.forEach( (acompaniante){
       SignatureController _controllerSignature = new SignatureController();
-      if(mapControllerSiganture[acompaniante]==null){print('signatureNulo');mapControllerSiganture[acompaniante] = _controllerSignature;}
-      mapControllerSiganture[acompaniante].addListener(()async{
-        var data = await mapControllerSiganture[acompaniante].toPngBytes();
+
+      _controllerSignature.addListener(()async{
+        var data = await _controllerSignature.toPngBytes();
         acompaniante.imagesign = base64.encode(data);
-        print('Valor de firma asignado');
       });
+
       Widget widget = CardAcompanante(
-          acompaniante: acompaniante,
-          signature: CustomSignature(
-            controller: mapControllerSiganture[acompaniante],
-          ),
+        acompaniante: acompaniante,
+        signature:  Container(
+          margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
+          child: SignatureWidget(
+            img: acompaniante.imagesign,
+            title:"",
+            controller: _controllerSignature,
+          )
+        )
       );
 
       widgets..add(widget);
@@ -305,6 +310,8 @@ _onAlertWithCustomContentPressed(context) {
     
     return widgets;
   }
+
+  
 
   Widget _tituloAcompa() {
     return Container(
@@ -436,31 +443,7 @@ _onAlertWithCustomContentPressed(context) {
     );
   }
 
-  Widget _signatureTitular() {
-    _controller.addListener(()async{
-      //setState(()async{
-        var data = await _controller.toPngBytes();
-        _reserva.result.titular.imagesign = base64.encode(data);
-      //});
-    });
-    return Container(
-        color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-                color: Colors.white,
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  Translations.of(context).text('ingresa_firma_titular'),
-                  style: TextStyle(fontSize: 20),
-                )),
-            CustomSignature(
-              controller: _controller,
-            )
-          ],
-        ));
-  }
+ 
 
   Widget _appBar() {
     return AppBar(

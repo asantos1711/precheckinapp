@@ -3,15 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/docIdentificacion.dart';
-import 'package:signature/signature.dart';
-
-/*
-Concidera cambiar este widget por un StateLess para que se encarge solo de pintar el
-los componentes y la funcionalidad la puedes manejar pasando funciones por rererencia,
-
-Falta el parámetro para poner el nombre.
-El widget para seleccionar aparece en ingles cuando selecciono español.
-*/
 
 class CardAcompanante extends StatefulWidget {
   Color primaryColor;
