@@ -98,7 +98,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
               ],
             )),
         _signature,
-        DocIdentificacion(),
+        DocIdentificacion(acompaniantes:_acompaniante),
       ],
     ));
   }

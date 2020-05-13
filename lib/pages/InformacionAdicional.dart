@@ -6,6 +6,7 @@ import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/providers/pms_provider.dart';
+import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/card_acompanante.dart';
 import 'package:precheckin/widgets/check_text_bold.dart';
@@ -81,7 +82,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
                   _signatureTitular(),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: DocIdentificacion()
+                    child: DocIdentificacion(acompaniantes: _reserva.result.titular,)
                   ),
                   _tituloAcompa(),
                   _acompanantes(),
@@ -131,7 +132,10 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   Future _saveData() async {
     _bloquearPantalla(true);
-    print("frma titu"+_reserva.result.titular.imagesign);
+    _reserva.result.acompaniantes.forEach((element) {
+      print('${element.documenttype} - ${element.idcard}');
+    });
+    
     PMSProvider p = new PMSProvider();
     bool status = await p.actualizaHospedaje(_reserva);
 
@@ -355,7 +359,7 @@ _onAlertWithCustomContentPressed(context) {
               pageBuilder: 
               (context, animation1, animation2) => 
               ViewWebView(
-                url: Translations.of(context).text('politicas_procedimientos_url'),
+                url: 'https://www.google.com/',
                 title:Translations.of(context).text('politicas_procedimientos'),
               ),
             ));
@@ -382,7 +386,7 @@ _onAlertWithCustomContentPressed(context) {
               pageBuilder: 
               (context, animation1, animation2) => 
               ViewWebView(
-                url: Translations.of(context).text('reglamento_hotel_url'),
+                url: 'https://www.google.com/',
                 title: Translations.of(context).text('reglamento_hotel'),
               ),
             ));
@@ -408,7 +412,7 @@ _onAlertWithCustomContentPressed(context) {
             PageRouteBuilder(
               pageBuilder: (context, animation1, animation2) => 
               ViewWebView(
-                url: Translations.of(context).text('aviso_privacidad_url'),
+                url:'https://www.google.com/',
                 title: Translations.of(context).text('aviso_privacidad'),
               ),
             ));
@@ -445,7 +449,8 @@ _onAlertWithCustomContentPressed(context) {
   Widget _appBar() {
     return AppBar(
       leading: Container(),
-      title: Text('Información de reservación'),
+      title: Text(Translations.of(context).text('info_reservacion'),style: appbarTitle),
+      centerTitle: true,
     );
   }
 }

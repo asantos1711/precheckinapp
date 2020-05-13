@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:precheckin/styles/styles.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ViewWebView extends StatefulWidget {
@@ -65,9 +66,10 @@ class _ViewWebViewState extends State<ViewWebView> {
     );
   }
   _appBar(){
+    String _t = title[0].toUpperCase()+title.substring(1);
     return AppBar(
-      backgroundColor: Color(0xFFE87200),
-      title: Text(title),
+      title: Text(_t,style: appbarTitle),
+      centerTitle: true,
     );
   }
 }
