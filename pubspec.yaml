@@ -36,6 +36,7 @@ dependencies:
   rflutter_alert: ^1.0.3
   fluttertoast: any
   image_picker_saver: ^0.3.0
+  webview_flutter: ^0.3.21
 
 dev_dependencies:
   flutter_test:

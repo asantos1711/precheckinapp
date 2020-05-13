@@ -32,8 +32,10 @@
   "fec_salida": "Fecha de salida",
   "continuar": "Continuar",
   "acepto_deacuerdo": "Acepto y estoy de acuerdo con ",
-  "reglamento_hotel_bold": "el reglamento del hotel.",
-  "politicas_procedimientos_bold": "las politicas y procedimientos del check in. ",
+  "reglamento_hotel": "el reglamento del hotel.",
+  "reglamento_hotel_url": "https://stackoverflow.com/questions/45588300/can-i-use-a-tabbar-and-tabbarview-as-an-in-page-widget",
+  "politicas_procedimientos": "las politicas y procedimientos del check in. ",
+  "politicas_procedimientos_url": "https://stackoverflow.com/questions/45588300/can-i-use-a-tabbar-and-tabbarview-as-an-in-page-widget",
   "ingresa_firma_titular": "Ingresa firma del titular ",
   "limpiar": "Limpiar",
   "doc_identificacion": "Documento de identificación",
@@ -43,6 +45,7 @@
   "anios": "Años",
   "ingresa_firma": "Ingresa firma de ",
   "aviso_privacidad": "el aviso de privacidad.",
+  "aviso_privacidad_url": "https://stackoverflow.com/questions/45588300/can-i-use-a-tabbar-and-tabbarview-as-an-in-page-widget",
   "recibir_info": "Estoy de acuerdo en recibir información y promociones de mi Club Vacacional de manera electrónica y/o telefónica.",
   "finalizar": "Finalizar",
   "cargo": "Esta solicitud genera un cargo de $",
@@ -55,6 +58,5 @@
   "opcion_duda": "Tengo dudas con mi reservación",
   "opcion_error": "Tengo errores con mi reservación",
   "aerolinea": "Aerolinea",
-  "mensaje_casillas": "Marque las casillas faltantes",
-  "finalizar": "Finalizar"
+  "mensaje_casillas": "Marque las casillas faltantes"
 }

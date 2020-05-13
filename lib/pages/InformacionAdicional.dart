@@ -1,15 +1,9 @@
 import 'dart:convert';
-import 'dart:typed_data';
-
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
-import 'package:precheckin/pages/ViewPoliRegla.dart';
-import 'package:precheckin/pages/ViewPromoInfo.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/tools/translation.dart';
@@ -20,6 +14,8 @@ import 'package:precheckin/widgets/docIdentificacion.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:signature/signature.dart';
 import 'package:precheckin/utils/tools_util.dart' as tools;
+
+import 'ViewWebView.dart';
 
 class InformacionAdicional extends StatefulWidget {
   @override
@@ -189,7 +185,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         } ,
         textBold: '',
         text:
-            'Estoy de acuerdo en recibir información y promociones de nuestro Club Vacacional de manera electrónica y/o telefónica',
+          Translations.of(context).text('recibir_info'),
         onTap: () {},
         value: _recibirInfoBool
     );
@@ -342,12 +338,17 @@ _onAlertWithCustomContentPressed(context) {
       } ,
       value: _poliReglaBool,
       text: Translations.of(context).text('acepto_deacuerdo'),
-      textBold: Translations.of(context).text('politicas_procedimientos_bold'),
+      textBold: Translations.of(context).text('politicas_procedimientos'),
       onTap: () {
         Navigator.push(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => ViewPoliRegla(),
+              pageBuilder: 
+              (context, animation1, animation2) => 
+              ViewWebView(
+                url: Translations.of(context).text('politicas_procedimientos_url'),
+                title:Translations.of(context).text('politicas_procedimientos'),
+              ),
             ));
       },
     );
@@ -364,12 +365,17 @@ _onAlertWithCustomContentPressed(context) {
       } ,
       value: _promoInfoBool,
       text: Translations.of(context).text('acepto_deacuerdo'),
-      textBold: Translations.of(context).text('reglamento_hotel_bold'),
+      textBold: Translations.of(context).text('reglamento_hotel'),
       onTap: () {
         Navigator.push(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => ViewPromoInfo(),
+              pageBuilder: 
+              (context, animation1, animation2) => 
+              ViewWebView(
+                url: Translations.of(context).text('reglamento_hotel_url'),
+                title: Translations.of(context).text('reglamento_hotel'),
+              ),
             ));
       },
     );
@@ -385,13 +391,17 @@ _onAlertWithCustomContentPressed(context) {
         _botonDisable();
       } ,
       value: _avisoPrivaBool,
-      text: 'Acepto y estoy de acuerdo con el ',
-      textBold: 'aviso de privacidad',
+      text: Translations.of(context).text('acepto_deacuerdo'),
+      textBold: Translations.of(context).text('aviso_privacidad'),
       onTap: () {
         Navigator.push(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => ViewPromoInfo(),
+              pageBuilder: (context, animation1, animation2) => 
+              ViewWebView(
+                url: Translations.of(context).text('aviso_privacidad_url'),
+                title: Translations.of(context).text('aviso_privacidad'),
+              ),
             ));
       },
     );
