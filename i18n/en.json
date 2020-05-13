@@ -36,6 +36,8 @@
   "politicas_procedimientos": "Check-in policies and procedures.",
   "ingresa_firma_titular": "Add holder's signature ",
   "limpiar": "Clear",
+  "cancel":"Cancel",
+  "change":"Change",
   "doc_identificacion": "ID",
   "acompanantes": "Companion",
   "fec_nacimiento": "Date of birth",
