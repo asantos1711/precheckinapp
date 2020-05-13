@@ -95,6 +95,8 @@ class PMSProvider {
       print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
     }
 
+    print(reserva.result.titular.imagesign);
+
     return reserva;
   }
 
@@ -105,6 +107,14 @@ class PMSProvider {
   ///actualizar los datos de la reserva requiere de parametro
   ///[reserva], que es del tipo [Reserva]
   Future<dynamic> actualizaHospedaje(Reserva reserva) async {
+
+
+    /*print(reserva.result.titular.imagesign);
+    return  null;*/
+
+
+
+
     bool status          = true;
     String uri           = '$_url/actualizaHospedajeJson';
     String authorization = 'Basic '+base64Encode(utf8.encode('$_usr:$_psw'));

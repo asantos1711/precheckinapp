@@ -17,6 +17,9 @@ import 'package:precheckin/utils/tools_util.dart' as tools;
 
 import 'ViewWebView.dart';
 
+
+import 'package:precheckin/widgets/signature_widget.dart';
+
 class InformacionAdicional extends StatefulWidget {
   @override
   _InformacionAdicionalState createState() => _InformacionAdicionalState();
@@ -42,6 +45,9 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
 
   final SignatureController _controller = SignatureController();
+  bool _capturar = false;
+
+
 
   @override
   void initState() {
@@ -76,6 +82,20 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
             children: <Widget>[
               ListView(
                 children: <Widget>[
+
+
+                    SignatureWidget(
+                      img:_reserva.result.titular.imagesign,
+                      capturar: _capturar,
+                      onPressed: () {
+                        print("tap");
+                        setState(() {
+                          _capturar = !_capturar;
+                        });
+                      } ,
+                    ),
+
+
                   _promoInfo(),
                   _poliRegla(),
                   _signatureTitular(),
@@ -131,7 +151,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   Future _saveData() async {
     _bloquearPantalla(true);
-    print("frma titu"+_reserva.result.titular.imagesign);
+    
     PMSProvider p = new PMSProvider();
     bool status = await p.actualizaHospedaje(_reserva);
 
