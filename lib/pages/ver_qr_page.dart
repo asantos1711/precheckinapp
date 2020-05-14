@@ -12,12 +12,20 @@ class VerQR extends StatelessWidget {
     _qr = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
-        body: Stack(
-      children: <Widget>[
-        _imagenFondo(),
-        _contenido(context),
-      ],
-    ));
+      body: Stack(
+        children: <Widget>[
+          _imagenFondo(),
+          _contenido(context),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.home, color: Colors.white, size: 35.0,),
+        onPressed: () => Navigator.pushNamed(context, 'idioma'),
+        backgroundColor: Color.fromRGBO(191, 52, 26, 1),
+        elevation: 15.0,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
   }
 
   Widget _imagenFondo() {
@@ -38,7 +46,7 @@ class VerQR extends StatelessWidget {
           Expanded(
             child: _codigosQR(),
           ),
-          _btnNuevoCodigo(context)
+          _btnNuevoCodigo(context),
         ],
       ),
     );
@@ -80,4 +88,7 @@ class VerQR extends StatelessWidget {
           }),
     );
   }
+
+
+
 }

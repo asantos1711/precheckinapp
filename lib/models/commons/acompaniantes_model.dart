@@ -1,3 +1,5 @@
+import 'package:precheckin/models/commons/result_model.dart';
+
 class Acompaniantes{
   int club;
   int idcliente;
@@ -38,7 +40,7 @@ class Acompaniantes{
     this.dircia = '',
     this.ciucia = '',
     this.telcia = '',
-    this.edad,
+    this.edad = '',
     this.parentesco = '',
     this.ocupacion = '',
     this.fechanac = '',
@@ -85,5 +87,38 @@ class Acompaniantes{
       estado          : json['estado'] ?? '',
       codigoPostal    : json['cpsocio'] ?? '',
     );
+  }
+
+  factory Acompaniantes.fromResult(Result result){
+
+    return Acompaniantes(
+      club            : result.idClub,
+      idcliente       : result.idCliente,
+      idacompaniantes : result.idCliente,
+      nombre          : result.nombreTitular,
+      direccion       : result.direccion,
+      ciudad          : result.ciudad,
+      telefono        : result.telefono,
+      nomcia          : "",
+      dircia          : "",
+      ciucia          : "",
+      telcia          : "",
+      edad            : "",
+      parentesco      : "",
+      ocupacion       : "",
+      fechanac        : "",
+      imagefront      : "",
+      imageback       : "",
+      imagesign       : "",
+      pais            : result.pais,
+      sexo            : "",
+      idcard          : "",
+      documenttype    : "",
+      documentexpdate : "",
+      istitular       : true,
+      estado          : result.estado,
+      codigoPostal    : result.codigoPostal
+    );
+
   }
 }
