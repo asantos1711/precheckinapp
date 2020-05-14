@@ -132,13 +132,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
                   onTap: () => _selectDate(context),
                 ) ,
               )
-            )/* TextFormField(
-              controller: _controllerFechaEdad,
-              decoration: InputDecoration(
-                  labelText: Translations.of(context).text('fec_nacimiento')),
-              readOnly: true,
-              onTap: () => _selectDate(context),
-            ) */
+            )
         )
     );
   }
