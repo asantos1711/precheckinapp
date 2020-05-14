@@ -40,6 +40,7 @@ dependencies:
   camera: any
   path_provider:
   path:
+  camera_camera: ^1.0.31
 
 dev_dependencies:
   flutter_test:

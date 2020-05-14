@@ -62,5 +62,8 @@
   "fin_escaneo_titulo":"Escaneo de pasaporte",
   "fin_escaneo_body":"El escaneo del pasaporte se ha realizado con éxito.",
   "foto_titulo_uno":"Haz la primera foto:\nanverso del documento de identificación",
-  "foto_body_uno":"Asegúrate de que haya buena iluminación y ajusta el anverso del documento de identificación hasta que encaje dentro del borde blanco. Toca el icono de la cámara cuando lo tengas todo listo."
+  "foto_body_uno":"Asegúrate de que haya buena iluminación y ajusta el anverso del documento de identificación hasta que encaje dentro del borde blanco. Presione Continuar cuando lo tengas todo listo.",
+  "foto_titulo_dos":"Haz la segunda foto:\nreverso del documento de identificación",
+  "foto_body_dos":"Asegúrate de que haya buena iluminación y ajusta el reverso del documento de identificación hasta que encaje dentro del borde blanco. Toca el icono de la cámara cuando lo tengas todo listo.",
+  "foto_fin_titulo":"Las fotos se capturaron correctamente."
 }

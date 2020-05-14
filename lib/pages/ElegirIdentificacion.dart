@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:camera_camera/camera_camera.dart';
 import 'dart:developer';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:io';
@@ -259,7 +260,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             if(_isSelect.short == 'P'){
               _flujopasaporte();
             }else if(_isSelect.short =='ID'){
-              _flujoId(0);
+              _flujoId();
             }
           }
         },
@@ -271,42 +272,21 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     );
   }
 
-  _flujoId(int vuelta)async{
-    
-    //Navigator.pop(context);
-      final cameras = await availableCameras();
-      final firstCamera = cameras.first; 
-      _camera(firstCamera);
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (BuildContext context) {
-            return _vistaCamara(vuelta);
-          },
-        ),
-      );
-    /* Alert(
+  _flujoId(){
+    Alert(
       closeFunction:(){
         print('Se cerró la alerta');
       } ,
       context: context,
       image: Image.asset('assets/images/id_front.png'),
-      title: "",
-      content: Container(child: Text('Acontinuación deberá capturar una foto de la parte frontal de su documento de identificación.\nAsegurese que la imagen sea clara y visible.'),),
+      title: Translations.of(context).text('foto_titulo_uno'),
+      content: Container(child: Text(Translations.of(context).text('foto_body_uno')),),
       buttons: [
         DialogButton(
           color: Colors.white,
-          onPressed: () async{
+          onPressed: () {
             Navigator.pop(context);
-            final cameras = await availableCameras();
-            final firstCamera = cameras.first; 
-            _camera(firstCamera);
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return _vistaCamara();
-                },
-              ),
-            );
+            _idDocument();
           } ,
           child: Text(
             Translations.of(context).text('continuar'),
@@ -314,51 +294,102 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           ),
         )
       ]
-    ).show(); */
+    ).show();
   }
 
-  Widget _vistaCamara(int vuelta){
-    double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      //extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        leading: InkWell(
-          onTap: ()=>Navigator.pop(context),
-          splashColor: Colors.grey,
-          child: Icon(Icons.arrow_back),
-        ),
-      ),
-      body: Stack(children: <Widget>[
-        Container(
+_idDocument () async {
+  double width = MediaQuery.of(context).size.width;
+  File file1 = await  Navigator.push(
+    context, 
+    MaterialPageRoute(
+      builder: (context) => Camera(
+        imageMask: Container(
             width:width,
-            height: width*1.25,
-            child: _iniciarCamara(),
-            /* decoration: BoxDecoration(
+            height: width*0.55,
+             decoration: BoxDecoration(
               border: Border.all(width: 5, color: Colors.grey.withAlpha(500) ),
-            ), */
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: width*1.25),
-          child: ListView(
-            children: <Widget>[
-              Padding(
-                padding:EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-                child: Text(Translations.of(context).text(vuelta==0?'foto_titulo_uno':'foto_titulo_uno'),
-                style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),)
-              ),
-              Padding(
-                padding:EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-                child: Text(Translations.of(context).text(vuelta==0?'foto_body_uno':'foto_titulo_uno'),
-                style: TextStyle(fontSize: 18),)
-              ),
-              Image.asset(vuelta==0?'assets/images/id_front.png':'assets/images/id_front.png',height: 200,),
-            ],
+            ), 
+        ) 
+      )
+    )
+  );
+
+   List<int> imageBytes= await file1.readAsBytes();
+    String base64Image = base64Encode(imageBytes);
+    acompaniantes.imagefront = base64Image; 
+    log('file ${acompaniantes.imagefront}');
+    debugPrint('file ${acompaniantes.imagefront}');
+
+    Alert(
+      closeFunction:(){
+        print('Se cerró la alerta');
+      } ,
+      context: context,
+      image: Image.asset('assets/images/id_back.png'),
+      title: Translations.of(context).text('foto_titulo_dos'),
+      content: Container(child: Text(Translations.of(context).text('foto_body_dos')),),
+      buttons: [
+        DialogButton(
+          color: Colors.white,
+          onPressed: ()async {
+            Navigator.pop(context);
+              File file2 = await  Navigator.push(context, MaterialPageRoute(builder: (context) => Camera(
+                 imageMask: Container(
+                    width:width,
+                    height: width*0.55,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 5, color: Colors.grey.withAlpha(500) ),
+                    ), 
+                )
+              )));
+              List<int> imageBytes1= await file2.readAsBytes();
+              String base64Image1 = base64Encode(imageBytes1);
+              acompaniantes.imageback= base64Image1; 
+              log('file ${acompaniantes.imageback}');
+              debugPrint('file ${acompaniantes.imageback}');
+            //Navigator.pop(context);
+            _alertaFinId(file1,file2);
+          } ,
+          child: Text(
+            Translations.of(context).text('continuar'),
+            style: TextStyle(color: Colors.blueAccent, fontSize: 20),
           ),
         )
-
-      ],),
-      floatingActionButton: _takePhoto(vuelta),
-    );
+      ]
+    ).show();
+  }
+  _alertaFinId(File file1,file2){
+    Alert(
+      closeFunction:(){
+        print('Se cerró la alerta');
+      } ,
+      context: context,
+      title: Translations.of(context).text('foto_fin_titulo'),
+      content: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+            child: Image.file(file1,height: 100,)
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+            child: Image.file(file2,height: 100,)
+          )
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          color: Colors.white,
+          onPressed: ()async {
+            Navigator.pop(context);
+          } ,
+          child: Text(
+            Translations.of(context).text('finalizar'),
+            style: TextStyle(color: Colors.blueAccent, fontSize: 20),
+          ),
+        )
+      ]
+    ).show();
   }
 
   _flujopasaporte(){
@@ -402,7 +433,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             String base64Image = base64Encode(imageBytes);
             acompaniantes.imagefront = base64Image; 
             print("imagen front : ${acompaniantes.imagefront}");
-            _flujoId(1);
+            _flujoId();
           } catch (e) {
             print(e);
           }
