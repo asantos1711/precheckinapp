@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:precheckin/models/commons/acompaniantes_model.dart';
 
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/models/save_data_model.dart';
@@ -9,8 +10,8 @@ import 'dart:developer' as dev;
 
 /// Clase para proveer los servicios de pms
 class PMSProvider {
-  final String _url = 'http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app';
-  //final String _url = 'http://10.194.18.59:8081/GroupSunsetPMSProxyServices/app';
+  //final String _url = 'http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app';
+  final String _url = 'http://10.194.18.59:8081/GroupSunsetPMSProxyServices/app';
   final String _usr = 'apphotel';
   final String _psw = 'hotel25012018';
   
@@ -43,14 +44,11 @@ class PMSProvider {
       final response    = await http.post(uri, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
       final decodedData = json.decode( utf8.decode(response.bodyBytes) );
       reserva           = Reserva.formJson(decodedData);
-
-     
     }
     catch (e)
     {
       print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
     }
-
 
     return reserva;
   }
@@ -86,7 +84,12 @@ class PMSProvider {
       reserva           = Reserva.formJson(decodedData);
 
       if(reserva.result.titular == null)
+        reserva.result.titular = Acompaniantes.fromResult(reserva.result);
+
+
+      if(reserva.result.titular == null)
         reserva = null;
+
 
       if(reserva.result.status.toString().trim().toLowerCase() != "r")
         reserva = null;
@@ -96,8 +99,6 @@ class PMSProvider {
       print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
     }
 
-    //print(reserva.result.titular.imagesign);
-
     return reserva;
   }
 
@@ -106,17 +107,8 @@ class PMSProvider {
   ///
   ///realiza la consulta al servicio actualizaHospedajeJson para 
   ///actualizar los datos de la reserva requiere de parametro
-  ///[reserva], que es del tipo [Reserva]
-  Future<dynamic> actualizaHospedaje(Reserva reserva) async {
-
-
-    /*print(reserva.result.titular.imagesign);
-    return  null;*/
-     
-
-
-
-
+  ///[result], que es del tipo [Result]
+  Future<dynamic> actualizaHospedaje(Result result) async {
     bool status          = true;
     String uri           = '$_url/actualizaHospedajeJson';
     String authorization = 'Basic '+base64Encode(utf8.encode('$_usr:$_psw'));
@@ -129,7 +121,7 @@ class PMSProvider {
 
     try
     {
-      SaveData saveModel = SaveData.fromReserva(reserva);
+      SaveData saveModel = SaveData.fromResult(result);
       final body         = saveModel.toJson();
       final response     = await http.post(
         uri, 
@@ -142,7 +134,7 @@ class PMSProvider {
     } 
     catch (e)
     {
-      print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
+      print("No fue posible Guardar la información de la reservación!. Se genero la siguinte excepcion:\n$e");
       status = false;
     }
     

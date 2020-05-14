@@ -22,6 +22,14 @@ import 'ViewWebView.dart';
 import 'package:precheckin/widgets/signature_widget.dart';
 
 class InformacionAdicional extends StatefulWidget {
+  Reserva reserva;
+  Result result;
+  
+  InformacionAdicional({
+    @required this.reserva,
+    @required this.result
+  });
+
   @override
   _InformacionAdicionalState createState() => _InformacionAdicionalState();
 }
@@ -41,6 +49,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   DateTime dateAco = new DateTime.now();
   TextEditingController textController = new TextEditingController(text: '');
   Reserva _reserva;  
+  Result _result;  
   Map<Acompaniantes,SignatureController> mapControllerSiganture = Map<Acompaniantes,SignatureController>();
 
   final SignatureController _controller = SignatureController();
@@ -53,6 +62,8 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     super.initState();
     _controller.addListener(() => print("Value changed"));
     _qr = _persistence.qr;
+    _reserva = this.widget.reserva;
+    _result = this.widget.result;
   }
 
   _botonDisable(){
@@ -63,7 +74,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   @override
   Widget build(BuildContext context) {
-    _reserva = ModalRoute.of(context).settings.arguments;
+    
 
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
@@ -86,7 +97,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
                   _signatureTitular(),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: DocIdentificacion(acompaniantes: _reserva.result.titular,)
+                    child: DocIdentificacion(acompaniantes: _result.titular,)
                   ),
                   _tituloAcompa(),
                   _acompanantes(),
@@ -117,13 +128,15 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   Widget _signatureTitular() {
     _controller.addListener(() async {
         var data = await _controller.toPngBytes();
-        _reserva.result.titular.imagesign = base64.encode(data);
+        _result.titular.imagesign = base64.encode(data);
     });
+
+    print(_result.titular.imagesign);
 
     return Container(
       margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
       child: SignatureWidget(
-        img:_reserva.result.titular.imagesign,
+        img:_result.titular.imagesign ?? "",
         title:Translations.of(context).text('ingresa_firma_titular'),
         controller: _controller,
       ),
@@ -156,7 +169,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     _bloquearPantalla(true);
     
     PMSProvider p = new PMSProvider();
-    bool status = await p.actualizaHospedaje(_reserva);
+    bool status = await p.actualizaHospedaje(_reserva.result);
 
     _bloquearPantalla(false);
 
@@ -228,8 +241,8 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 _onAlertWithCustomContentPressed(context) {
     Acompaniantes _aco = new Acompaniantes();
     _aco.fechanac = new DateTime.now().toString();
-    _aco.club = _reserva.result.idClub;
-    _aco.idcliente = _reserva.result.idCliente;
+    _aco.club = _result.idClub;
+    _aco.idcliente = _result.idCliente;
     _aco.idacompaniantes = 0;
     _aco.istitular = false;
     print("Alerta fecha "+_aco.fechanac);
@@ -271,7 +284,7 @@ _onAlertWithCustomContentPressed(context) {
 
                 mapControllerSiganture[_aco] =_sigController;
                 _aco.istitular = false;
-                _reserva.result.acompaniantes.add(_aco);
+                _result.acompaniantes.add(_aco);
                 mapControllerSiganture[_aco] =_sigController;
                 print('add');
               });
@@ -293,7 +306,7 @@ _onAlertWithCustomContentPressed(context) {
   List<Widget> _listaAcompaniantes() {
     List<Widget> widgets = [];
 
-    _reserva.result.acompaniantes.forEach( (acompaniante){
+    _result.acompaniantes.forEach( (acompaniante){
       SignatureController _controllerSignature = new SignatureController();
 
       _controllerSignature.addListener(()async{
@@ -420,7 +433,7 @@ _onAlertWithCustomContentPressed(context) {
               pageBuilder: 
               (context, animation1, animation2) => 
               ViewWebView(
-                url: 'https://www.google.com/',
+                url: 'https://www.sunsetworldresorts.com/es/resorts/hacienda-tres-rios-resort-spa-nature-park/politica-de-privacidad/',
                 title: Translations.of(context).text('reglamento_hotel'),
               ),
             ));

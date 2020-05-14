@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
       title: 'My Application',
       theme: new ThemeData(
         primarySwatch: Colors.blue,
-        primaryColor: Color(0xFFBF341A)
+        primaryColor: Color.fromRGBO(191, 52, 26, 1)
       ),
       localizationsDelegates: [
         _localeOverrideDelegate,

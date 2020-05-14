@@ -12,12 +12,20 @@ class VerQR extends StatelessWidget {
     _qr = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
-        body: Stack(
-      children: <Widget>[
-        _imagenFondo(),
-        _contenido(context),
-      ],
-    ));
+      body: Stack(
+        children: <Widget>[
+          _imagenFondo(),
+          _contenido(context),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.home, color: Colors.white, size: 35.0,),
+        onPressed: () => Navigator.pushNamed(context, 'idioma'),
+        backgroundColor: Color.fromRGBO(191, 52, 26, 1),
+        elevation: 15.0,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
   }
 
   Widget _imagenFondo() {
@@ -36,9 +44,9 @@ class VerQR extends StatelessWidget {
         children: <Widget>[
           _logo(),
           Expanded(
-            child: _codigosQR(),
+            child: _codigosQR(context),
           ),
-          _btnNuevoCodigo(context)
+          //_btnNuevoCodigo(context),
         ],
       ),
     );
@@ -55,12 +63,17 @@ class VerQR extends StatelessWidget {
     );
   }
 
-  Widget _codigosQR() {
+  Widget _codigosQR(BuildContext context) {
     return Container(
         margin: EdgeInsets.symmetric(vertical: 100.0),
-        child: QRCode(
-          code: _qr,
-          showText: true,
+        child: Column(
+          children: <Widget>[
+            QRCode(
+              code: _qr,
+              showText: true,
+            ),
+            _btnNuevoCodigo(context)
+          ],
         ));
   }
 
@@ -69,7 +82,7 @@ class VerQR extends StatelessWidget {
       width: 120.0,
       margin: EdgeInsets.symmetric(vertical: 14.0),
       child: RaisedButton(
-          child: Text("OK"),
+          child: Text("Nuevo Codigo"),
           shape: StadiumBorder(),
           color: Color.fromRGBO(255, 255, 255, 0.5),
           elevation: 12.0,
@@ -80,4 +93,7 @@ class VerQR extends StatelessWidget {
           }),
     );
   }
+
+
+
 }

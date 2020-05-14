@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:precheckin/models/reserva_model.dart';
+import 'package:precheckin/pages/HabitacionTitular.dart';
 import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/utils/tools_util.dart' as tools;
@@ -135,7 +136,12 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
       tools.showAlert(context, "No se encontro información");
     else {
       infoReserva.codigo = _codigoController.text;
-      Navigator.pushNamed(context, 'reserva', arguments: infoReserva); //Navegacion por nombre pasando argumentos.
+
+      if(infoReserva.ligadas.isEmpty)
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HabitacionTitular(reserva: infoReserva, result: infoReserva.result,)));
+      else
+       Navigator.pushNamed(context, 'litaReserva', arguments: infoReserva);
+       
     }
   }
 
