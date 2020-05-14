@@ -54,13 +54,13 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
             child: InkWell(
               splashColor: Colors.grey,
                 onTap: (){
-                  startScanning();
-                  /* Navigator.push(
+                  //startScanning();
+                   Navigator.push(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (context, animation1, animation2) => ElegirIdentificacion(),
+                      pageBuilder: (context, animation1, animation2) => ElegirIdentificacion(acompaniantes: acompaniantes,),
                     )
-                  ); */
+                  ); 
                 },
                 child:Icon(Icons.camera_alt, color: Colors.blue, size: 30,)
               )

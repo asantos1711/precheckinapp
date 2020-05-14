@@ -52,8 +52,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   Result _result;  
   Map<Acompaniantes,SignatureController> mapControllerSiganture = Map<Acompaniantes,SignatureController>();
 
-
-
   final SignatureController _controller = SignatureController();
 
 
@@ -312,7 +310,7 @@ _onAlertWithCustomContentPressed(context) {
         var data = await _controllerSignature.toPngBytes();
         acompaniante.imagesign = base64.encode(data);
       });
-
+      acompaniante.imagefront = null;
       Widget widget = CardAcompanante(
         acompaniante: acompaniante,
         signature:  Container(
@@ -369,7 +367,9 @@ _onAlertWithCustomContentPressed(context) {
                     Navigator.push(
                       context,
                       PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) => ElegirIdentificacion(),
+                        pageBuilder: (context, animation1, animation2) => ElegirIdentificacion(
+                          acompaniantes: _reserva.result.titular,
+                        ),
                       )
                     );
                   },
