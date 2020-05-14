@@ -28,6 +28,9 @@ class ScanerModel {
     String masterCheckDigit;
     String givenNamesReadable;
     String optionals;
+    String portrait;
+    String signature;
+    String full_image;
 
     ScanerModel({
         this.documentTypeRaw,
@@ -52,6 +55,9 @@ class ScanerModel {
         this.masterCheckDigit,
         this.givenNamesReadable,
         this.optionals,
+        this.portrait,
+        this.signature,
+        this.full_image
     });
 
     factory ScanerModel.fromJson(Map<String, dynamic> json) => ScanerModel(
@@ -77,6 +83,9 @@ class ScanerModel {
         masterCheckDigit: json["master_check_digit"] == null ? null : json["master_check_digit"],
         givenNamesReadable: json["given_names_readable"] == null ? null : json["given_names_readable"],
         optionals: json["optionals"] == null ? null : json["optionals"],
+        portrait: json["portrait"] == null ? null : json["portrait"],
+        signature: json["signature"] == null ? null : json["signature"],
+        full_image: json["full_image"] == null ? null : json["full_image"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -102,5 +111,8 @@ class ScanerModel {
         "master_check_digit": masterCheckDigit == null ? null : masterCheckDigit,
         "given_names_readable": givenNamesReadable == null ? null : givenNamesReadable,
         "optionals": optionals == null ? null : optionals,
+        "portrait": portrait == null ? null : portrait,
+        "signature": signature == null ? null : signature,
+        "full_image": full_image == null ? null : full_image,
     };
 }

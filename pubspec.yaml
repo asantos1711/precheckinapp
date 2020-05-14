@@ -37,6 +37,9 @@ dependencies:
   fluttertoast: any
   image_picker_saver: ^0.3.0
   webview_flutter: ^0.3.21
+  camera: any
+  path_provider:
+  path:
 
 dev_dependencies:
   flutter_test:
