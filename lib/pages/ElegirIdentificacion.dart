@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -415,12 +416,14 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
   }
 
   _alertScannerR(){
+    Uint8List bytes = base64.decode(acompaniantes.imagefront);
     return Alert(
         closeFunction:(){
           print('Se cerró la alerta');
           Navigator.pop(context);
           Navigator.pop(context);
         } ,
+        image: new Image.memory(bytes),
         context: context,
         title: "Escaneo de Pasaporte",
         content: Container(child: Text('El escaneo del pasaporte se ha realizado con éxito.'),),
