@@ -4,6 +4,7 @@ import 'package:precheckin/models/commons/aerolinea_model.dart';
 import 'package:precheckin/providers/aerolinea_provider.dart';
 import 'package:precheckin/models/aerolineas_model.dart';
 
+
 class AerolineaWidget extends StatelessWidget {
   AerolineaProvider _provider = new AerolineaProvider();
   List<Aerolinea> _aeroLineas = [];
