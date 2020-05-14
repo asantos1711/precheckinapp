@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:precheckin/pages/InformacionAdicional.dart';
 import 'package:precheckin/styles/styles.dart';
 
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/utils/hotel_utils.dart';
 import 'package:precheckin/utils/fecha_util.dart' as futil;
+import 'package:precheckin/widgets/aerolinea_widget.dart';
 import 'package:precheckin/widgets/paises_widget.dart';
 import 'package:precheckin/widgets/estados_widget.dart';
 
 class HabitacionTitular extends StatefulWidget {
+  Reserva reserva;
+  Result result;
+
+  HabitacionTitular({
+    @required this.reserva,
+    @required this.result,
+  });
+
+
   @override
   _HabitacionTitularState createState() => _HabitacionTitularState();
 }
@@ -17,8 +28,10 @@ class HabitacionTitular extends StatefulWidget {
 class _HabitacionTitularState extends State<HabitacionTitular> with TickerProviderStateMixin{
 
   Reserva _reserva;  
+  Result _result;
   String _pais;
   String _estado;
+  String _aerolinea;
   double height;
   double width;
   double space;
@@ -47,12 +60,14 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
    
     _controllerFechaVuelo.text = "${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}";
     _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+    _reserva = this.widget.reserva;  
+    _result  = this.widget.result;
   }
 
 
   @override
   Widget build(BuildContext context) {
-    _reserva = ModalRoute.of(context).settings.arguments; //Obtiene la informacion que biene de los argumentos.
+    
     _inicializarDatos();//Inicializa las variables.
 
     return Scaffold(
@@ -65,16 +80,17 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
   void _inicializarDatos() {
     
-    _controllerNombre.text    = _reserva.result.titular.nombre ?? "";
-    _controllerCP.text        = _reserva.result.codigoPostal ?? "";
-    _controllerAerolinea.text = _reserva.result.vuelos[0].aerolinea1 ?? "";
-    _controllerCiudad.text    = _reserva.result.titular.ciudad ?? "";
-    _controllerVuelo.text     = _reserva.result.vuelos[0].vuelollegada ?? "";
-    _controllerVueloFS.text   = futil.splitFecha(_reserva.result.vuelos[0].fechasalida ?? "");
-    _fechaVuelo               = DateTime.parse(_reserva.result.vuelos[0].fechallegada.replaceAll('-', ""));
+    _controllerNombre.text    = _result.titular.nombre ?? "";
+    _controllerCP.text        = _result.codigoPostal ?? "";
+    _controllerAerolinea.text = _result.vuelos.isNotEmpty ? (_result.vuelos[0].aerolinea1 ?? "") : "";
+    _controllerCiudad.text    = _result.titular.ciudad ?? "";
+    _controllerVuelo.text     = _result.vuelos.isNotEmpty ?(_result.vuelos[0].vuelollegada ?? "") : "";
+    _controllerVueloFS.text   = _result.vuelos.isNotEmpty ? futil.splitFecha(_result.vuelos[0].fechasalida ?? "") : "";
+    _fechaVuelo               = _result.vuelos.isNotEmpty ? DateTime.parse(_result.vuelos[0].fechallegada.replaceAll('-', "")) : null;
     
-    _pais                     = (_pais == null) ? _reserva.result.titular.pais : _pais; //Validacion para que cambie el valor del pais
-    _estado                   = (_estado == null) ? _reserva.result.estado : _estado; //Validacion para que cambie el valor del estado
+    _pais                     = (_pais == null) ? _result.titular.pais : _pais; //Validacion para que cambie el valor del pais
+    _estado                   = (_estado == null) ? _result.estado : _estado; //Validacion para que cambie el valor del estado
+    _aerolinea                = (_aerolinea == null) ? (_result.vuelos.isNotEmpty ? (_result.vuelos[0].aerolinea1 ?? "") : "") ?? "" : _aerolinea;
 
     _opcionesFloat["1"]       = Translations.of(context).text('opcion_duda').toString();
     _opcionesFloat["2"]       = Translations.of(context).text('opcion_error').toString();
@@ -93,8 +109,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   Widget _body() {
     return ListView(
       children: <Widget>[
-        _seccionReserva(),
-        _seccionTitular(),
+       _seccionReserva(),
+       _seccionTitular(),
         _seccionContacto(),
         _seccionVuelo(),
         _buttonContinuar(),
@@ -218,7 +234,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             alignment: Alignment.centerLeft,
             child: Container(
               child: Text(
-                    _reserva.result.idReserva.toString(),
+                    _result.idReserva.toString(),
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -273,7 +289,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerLeft,
                   child: Container(
                     child: Text(
-                      _reserva.result.fechaCheckin,
+                      _result.fechaCheckin,
                       style: TextStyle(fontSize: 18),
                       )
                   ),
@@ -282,7 +298,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerRight,
                   child: Container(
                     child: Text(
-                      _reserva.result.fechaCheckout,
+                      _result.fechaCheckout,
                       style: TextStyle(fontSize: 18),
                       )
                   ),
@@ -326,7 +342,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerLeft,
                   child: Container(
                     child: Text(
-                      '${_reserva.result.numeroAdultos} '+Translations.of(context).text('adultos'),
+                      '${_result.numeroAdultos} '+Translations.of(context).text('adultos'),
                       style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
                       )
                   ),
@@ -335,7 +351,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.center,
                   child: Container(
                     child: Text(
-                      '${_reserva.result.numeroAdolecentes} '+Translations.of(context).text('adolecentes'),
+                      '${_result.numeroAdolecentes} '+Translations.of(context).text('adolecentes'),
                       style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
                       )
                   ),
@@ -344,7 +360,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerRight,
                   child: Container(
                     child: Text(
-                      '${_reserva.result.numeroNinios} '+Translations.of(context).text('ninos'),
+                      '${_result.numeroNinios} '+Translations.of(context).text('ninos'),
                       style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
                       )
                   ),
@@ -416,7 +432,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              child: Text(_reserva.tipoHabitacion.descripcion ?? '',
+              child: Text(_result.tipoHabitacion?.descripcion ?? '',
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -451,7 +467,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             alignment: Alignment.centerLeft,
             child: Container(
               padding: EdgeInsets.only(left:10),
-              child: Text(getClavePlan(_reserva.result.idClub.toString(), _reserva.plana),
+              child: Text(getClavePlan(_result.idClub.toString(), _reserva.plana),
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -544,8 +560,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                     ),
 
                     onChanged: (nombre){
-                      _reserva.result.nombreTitular = nombre;
-                      _reserva.result.titular.nombre = nombre;
+                      _result.nombreTitular = nombre;
+                      _result.titular.nombre = nombre;
 
                     },
 
@@ -582,8 +598,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                     ),
                     onChanged: (ciudad) {
 
-                      _reserva.result.ciudad = ciudad;
-                      _reserva.result.titular.ciudad = ciudad;
+                      _result.ciudad = ciudad;
+                      _result.titular.ciudad = ciudad;
 
                     },
                   )
@@ -598,8 +614,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                     ),
                     onChanged: (cp){
 
-                      _reserva.result.codigoPostal = cp;
-                      _reserva.result.titular.codigoPostal = cp;
+                      _result.codigoPostal = cp;
+                      _result.titular.codigoPostal = cp;
 
                     },
 
@@ -614,18 +630,17 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   }
 
   Widget _dropdownPaises(){
-    
     return Container(
       width: (width-50)/2,
       padding: EdgeInsets.only(top: 19, right: 10),
       child: PaisesWidget(
         hotel:"0",
-        valorInicial: _pais,
+        valorInicial: _pais ?? "MEX",
         change: (pais){
           setState(() {
             _pais = pais;
-            _reserva.result.pais = pais;
-            _reserva.result.titular.pais = pais;
+            _result.pais = pais;
+            _result.titular.pais = pais;
           });
         },
       ),
@@ -644,8 +659,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         change: (estado){
           setState(() {
             _estado = estado;
-            _reserva.result.estado = estado;
-            _reserva.result.titular.estado = estado;
+            _result.estado = estado;
+            _result.titular.estado = estado;
           });
         },
       ),
@@ -701,7 +716,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    child: Text(_reserva.result.email,
+                    child: Text(_result.email,
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
@@ -732,7 +747,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    child: Text(_reserva.result.telefono,
+                    child: Text(_result.telefono,
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
@@ -778,26 +793,39 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
           Container(
             padding: EdgeInsets.only(left: 10),
             width: width-30,
-            child: TextFormField(
+            child: AerolineaWidget(
+              valorInicial: _aerolinea,
+              change: (aerolinea) => setState(() => _aerolinea = aerolinea),
+            )
+            /*child: TextFormField(
               controller: _controllerAerolinea,
               decoration: InputDecoration(
                 labelText: Translations.of(context).text('aerolinea')
               ),
-              onChanged: (numeroVuelo) => _reserva.result.vuelos[0].vuelollegada = numeroVuelo,
-            )
+              onChanged: (numeroVuelo) => _result.vuelos[0].vuelollegada = numeroVuelo,
+            )*/
           ),
           Row(
             children: <Widget>[
               Container(
                   padding: EdgeInsets.only(left: 10),
                   width: (width-30)/2,
-                  child: TextFormField(
-                    controller: _controllerFechaVuelo,
-                    decoration: InputDecoration(
-                        labelText: Translations.of(context).text('fec_salida')),
-                    readOnly: true,
-                    onTap: () => _selectDate(context),
-                  ),
+                  child: new Theme(
+                      data: Theme.of(context).copyWith(
+                        primaryColor: Theme.of(context).primaryColor,
+                        accentColor: Theme.of(context).primaryColor,
+                        splashColor: Theme.of(context).primaryColor,
+                      ),
+                      child: new Builder(
+                        builder: (context) =>new TextFormField(
+                          controller: _controllerFechaVuelo,
+                          decoration: InputDecoration(
+                              labelText: Translations.of(context).text('fec_salida')),
+                          readOnly: true,
+                          onTap: () => _selectDate(context),
+                        ),
+                      )
+                    )
               ),
               Container(
                   padding: EdgeInsets.only(left: 10),
@@ -807,7 +835,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                     decoration: InputDecoration(
                         labelText: Translations.of(context).text('no_vuelo')
                     ),
-                    onChanged: (numeroVuelo) => _reserva.result.vuelos[0].vuelollegada = numeroVuelo,
+                    onChanged: (numeroVuelo) => _result.vuelos[0].vuelollegada = numeroVuelo,
                   )
               )
             ],
@@ -820,6 +848,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
+        locale: Translations.of(context).locale,
         initialDate: _fechaVuelo,
         firstDate: DateTime(1910),
         lastDate: DateTime.now());
@@ -827,7 +856,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
       setState(() {
         _fechaVuelo = picked;
         print(_fechaVuelo.toString());
-        _reserva.result.vuelos[0].fechallegada = _fechaVuelo.toString();
+        _result.vuelos[0].fechallegada = _fechaVuelo.toString();
         _controllerFechaVuelo.text ="${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}";
       });
     }
@@ -846,7 +875,9 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         color: Theme.of(context).primaryColor,
         padding: EdgeInsets.all(8.0),
         splashColor: Colors.orange,
-        onPressed: () => Navigator.pushNamed(context, 'infoAdicional', arguments: _reserva),
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => InformacionAdicional(reserva: _reserva, result: _result,)));
+        },
         child: Text(
           Translations.of(context).text('continuar'),
           style: TextStyle(fontSize: 20.0),

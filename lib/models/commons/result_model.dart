@@ -1,4 +1,6 @@
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
+import 'package:precheckin/models/commons/acuerdos_model.dart';
+import 'package:precheckin/models/commons/tipo_habitacion_model.dart';
 import 'package:precheckin/models/commons/vuelos_model.dart';
 
 class Result {
@@ -24,6 +26,8 @@ class Result {
   Acompaniantes titular;
   List<Acompaniantes> acompaniantes;
   List<Vuelos> vuelos;
+  Acuerdos acuerdos;
+  TipoHabitacion tipoHabitacion;
 
   Result({
     this.idClub,
@@ -48,6 +52,8 @@ class Result {
     this.status,
     this.acompaniantes,
     this.vuelos,
+    this.acuerdos,
+    this.tipoHabitacion,
   });
 
   factory Result.fromJson( Map<String,dynamic> json ){
@@ -89,7 +95,9 @@ class Result {
       status            : json['idstatus'] ?? "",
       titular           : titular,
       acompaniantes     : acompaniantes,
-      vuelos            : json['vuelos'] != null ? List<Vuelos>.from( json['vuelos'].map( (v) => Vuelos.fromJson(v) ) ) : []
+      vuelos            : json['vuelos'] != null ? List<Vuelos>.from( json['vuelos'].map( (v) => Vuelos.fromJson(v) ) ) : [],
+      acuerdos          : json['tarreg'] != null ? Acuerdos.fromJson(json['tarreg']) : null,
+      tipoHabitacion  : json['tipohabitacion']  != null ? TipoHabitacion.fromJson(json['tipohabitacion']) : null,
     );
   }
 }

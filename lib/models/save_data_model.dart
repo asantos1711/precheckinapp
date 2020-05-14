@@ -1,6 +1,7 @@
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
+import 'package:precheckin/models/commons/result_model.dart';
 import 'package:precheckin/utils/fecha_util.dart' as futil;
-import 'package:precheckin/models/reserva_model.dart';
+
 
 
 class SaveData {
@@ -23,12 +24,12 @@ class SaveData {
         rh         : Rh.fromJson(json["rh"]),
     );
 
-    factory SaveData.fromReserva(Reserva reserva){
+    factory SaveData.fromResult(Result result){
       return new SaveData(
         dbdatostmp : new Dbdatostmp(),
         iduser     : "JDELGADO",
-        idhotel    : reserva.result.idClub.toString(),
-        rh         : Rh.fromReserva(reserva) 
+        idhotel    : result.idClub.toString(),
+        rh         : Rh.fromResult(result) 
       );
     }
 
@@ -100,26 +101,26 @@ class Rh {
       vecaco          : List<Vecaco>.from(json["vecaco"].map((x) => Vecaco.fromJson(x))),
   );
 
-  factory Rh.fromReserva(Reserva reserva){
-    List<Vecaco> vecacos = [Vecaco.fromAcompaniante(reserva.result.titular)];
+  factory Rh.fromResult(Result result){
+    List<Vecaco> vecacos = [Vecaco.fromAcompaniante(result.titular)];
 
-    reserva.result.acompaniantes.forEach((acompaniante) { 
+    result.acompaniantes.forEach((acompaniante) { 
       vecacos.add(Vecaco.fromAcompaniante(acompaniante));
     });
 
     return new Rh(
-      idreserva       : reserva.result.idReserva,
-      idcliente       : reserva.result.idCliente,
-      uclub           : reserva.result.idClub,
-      idstatus        : reserva.result.status,
-      nombre          : reserva.result.nombreTitular,
-      direccion       : reserva.result.direccion,
-      ciudad          : reserva.result.ciudad,
-      telefono        : reserva.result.telefono,
-      emailhogar      : reserva.result.email,
-      pais            : reserva.result.pais,
-      estado          : reserva.result.estado,
-      cpsocio         : reserva.result.codigoPostal,
+      idreserva       : result.idReserva,
+      idcliente       : result.idCliente,
+      uclub           : result.idClub,
+      idstatus        : result.status,
+      nombre          : result.nombreTitular,
+      direccion       : result.direccion,
+      ciudad          : result.ciudad,
+      telefono        : result.telefono,
+      emailhogar      : result.email,
+      pais            : result.pais,
+      estado          : result.estado,
+      cpsocio         : result.codigoPostal,
       usuarioregistro : "JDELGADO",
       vecaco          : vecacos,
     );
