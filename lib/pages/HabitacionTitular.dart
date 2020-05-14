@@ -810,13 +810,22 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
               Container(
                   padding: EdgeInsets.only(left: 10),
                   width: (width-30)/2,
-                  child: TextFormField(
-                    controller: _controllerFechaVuelo,
-                    decoration: InputDecoration(
-                        labelText: Translations.of(context).text('fec_salida')),
-                    readOnly: true,
-                    onTap: () => _selectDate(context),
-                  ),
+                  child: new Theme(
+                      data: Theme.of(context).copyWith(
+                        primaryColor: Theme.of(context).primaryColor,
+                        accentColor: Theme.of(context).primaryColor,
+                        splashColor: Theme.of(context).primaryColor,
+                      ),
+                      child: new Builder(
+                        builder: (context) =>new TextFormField(
+                          controller: _controllerFechaVuelo,
+                          decoration: InputDecoration(
+                              labelText: Translations.of(context).text('fec_salida')),
+                          readOnly: true,
+                          onTap: () => _selectDate(context),
+                        ),
+                      )
+                    )
               ),
               Container(
                   padding: EdgeInsets.only(left: 10),
@@ -839,6 +848,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
+        locale: Translations.of(context).locale,
         initialDate: _fechaVuelo,
         firstDate: DateTime(1910),
         lastDate: DateTime.now());

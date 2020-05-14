@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,11 +13,10 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:mrzflutterplugin/mrzflutterplugin.dart';
 import 'package:precheckin/tools/translation.dart';
-import 'package:precheckin/widgets/DisplayPictureScreen.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-
 import '../models/ScanerModel.dart';
 import '../models/commons/acompaniantes_model.dart';
+
 class ElegirIdentificacion extends StatefulWidget {
   Acompaniantes acompaniantes;
   ElegirIdentificacion({
@@ -58,14 +58,14 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
    List<TipoDoc> docList = [
     TipoDoc(
       index: 0,
-      name: "Pasaporte",
+      name: "pasaporte",
       short: "P",
       icon: Icon(FontAwesomeIcons.circle)
     ),
     TipoDoc(
       index: 1,
       short:"ID",
-      name: "Documento de Identificación",
+      name: "doc_identificacion",
       icon: Icon(FontAwesomeIcons.circle)
     ),
   ];
@@ -139,42 +139,57 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           itemCount: docList.length,
           itemBuilder: (context, item) {
             TipoDoc doc = docList[item];
-            return  Container(
-              width: MediaQuery.of(context).size.width-40,
-              decoration: _decoration(),
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(doc.name),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap:(){
-                        //setState(() {
-                          nameItem = doc.name;
-                          idItem = item;
-                          _isSelect = doc;
-                          //docList[idItem].icon = Icon(FontAwesomeIcons.checkCircle);
-                          setState(() {
-                           docList.forEach((d){
-                            if(d.index!=item){
-                              d.icon = Icon(FontAwesomeIcons.circle);
-                            }else{
-                              d.icon = Icon(FontAwesomeIcons.checkCircle, color: Colors.green,);
-                            }
-                          }); 
-                        });
-                      },
-                      splashColor: Colors.grey,
-                      child: doc.icon
+            return  InkWell(
+              onTap:(){
+                nameItem = doc.name;
+                idItem = item;
+                _isSelect = doc;
+                setState(() {
+                  docList.forEach((d){
+                    if(d.index!=item){
+                      d.icon = Icon(FontAwesomeIcons.circle);
+                    }else{
+                      d.icon = Icon(FontAwesomeIcons.checkCircle, color: Colors.green,);
+                    }
+                  }); 
+                });
+              },
+              splashColor: Colors.grey,
+              child: Container(
+                width: MediaQuery.of(context).size.width-40,
+                decoration: _decoration(),
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(Translations.of(context).text(doc.name)),
                     ),
-                  ),
-                ],
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap:(){
+                            nameItem = doc.name;
+                            idItem = item;
+                            _isSelect = doc;
+                            setState(() {
+                              docList.forEach((d){
+                              if(d.index!=item){
+                                d.icon = Icon(FontAwesomeIcons.circle);
+                              }else{
+                                d.icon = Icon(FontAwesomeIcons.checkCircle, color: Colors.green,);
+                              }
+                            }); 
+                          });
+                        },
+                        splashColor: Colors.grey,
+                        child: doc.icon
+                      ),
+                    ),
+                  ],
+                )
               )
             );
           },
@@ -244,7 +259,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             if(_isSelect.short == 'P'){
               _flujopasaporte();
             }else if(_isSelect.short =='ID'){
-              _flujoId();
+              _flujoId(0);
             }
           }
         },
@@ -256,8 +271,20 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     );
   }
 
-  _flujoId()async{
-    Alert(
+  _flujoId(int vuelta)async{
+    
+    //Navigator.pop(context);
+      final cameras = await availableCameras();
+      final firstCamera = cameras.first; 
+      _camera(firstCamera);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (BuildContext context) {
+            return _vistaCamara(vuelta);
+          },
+        ),
+      );
+    /* Alert(
       closeFunction:(){
         print('Se cerró la alerta');
       } ,
@@ -287,26 +314,50 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           ),
         )
       ]
-    ).show();
+    ).show(); */
   }
 
-  Widget _vistaCamara(){
+  Widget _vistaCamara(int vuelta){
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       //extendBodyBehindAppBar: true,
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: InkWell(
+          onTap: ()=>Navigator.pop(context),
+          splashColor: Colors.grey,
+          child: Icon(Icons.arrow_back),
+        ),
+      ),
       body: Stack(children: <Widget>[
-         Container(
+        Container(
             width:width,
             height: width*1.25,
             child: _iniciarCamara(),
             /* decoration: BoxDecoration(
               border: Border.all(width: 5, color: Colors.grey.withAlpha(500) ),
             ), */
-          )
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: width*1.25),
+          child: ListView(
+            children: <Widget>[
+              Padding(
+                padding:EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                child: Text(Translations.of(context).text(vuelta==0?'foto_titulo_uno':'foto_titulo_uno'),
+                style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),)
+              ),
+              Padding(
+                padding:EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                child: Text(Translations.of(context).text(vuelta==0?'foto_body_uno':'foto_titulo_uno'),
+                style: TextStyle(fontSize: 18),)
+              ),
+              Image.asset(vuelta==0?'assets/images/id_front.png':'assets/images/id_front.png',height: 200,),
+            ],
+          ),
+        )
 
       ],),
-      floatingActionButton: _takePhoto(),
+      floatingActionButton: _takePhoto(vuelta),
     );
   }
 
@@ -318,7 +369,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
       context: context,
       image: Image.network('https://image.shutterstock.com/image-vector/vector-illustration-passport-biometric-data-260nw-761890669.jpg'),
       title: "",
-      content: Container(child: Text('A continuación se escaneará el Pasaporte.\nAsegurese de exista una imagen clara y visible.'),),
+      content: Container(child: Text(Translations.of(context).text('instruccion_scanner')),),
       buttons: [
         DialogButton(
           color: Colors.white,
@@ -336,7 +387,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     
   }
 
-  _takePhoto(){
+  _takePhoto(int vuelta){
     return FloatingActionButton(
         child: Icon(Icons.camera_alt),
         onPressed: () async {
@@ -346,14 +397,12 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
               (await getTemporaryDirectory()).path,
               '${DateTime.now()}.png',
             );
-
-            await controller.takePicture(path);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(imagePath: path),
-              ),
-            );
+            print("Path :  ");
+            List<int> imageBytes= await  FileImage(File(path)).file.readAsBytes();
+            String base64Image = base64Encode(imageBytes);
+            acompaniantes.imagefront = base64Image; 
+            print("imagen front : ${acompaniantes.imagefront}");
+            _flujoId(1);
           } catch (e) {
             print(e);
           }
@@ -407,7 +456,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
       _scanerModel = res;
       _result = scannerResult;
       acompaniantes.documenttype = _scanerModel.documentTypeReadable;
-      acompaniantes.imagefront = _scanerModel?.portrait ??'';
+      acompaniantes.imagefront = _scanerModel?.full_image ??'';
       acompaniantes.nombre = _scanerModel.givenNamesReadable;
 
       log('imagefront: ${acompaniantes.imagefront}');
@@ -425,8 +474,8 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         } ,
         image: new Image.memory(bytes),
         context: context,
-        title: "Escaneo de Pasaporte",
-        content: Container(child: Text('El escaneo del pasaporte se ha realizado con éxito.'),),
+        title: Translations.of(context).text('fin_escaneo_titulo'),
+        content: Container(child: Text(Translations.of(context).text('fin_escaneo_body')),),
         buttons: [
           DialogButton(
             color: Colors.white,

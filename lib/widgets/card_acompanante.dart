@@ -44,6 +44,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: _fecaNac,
+        locale: Translations.of(context).locale,
         firstDate: DateTime(1910),
         lastDate: DateTime.now());
     if (picked != null && picked != _date)
@@ -116,13 +117,28 @@ class _CardAcompananteState extends State<CardAcompanante> {
         alignment: Alignment.centerLeft,
         child: Container(
             width: (width - 30) / 2,
-            child: TextFormField(
+            child:  new Theme(
+              data: Theme.of(context).copyWith(
+                primaryColor: Theme.of(context).primaryColor,
+                accentColor: Theme.of(context).primaryColor,
+                splashColor: Theme.of(context).primaryColor,
+              ),
+              child: new Builder(
+                builder: (context) =>new TextFormField(
+                  controller: _controllerFechaEdad,
+                  decoration: InputDecoration(
+                      labelText: Translations.of(context).text('fec_nacimiento')),
+                  readOnly: true,
+                  onTap: () => _selectDate(context),
+                ) ,
+              )
+            )/* TextFormField(
               controller: _controllerFechaEdad,
               decoration: InputDecoration(
                   labelText: Translations.of(context).text('fec_nacimiento')),
               readOnly: true,
               onTap: () => _selectDate(context),
-            )
+            ) */
         )
     );
   }
