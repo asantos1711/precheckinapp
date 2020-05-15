@@ -28,4 +28,13 @@ class UserPreferences {
 
 
 
+
+
+  bool get ligadas {
+    return _pref.getBool("ligadas") ?? false;
+  }
+
+  set ligadas(bool value){
+    _pref.setBool("ligadas", value);
+  }
 }
