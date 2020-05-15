@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
@@ -37,7 +38,7 @@ class InformacionAdicional extends StatefulWidget {
 class _InformacionAdicionalState extends State<InformacionAdicional> {
   double width;
   double height;
-  bool _enableButton = false;
+  bool _enableButton = true;
   bool _promoInfoBool = true;
   bool _avisoPrivaBool = true;
   bool _recibirInfoBool = true;

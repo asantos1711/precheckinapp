@@ -812,9 +812,9 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   width: (width-30)/2,
                   child: new Theme(
                       data: Theme.of(context).copyWith(
-                        primaryColor: Theme.of(context).primaryColor,
-                        accentColor: Theme.of(context).primaryColor,
-                        splashColor: Theme.of(context).primaryColor,
+                        primaryColor: Color.fromRGBO(191, 52, 26, 1),
+                        accentColor: Color.fromRGBO(191, 52, 26, 1),
+                        splashColor: Color.fromRGBO(191, 52, 26, 1),
                       ),
                       child: new Builder(
                         builder: (context) =>new TextFormField(

@@ -58,7 +58,7 @@
   "opcion_error": "Tengo errores con mi reservación",
   "aerolinea": "Aerolinea",
   "mensaje_casillas": "Marque las casillas faltantes",
-  "instruccion_scanner":"A continuación se escaneará el Pasaporte.\nAsegurese de exista una imagen clara y visible.",
+  "instruccion_scanner":"A continuación se escaneará el Pasaporte.Asegurese de exista una imagen clara y visible.",
   "fin_escaneo_titulo":"Escaneo de pasaporte",
   "fin_escaneo_body":"El escaneo del pasaporte se ha realizado con éxito.",
   "foto_titulo_uno":"Haz la primera foto:\nanverso del documento de identificación",
