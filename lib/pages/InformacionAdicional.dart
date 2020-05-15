@@ -38,10 +38,10 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   double width;
   double height;
   bool _enableButton = false;
-  bool _promoInfoBool = false;
-  bool _avisoPrivaBool = false;
-  bool _recibirInfoBool = false;
-  bool _poliReglaBool = false;
+  bool _promoInfoBool = true;
+  bool _avisoPrivaBool = true;
+  bool _recibirInfoBool = true;
+  bool _poliReglaBool = true;
   bool _bloquear = false;
   QRPersistence _persistence = new QRPersistence();
   List<String> _qr;
