@@ -118,19 +118,22 @@ class _CardAcompananteState extends State<CardAcompanante> {
     return Align(
         alignment: Alignment.centerLeft,
         child: Container(
-            width: ((width - 30) /3),
+            width: ((width - 30) *0.45),
             child:  new Theme(
               data: Theme.of(context).copyWith(
-                primaryColor: Theme.of(context).primaryColor,
-                accentColor: Theme.of(context).primaryColor,
-                splashColor: Theme.of(context).primaryColor,
+                primaryColor: Color.fromRGBO(191, 52, 26, 1),
+                accentColor: Color.fromRGBO(191, 52, 26, 1),
+                splashColor: Color.fromRGBO(191, 52, 26, 1),
               ),
               child: new Builder(
                 builder: (context) =>new TextFormField(
                   controller: _controllerFechaEdad,
                   decoration: InputDecoration(
-                    hintMaxLines: 2,
-                    labelText: Translations.of(context).text('fec_nacimiento')),
+                    hintMaxLines: 4,
+                    labelStyle: TextStyle(fontSize: 14),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    labelText: Translations.of(context).text('fec_nacimiento')
+                  ),
                   readOnly: true,
                   onTap: () => _selectDate(context),
                 ) ,

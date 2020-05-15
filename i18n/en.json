@@ -56,7 +56,7 @@
   "no_compartir": "We will not share your ID with any other user.",
   "aerolinea": "Airline",
   "mensaje_casillas": "Check the missing boxes",
-  "instruccion_scanner":"The Passport will then be scanned.\nMake sure there is a clear and visible image.",
+  "instruccion_scanner":"The Passport will then be scanned.Make sure there is a clear and visible image.",
   "fin_escaneo_titulo":"Passport scan",
   "fin_escaneo_body":"The passport scan was successful.",
   "foto_titulo_uno":"Take the first photo:\nfront of the identification document",

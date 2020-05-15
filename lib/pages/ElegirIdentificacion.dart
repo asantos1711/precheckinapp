@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:camera_camera/camera_camera.dart';
 import 'dart:developer';
 import 'package:flutter/services.dart' show rootBundle;
@@ -279,8 +280,30 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
       } ,
       context: context,
       image: Image.asset('assets/images/id_front.png'),
-      title: Translations.of(context).text('foto_titulo_uno'),
-      content: Container(child: Text(Translations.of(context).text('foto_body_uno')),),
+      title: '',
+      content: Column(
+        children: <Widget>[
+        Container(
+          height: 70,
+          child: AutoSizeText(
+            Translations.of(context).text('foto_titulo_uno'),
+            style: TextStyle(fontWeight: FontWeight.bold),
+            //maxLines: 2,
+            maxFontSize: 25.0 ,
+            minFontSize: 10.0 ,
+          )
+        ),
+        Container(
+          height: 90,
+          child: AutoSizeText(
+            Translations.of(context).text('foto_body_uno'),
+            //maxLines: 4,
+            maxFontSize: 17.0 ,
+            minFontSize: 10.0 ,
+          )
+        ),
+        ],
+      ),
       buttons: [
         DialogButton(
           color: Colors.white,
@@ -400,7 +423,16 @@ _idDocument () async {
       context: context,
       image: Image.network('https://image.shutterstock.com/image-vector/vector-illustration-passport-biometric-data-260nw-761890669.jpg'),
       title: "",
-      content: Container(child: Text(Translations.of(context).text('instruccion_scanner')),),
+      content: Container(
+          height: 70,
+          child: AutoSizeText(
+            Translations.of(context).text('instruccion_scanner'),
+            //style: TextStyle(fontWeight: FontWeight.bold),
+            //maxLines: 2,
+            maxFontSize: 25.0 ,
+            minFontSize: 10.0 ,
+          )
+        ),
       buttons: [
         DialogButton(
           color: Colors.white,
@@ -505,8 +537,30 @@ _idDocument () async {
         } ,
         image: new Image.memory(bytes),
         context: context,
-        title: Translations.of(context).text('fin_escaneo_titulo'),
-        content: Container(child: Text(Translations.of(context).text('fin_escaneo_body')),),
+        title: '',
+        content: Column(
+          children: <Widget>[
+            Container(
+              height: 70,
+              child: AutoSizeText(
+                Translations.of(context).text('fin_escaneo_titulo'),
+                style: TextStyle(fontWeight: FontWeight.bold),
+                //maxLines: 2,
+                maxFontSize: 25.0 ,
+                minFontSize: 10.0 ,
+              )
+            ),
+            Container(
+              height: 90,
+              child: AutoSizeText(
+                Translations.of(context).text('fin_escaneo_body'),
+                //maxLines: 4,
+                maxFontSize: 17.0 ,
+                minFontSize: 10.0 ,
+              )
+            ),
+          ],
+        ),
         buttons: [
           DialogButton(
             color: Colors.white,

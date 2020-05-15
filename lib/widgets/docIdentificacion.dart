@@ -67,7 +67,9 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
                         )
                       ); 
                     },
-                    child:Icon(Icons.camera_alt, color: Colors.blue, size: 30,)
+                    child:_condicionIcono()?
+                      Icon(Icons.check_circle_outline, color:Colors.green, size: 30,):
+                      Icon(Icons.camera_alt, color: Colors.blue, size: 30,)
                   )
               )
             ],
@@ -75,6 +77,15 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
         ],
       )
     );
+  }
+
+  bool _condicionIcono(){
+    bool condicion =  acompaniantes.imageback!=null
+    &&acompaniantes.imagefront !=null
+    &&acompaniantes.imageback.length>10
+    &&acompaniantes.imagefront.length>10 ;
+    print('condicion'+condicion.toString());
+    return condicion;
   }
 
 
