@@ -60,15 +60,13 @@ class Result {
     String estado = json['estado'] ?? "";
     estado = (estado.isEmpty || estado.trim() == "NIN") ? "-" : estado;
 
-    Acompaniantes titular;
+    Acompaniantes titular = Acompaniantes.fromResultJSON(json);
     List<Acompaniantes> acompaniantes = [];
     
     if(json['vecaco'] != null){
       List<Acompaniantes> huespedes = List<Acompaniantes>.from( json['vecaco'].map( (v) => Acompaniantes.fromJson(v) ) );
       huespedes.forEach((huesped) {
-        if(huesped.istitular == true)
-          titular = huesped;
-        else
+        if(huesped.istitular == false)
           acompaniantes.add(huesped);
       });
     }

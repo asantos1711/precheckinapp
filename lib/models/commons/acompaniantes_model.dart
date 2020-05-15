@@ -89,6 +89,9 @@ class Acompaniantes{
     );
   }
 
+
+  
+
   factory Acompaniantes.fromResult(Result result){
 
     return Acompaniantes(
@@ -118,6 +121,44 @@ class Acompaniantes{
       istitular       : true,
       estado          : result.estado,
       codigoPostal    : result.codigoPostal
+    );
+
+  }
+
+
+  
+
+  factory Acompaniantes.fromResultJSON(Map<String,dynamic> json){
+    String estado = json['estado'] ?? "";
+    estado = (estado.isEmpty || estado.trim() == "NIN") ? "-" : estado;
+
+    return Acompaniantes(
+      club            : json['uclub'] ?? "",
+      idcliente       : json['idcliente'] ?? "",
+      idacompaniantes : null,
+      nombre          : json['nombre'] ?? "",
+      direccion       : json['direccion'] ?? "",
+      ciudad          : json['ciudad'] ?? "",
+      telefono        : json['telefono'] ?? "",
+      nomcia          : "",
+      dircia          : "",
+      ciucia          : "",
+      telcia          : "",
+      edad            : "",
+      parentesco      : "",
+      ocupacion       : "",
+      fechanac        : "",
+      imagefront      : "",
+      imageback       : "",
+      imagesign       : "",
+      pais            : json['pais'] ?? "-",
+      sexo            : "",
+      idcard          : "",
+      documenttype    : "",
+      documentexpdate : "",
+      istitular       : true,
+      estado          : estado,
+      codigoPostal    : json['cpsocio'] ?? ""
     );
 
   }

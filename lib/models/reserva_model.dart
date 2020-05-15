@@ -1,5 +1,4 @@
 import 'package:precheckin/models/commons/especial_request_model.dart';
-import 'package:precheckin/models/commons/tipo_habitacion_model.dart';
 import 'package:precheckin/models/commons/result_model.dart';
 export 'package:precheckin/models/commons/result_model.dart';
 
@@ -8,7 +7,6 @@ class Reserva {
   Result result;
   String nombreHotel;
   String codigo;
-  
   List<EspecialRequest> especialRequest;
   Map<String,String> plana;
   List<Result> ligadas;
@@ -18,7 +16,6 @@ class Reserva {
     this.result,
     this.nombreHotel,
     this.codigo,
-    
     this.especialRequest,
     this.plana,
     this.ligadas,
@@ -35,7 +32,6 @@ class Reserva {
       result          : json['result'] != null ? Result.fromJson( json['result'] ) : null,
       nombreHotel     : json['nombrehotel'] ?? '',
       codigo          : "",
-      
       especialRequest : json['especialrequest'] != null ? List<EspecialRequest>.from( json['especialrequest'].map( (l)=> EspecialRequest.fromJson(l)) ) : [],
       plana           : Map.from(json["plana"]).map((k, v) => MapEntry<String, String>(k, v)),
       ligadas         : rl 
