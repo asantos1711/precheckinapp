@@ -10,8 +10,8 @@ import 'dart:developer' as dev;
 
 /// Clase para proveer los servicios de pms
 class PMSProvider {
-  //final String _url = 'http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app';
-  final String _url = 'http://10.194.18.59:8081/GroupSunsetPMSProxyServices/app';
+  final String _url = 'http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app';
+  //final String _url = 'http://10.194.18.59:8081/GroupSunsetPMSProxyServices/app';
   final String _usr = 'apphotel';
   final String _psw = 'hotel25012018';
   

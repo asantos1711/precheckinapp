@@ -44,26 +44,33 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
       child:Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
-            // width: ((width-20)/3)*2,
-            child: Text(Translations.of(context).text('doc_identificacion'),style: TextStyle(color: Colors.blueAccent,fontSize: 18),)
+          Expanded(
+            child: Text(Translations.of(context).text('doc_identificacion'),
+              style: TextStyle(color: Colors.blueAccent,fontSize: 18),
+              maxLines: 2,
+              ),
           ),
-          Container(
-            alignment: Alignment.centerRight,
-            //width: (width-20)/3,
-            child: InkWell(
-              splashColor: Colors.grey,
-                onTap: (){
-                  //startScanning();
-                   Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation1, animation2) => ElegirIdentificacion(acompaniantes: acompaniantes,),
-                    )
-                  ); 
-                },
-                child:Icon(Icons.camera_alt, color: Colors.blue, size: 30,)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                //alignment: Alignment.centerRight,
+                //width: (width-20)/3,
+                child: InkWell(
+                  splashColor: Colors.grey,
+                    onTap: (){
+                      //startScanning();
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) => ElegirIdentificacion(acompaniantes: acompaniantes,),
+                        )
+                      ); 
+                    },
+                    child:Icon(Icons.camera_alt, color: Colors.blue, size: 30,)
+                  )
               )
+            ],
           )
         ],
       )

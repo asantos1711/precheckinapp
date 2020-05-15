@@ -83,10 +83,12 @@ class _CardAcompananteState extends State<CardAcompanante> {
               children: <Widget>[
                 _nombre(),
                 Container(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[_fechaNacimiento(), _edad()],
-                )),
+                  child: Flex(
+                    direction: Axis.horizontal,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[_fechaNacimiento(), _edad()],
+                  )
+                ),
               ],
             )),
         _signature,
@@ -116,7 +118,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
     return Align(
         alignment: Alignment.centerLeft,
         child: Container(
-            width: (width - 30) / 2,
+            width: ((width - 30) /3),
             child:  new Theme(
               data: Theme.of(context).copyWith(
                 primaryColor: Theme.of(context).primaryColor,
@@ -127,7 +129,8 @@ class _CardAcompananteState extends State<CardAcompanante> {
                 builder: (context) =>new TextFormField(
                   controller: _controllerFechaEdad,
                   decoration: InputDecoration(
-                      labelText: Translations.of(context).text('fec_nacimiento')),
+                    hintMaxLines: 2,
+                    labelText: Translations.of(context).text('fec_nacimiento')),
                   readOnly: true,
                   onTap: () => _selectDate(context),
                 ) ,

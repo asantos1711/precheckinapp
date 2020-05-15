@@ -347,7 +347,6 @@ _idDocument () async {
               acompaniantes.imageback= base64Image1; 
               log('file ${acompaniantes.imageback}');
               debugPrint('file ${acompaniantes.imageback}');
-            //Navigator.pop(context);
             _alertaFinId(file1,file2);
           } ,
           child: Text(
@@ -381,6 +380,7 @@ _idDocument () async {
         DialogButton(
           color: Colors.white,
           onPressed: ()async {
+            Navigator.pop(context);
             Navigator.pop(context);
           } ,
           child: Text(
