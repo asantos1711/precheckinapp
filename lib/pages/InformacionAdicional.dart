@@ -53,17 +53,17 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   Map<Acompaniantes,SignatureController> mapControllerSiganture = Map<Acompaniantes,SignatureController>();
 
   final SignatureController _controller = SignatureController();
-  bool _capturar = false;
 
 
 
   @override
   void initState() {
     super.initState();
-    _controller.addListener(() => print("Value changed"));
+    _controller.addListener((){});
     _qr = _persistence.qr;
     _reserva = this.widget.reserva;
     _result = this.widget.result;
+
   }
 
   _botonDisable(){
@@ -131,8 +131,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         _result.titular.imagesign = base64.encode(data);
     });
 
-    print(_result.titular.imagesign);
-
     return Container(
       margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
       child: SignatureWidget(
@@ -169,7 +167,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     _bloquearPantalla(true);
     
     PMSProvider p = new PMSProvider();
-    bool status = await p.actualizaHospedaje(_reserva.result);
+    bool status = await p.actualizaHospedaje(_result);
 
     _bloquearPantalla(false);
 
@@ -245,7 +243,7 @@ _onAlertWithCustomContentPressed(context) {
     _aco.idcliente = _result.idCliente;
     _aco.idacompaniantes = 0;
     _aco.istitular = false;
-    print("Alerta fecha "+_aco.fechanac);
+    
     SignatureController _sigController = new SignatureController();
     _sigController.addListener(() async {
         var data = await _sigController.toPngBytes();
@@ -291,7 +289,6 @@ _onAlertWithCustomContentPressed(context) {
                 _aco.istitular = false;
                 _result.acompaniantes.add(_aco);
                 mapControllerSiganture[_aco] =_sigController;
-                print('add');
               });
               Navigator.pop(context);
             } ,

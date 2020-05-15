@@ -4,7 +4,6 @@ import 'package:precheckin/models/commons/acompaniantes_model.dart';
 
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/models/save_data_model.dart';
-import 'dart:developer' as dev;
 
 
 
@@ -123,6 +122,7 @@ class PMSProvider {
     {
       SaveData saveModel = SaveData.fromResult(result);
       final body         = saveModel.toJson();
+      //String s = jsonEncode(body);
       final response     = await http.post(
         uri, 
         headers: headers, 

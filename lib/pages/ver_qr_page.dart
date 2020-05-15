@@ -15,7 +15,16 @@ class VerQR extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           _imagenFondo(),
-          _contenido(context),
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  _logo(),
+                  _codigosQR(context)
+                ],
+              ),
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -36,20 +45,6 @@ class VerQR extends StatelessWidget {
           "assets/images/background.png",
           fit: BoxFit.cover,
         ));
-  }
-
-  Widget _contenido(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: <Widget>[
-          _logo(),
-          Expanded(
-            child: _codigosQR(context),
-          ),
-          //_btnNuevoCodigo(context),
-        ],
-      ),
-    );
   }
 
   Widget _logo() {
