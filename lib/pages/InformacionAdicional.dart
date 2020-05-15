@@ -266,11 +266,16 @@ _onAlertWithCustomContentPressed(context) {
               ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Icon(FontAwesomeIcons.exclamationCircle , color: Colors.red,size: 15, ),
-                Text(
-                  Translations.of(context).text('cargo')+''+Translations.of(context).text('cargo_valor'), 
-                  style: TextStyle(color: Colors.red, fontSize: 15),)
+                Expanded(
+                  child: Text(
+                    Translations.of(context).text('cargo')+''+Translations.of(context).text('cargo_valor'), 
+                    style: TextStyle(color: Colors.red, fontSize: 15),
+                    maxLines: 2,
+                    ),  
+                )
               ],
             )
           ],
