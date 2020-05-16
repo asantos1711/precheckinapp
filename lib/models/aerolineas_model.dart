@@ -1,4 +1,5 @@
 import 'package:precheckin/models/commons/aerolinea_model.dart';
+export 'package:precheckin/models/commons/aerolinea_model.dart';
 
 class AerolineasModel {
   List<Aerolinea> aerolineas;

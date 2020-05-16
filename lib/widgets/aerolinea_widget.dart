@@ -1,23 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:precheckin/models/commons/aerolinea_model.dart';
 
 import 'package:precheckin/providers/aerolinea_provider.dart';
+import 'package:precheckin/search/aerolineas_search.dart';
 import 'package:precheckin/models/aerolineas_model.dart';
+import 'package:precheckin/tools/translation.dart';
 
 
-class AerolineaWidget extends StatelessWidget {
-  AerolineaProvider _provider = new AerolineaProvider();
-  List<Aerolinea> _aeroLineas = [];
+class AerolineasWidget extends StatefulWidget {
+  Function onTap;
   String valorInicial;
-  final Function change;
 
-  AerolineaWidget({
-    this.valorInicial,
-    this.change
-  });
+  AerolineasWidget({ @required this.onTap, this.valorInicial = "" });
+
+  @override
+  _AerolineasWidgetState createState() => _AerolineasWidgetState();
+}
+
+
+class _AerolineasWidgetState extends State<AerolineasWidget> {
+  String _titulo;
+  TextEditingController _ctrlAeroliner;
+  AerolineaProvider _provider;
+  List<Aerolinea> _aeroLineas;
+  String _valor = "";
+
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrlAeroliner   = new TextEditingController();
+    _provider        = new AerolineaProvider();
+    _aeroLineas      = [];
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    _titulo = Translations.of(context).text('aerolinea');
+
     return FutureBuilder(
       future: _provider.getAerolineas(),
       builder: (BuildContext context, AsyncSnapshot<AerolineasModel> snapshot) {
@@ -26,46 +46,38 @@ class AerolineaWidget extends StatelessWidget {
           return Center(child: CircularProgressIndicator(),);
         
         _aeroLineas = snapshot.data.aerolineas;
-        valorInicial = _verificarValorInicial(valorInicial);
+        _valor = _getValorInicial();
 
-        return DropdownButton(
-          isExpanded: true,
-          items: _getItems(),
-          value: valorInicial.trim(),
-          onChanged: change,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(_titulo),
+            TextField(
+              controller: _ctrlAeroliner,
+              onTap: () async {
+                FocusScope.of(context).requestFocus(new FocusNode());
+                Aerolinea aerolinea = await showSearch(context: context, delegate: AerolineasSearch(aeroLineas: _aeroLineas), query: _valor);
+
+                _ctrlAeroliner.text = aerolinea?.name;
+
+                widget.onTap.call(aerolinea?.fs);
+              },
+            )
+          ],
         );
       },
     );
   }
 
-  //Forma la lista de los items apartir de la lista de paises obtenida del provider
-  List<DropdownMenuItem<String>> _getItems() {
-    List<DropdownMenuItem<String>> lista = new List();
 
-    _aeroLineas.forEach( (ar) {
-      lista.add(DropdownMenuItem(
-        child: Text(ar.name),
-        value: ar.fs,
-      ));
-    });
+  //Establecer el valor inicial
+  String _getValorInicial(){
+    String valor = "";
+    List<Aerolinea> list = _aeroLineas.where( (a)=>a.fs.toLowerCase() == widget.valorInicial.toLowerCase()).toList();
 
-    return lista;
+    if(list.length > 0)
+      valor = list[0]?.name;
+
+    return valor;
   }
-
-
-  //Valida que la clve de estado que biene en valor inicial este entre los que trar e
-  //servicio de estadps.
-  String _verificarValorInicial(String val){
-    String e = "-";
-    
-    for (var i = 0; i < _aeroLineas.length; i++) {
-      if(val == _aeroLineas[i].fs) {
-        e = val;
-        break;
-      }
-    }
-
-    return e;
-  }
-
 }

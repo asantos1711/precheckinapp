@@ -790,21 +790,27 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             ),
           ),
           SizedBox(height: 5,),
+
+
+
+
+
           Container(
             padding: EdgeInsets.only(left: 10),
             width: width-30,
-            child: AerolineaWidget(
-              valorInicial: _aerolinea,
-              change: (aerolinea) => setState(() => _aerolinea = aerolinea),
-            )
-            /*child: TextFormField(
-              controller: _controllerAerolinea,
-              decoration: InputDecoration(
-                labelText: Translations.of(context).text('aerolinea')
-              ),
-              onChanged: (numeroVuelo) => _result.vuelos[0].vuelollegada = numeroVuelo,
-            )*/
+            child: AerolineasWidget(
+              valorInicial: _controllerAerolinea.text,
+              onTap: (value) {
+
+                _controllerAerolinea.text = value;
+                
+              },
+            ),
           ),
+
+
+
+
           Row(
             children: <Widget>[
               Container(
