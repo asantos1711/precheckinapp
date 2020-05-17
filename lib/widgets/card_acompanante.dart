@@ -126,10 +126,14 @@ class _CardAcompananteState extends State<CardAcompanante> {
         child: Container(
             width: ((width - 30) *0.40),
             child:  new Theme(
-              data: Theme.of(context).copyWith(
-                primaryColor: Color.fromRGBO(191, 52, 26, 1),
+              data: ThemeData(
+                primarySwatch: Colors.red,
+                primaryColor: Color.fromRGBO(191, 52, 26, 1),//Head background
                 accentColor: Color.fromRGBO(191, 52, 26, 1),
                 splashColor: Color.fromRGBO(191, 52, 26, 1),
+                primaryTextTheme: TextTheme(headline: TextStyle(color: Color.fromRGBO(191, 52, 26, 1))) ,
+                textTheme:TextTheme(headline: TextStyle(color: Color.fromRGBO(191, 52, 26, 1))) ,
+                accentTextTheme: TextTheme(headline: TextStyle(color: Color.fromRGBO(191, 52, 26, 1)))
               ),
               child: new Builder(
                 builder: (context) => new Column(

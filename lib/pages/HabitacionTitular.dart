@@ -479,10 +479,14 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   padding: EdgeInsets.only(left: 10),
                   width: (width-30)/2,
                   child: new Theme(
-                      data: Theme.of(context).copyWith(
-                        primaryColor: Color.fromRGBO(191, 52, 26, 1),
+                      data: ThemeData(
+                        primarySwatch: Colors.red,
+                        primaryColor: Color.fromRGBO(191, 52, 26, 1),//Head background
                         accentColor: Color.fromRGBO(191, 52, 26, 1),
                         splashColor: Color.fromRGBO(191, 52, 26, 1),
+                        primaryTextTheme: TextTheme(headline: TextStyle(color: Color.fromRGBO(191, 52, 26, 1))) ,
+                        textTheme:TextTheme(headline: TextStyle(color: Color.fromRGBO(191, 52, 26, 1))) ,
+                        accentTextTheme: TextTheme(headline: TextStyle(color: Color.fromRGBO(191, 52, 26, 1)))
                       ),
                       child: new Builder(
                         builder: (context) =>new TextFormField(
