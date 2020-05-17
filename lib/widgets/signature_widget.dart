@@ -36,12 +36,12 @@ class _SignatureWidgetState extends State<SignatureWidget> {
     _width = MediaQuery.of(context).size.width;
 
     Widget firma = (_capturar == true) ? _image() : _firma();
-
+    Widget titulo = (widget.title =='' || widget.title==null) ? Container() : Text(widget.title, style: TextStyle(fontSize: 20));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Text(widget.title, style: TextStyle(fontSize: 20)),
-        SizedBox(height: 10.0,),
+        titulo,
         firma
       ],
     );
@@ -52,6 +52,7 @@ class _SignatureWidgetState extends State<SignatureWidget> {
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
             decoration: BoxDecoration(border: Border.all(width: 2.0, color: Colors.grey)),
@@ -59,7 +60,7 @@ class _SignatureWidgetState extends State<SignatureWidget> {
             height: 100.0,
             child: Image.memory(base64.decode(widget.img)),
           ),
-          SizedBox(height: 10.0,),
+          //SizedBox(height: 10.0,),
           FlatButton(
             child: Text(Translations.of(context).text('change')),
             color: Colors.white,
@@ -75,6 +76,7 @@ class _SignatureWidgetState extends State<SignatureWidget> {
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
             decoration: BoxDecoration(border: Border.all(width: 2.0, color: Colors.grey)),

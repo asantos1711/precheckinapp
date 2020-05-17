@@ -41,10 +41,10 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   double width;
   double height;
   bool _enableButton = true;
-  bool _promoInfoBool = true;
+  bool _reglaHotelBool = true;
   bool _avisoPrivaBool = true;
   bool _recibirInfoBool = true;
-  bool _poliReglaBool = true;
+  bool _poliProceBool = true;
   bool _bloquear = false;
   int cant_adultos, cant_menores;
   QRPersistence _persistence = new QRPersistence();
@@ -72,7 +72,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   _botonDisable(){
     setState(() {
-      _enableButton = _poliReglaBool && _promoInfoBool & _avisoPrivaBool ;
+      _enableButton = _poliProceBool && _reglaHotelBool & _avisoPrivaBool ;
     });
   }
 
@@ -94,8 +94,8 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
             children: <Widget>[
               ListView(
                 children: <Widget>[
-                  _promoInfo(),
-                  _poliRegla(),
+                  _reglaHotel(),
+                  _poliProce(),
                   _signatureTitular(),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
@@ -295,6 +295,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         onChange:(boo){
           setState(() {
             _recibirInfoBool = !_recibirInfoBool;
+            _reserva.result.acuerdos.promociones = toInt(_recibirInfoBool);
           });
         } ,
         textBold: '',
@@ -470,17 +471,19 @@ _onAlertWithCustomContentPressed(context) {
         ));
   }
 
-  Widget _poliRegla() {
+  Widget _poliProce() {
     return CheckTextBold(
       width: width,
       onChange:(boo){
         setState(() {
-          _poliReglaBool = !_poliReglaBool;
-          _reserva.result.acuerdos.reglamento = toInt(_poliReglaBool);
+          _poliProceBool = !_poliProceBool;
+          _reserva.result.acuerdos.politicas = toInt(_poliProceBool);
+          _reserva.result.acuerdos.estobjdes = toInt(_poliProceBool);
+          _reserva.result.acuerdos.estsanamb = toInt(_poliProceBool);
         });
         _botonDisable();
       } ,
-      value: _poliReglaBool,
+      value: _poliProceBool,
       text: Translations.of(context).text('acepto_deacuerdo'),
       textBold: Translations.of(context).text('politicas_procedimientos'),
       onTap: () {
@@ -499,16 +502,17 @@ _onAlertWithCustomContentPressed(context) {
     );
   }
 
-  Widget _promoInfo() {
+  Widget _reglaHotel() {
     return CheckTextBold(
       width: width,
       onChange:(boo){
         setState(() {
-          _promoInfoBool = !_promoInfoBool;
+          _reglaHotelBool = !_reglaHotelBool;
+          _reserva.result.acuerdos.reglamento = toInt(_reglaHotelBool);
         });
         _botonDisable();
       } ,
-      value: _promoInfoBool,
+      value: _reglaHotelBool,
       text: Translations.of(context).text('acepto_deacuerdo'),
       textBold: Translations.of(context).text('reglamento_hotel'),
       onTap: () {
@@ -533,6 +537,7 @@ _onAlertWithCustomContentPressed(context) {
       onChange:(boo){
         setState(() {
           _avisoPrivaBool = !_avisoPrivaBool;
+          _reserva.result.acuerdos.avisoPrivacidad = toInt(_avisoPrivaBool);
         });
         _botonDisable();
       } ,

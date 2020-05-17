@@ -70,5 +70,6 @@
   "reservation_list": "Reservation List",
   "max_adultos":"You have reached the maximum of adult companions.",
   "max_menores":"You have reached the maximum number of minor companions.",
-  "max_acompanantes":"You have reached the maximum number of companions."
+  "max_acompanantes":"You have reached the maximum number of companions.",
+  "firma_aco":"Companion Signature"
 }

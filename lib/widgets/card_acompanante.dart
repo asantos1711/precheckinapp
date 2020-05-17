@@ -90,7 +90,13 @@ class _CardAcompananteState extends State<CardAcompanante> {
                   )
                 ),
               ],
-            )),
+            )
+          ),
+        Container(
+          padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+          width: width,
+          child: Text(Translations.of(context).text('firma_aco'), style:TextStyle(fontSize: 15)), 
+        ),
         _signature,
         DocIdentificacion(acompaniantes:_acompaniante),
       ],

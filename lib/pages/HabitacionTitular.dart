@@ -77,6 +77,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     _inicializarDatos();//Inicializa las variables.
 
     return Scaffold(
+      backgroundColor: Colors.white,
         appBar: _appBar(),
         body: _body(),
         floatingActionButton: _floatButton(),
@@ -364,7 +365,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerLeft,
                   child: Container(
                     child: Text(_result.email,
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 15),
                     ),
                   ),
                 ),
