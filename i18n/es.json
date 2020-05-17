@@ -68,5 +68,6 @@
   "foto_body_uno":"Asegúrate de que haya buena iluminación y ajusta el anverso del documento de identificación hasta que encaje dentro del borde blanco. Presione Continuar cuando lo tengas todo listo.",
   "foto_titulo_dos":"Haz la segunda foto:\nreverso del documento de identificación",
   "foto_body_dos":"Asegúrate de que haya buena iluminación y ajusta el reverso del documento de identificación hasta que encaje dentro del borde blanco. Toca el icono de la cámara cuando lo tengas todo listo.",
-  "foto_fin_titulo":"Las fotos se capturaron correctamente."
+  "foto_fin_titulo":"Las fotos se capturaron correctamente.",
+  "reservation_list": "Lista de Reservaciones"
 }

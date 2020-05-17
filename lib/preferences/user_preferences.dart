@@ -33,4 +33,12 @@ class UserPreferences {
   set ligadas(List<String> value){
     _pref.setStringList("ligadas", value);
   }
+
+  bool get tieneLigadas {
+    return _pref.getBool("tieneLigadas") ?? false;
+  }
+
+  set tieneLigadas(bool value){
+    _pref.setBool("tieneLigadas", value);
+  }
 }

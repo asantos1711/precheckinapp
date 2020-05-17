@@ -65,6 +65,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   void initState() {
     super.initState();
     _controller.addListener((){});
+
     _qr = _persistence.qr;
     _reserva = this.widget.reserva;
     _result = this.widget.result;
@@ -177,7 +178,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
     if(status) {
 
-      if(_pref.ligadas.isEmpty) {
+      if(!_pref.tieneLigadas) {
         if(!_qr.contains(_reserva.codigo))
           _qr.add(_reserva.codigo);
 
@@ -185,7 +186,10 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
         Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
       } else {
-        _pref.ligadas.remove(_result.idReserva.toString());
+        List<String> l = _pref.ligadas;
+        l.remove(_result.idReserva.toString());
+        _pref.ligadas = l;
+
         Navigator.pushNamed(context, 'litaReserva', arguments: _reserva);
       }
 

@@ -3,7 +3,9 @@ import 'package:precheckin/models/commons/result_model.dart';
 
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/HabitacionTitular.dart';
+import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
+import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 
 class ListaReservas extends StatefulWidget {
@@ -12,9 +14,20 @@ class ListaReservas extends StatefulWidget {
 }
 
 class _ListaReservasState extends State<ListaReservas> {
-  Reserva _model;
+  
+
+  QRPersistence _persistence = new QRPersistence();
   UserPreferences _pref = new UserPreferences();
+  Reserva _model;
   bool _enableButton = false;
+  List<String> _qr;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _qr = _persistence.qr;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +38,7 @@ class _ListaReservasState extends State<ListaReservas> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title:Text("lista de reservas"),
+        title:Text(Translations.of(context).text('reservation_list')),
       ),
       body: Container(
         margin: EdgeInsets.all(10.0),
@@ -53,14 +66,12 @@ class _ListaReservasState extends State<ListaReservas> {
   }
 
   Widget _reserva(BuildContext context, Result res) {
+    bool procesado = _pref.ligadas.indexOf(res.idReserva.toString()) == -1;
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal:10.0, vertical:10.0),
       padding: EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        color: (_pref.ligadas.indexOf(res.idReserva.toString()) == -1) ?  Colors.green : Color.fromRGBO(0, 0, 0, 0.09),
-      ),
+      decoration: procesado ? boxReservationProcessed : boxReservationUnprocessed,
       child: ListTile(
         leading: Icon(Icons.hotel),
         title: Column(
@@ -71,6 +82,7 @@ class _ListaReservasState extends State<ListaReservas> {
             Text("No. ${res?.idReserva}"),
           ],
         ),
+        trailing: procesado ? iconChecked : null,
         onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HabitacionTitular(reserva: _model, result: res,))),
       ),
     );
@@ -86,7 +98,14 @@ class _ListaReservasState extends State<ListaReservas> {
         disabledColor: Colors.grey,
         disabledTextColor: Colors.black,
         splashColor: Colors.grey,
-        onPressed: _enableButton == false ? null : (){},
+        onPressed: _enableButton == false ? null : (){
+          if(!_qr.contains(_model.codigo))
+            _qr.add(_model.codigo);
+
+          _persistence.qr = _qr;
+
+          Navigator.pushNamed(context, "verQR", arguments: _model.codigo);
+        },
         child: Text(
           Translations.of(context).text('finalizar'),
           style: TextStyle(fontSize: 20.0),

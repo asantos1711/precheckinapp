@@ -66,5 +66,6 @@
   "foto_body_uno":"Make sure there is good lighting and adjust the front of the ID until it fits inside the white border. Tap Continue when you have everything ready.",
   "foto_titulo_dos":"Take the second photo:\nback of the identification document",
   "foto_body_dos":"Make sure there is good lighting and adjust the back of the ID until it fits inside the white border. Tap the camera icon when you have everything ready.",
-  "foto_fin_titulo":"The photos were captured correctly."
+  "foto_fin_titulo":"The photos were captured correctly.",
+  "reservation_list": "Reservation List"
 }
