@@ -18,9 +18,18 @@ TextStyle etiqueta = TextStyle(
 
 TextStyle valor = TextStyle(
   fontFamily: "Montserrat", 
-  fontSize: 15.0,
   fontWeight: FontWeight.bold,
 );
+
+TextStyle titulos = TextStyle(
+  fontWeight: FontWeight.w600,
+  fontSize: 16.0,
+  color: Color.fromARGB(255,63, 90, 166)
+);
+
+
+Color backgroundBloqueado          = Color(0XFFF5F5F5);
+BoxDecoration boxDecorationDefault = BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey, width: 1)));
 
 
 

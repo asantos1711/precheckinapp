@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/HabitacionTitular.dart';
+import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/utils/tools_util.dart' as tools;
@@ -16,6 +17,7 @@ class CodigoAcceso extends StatefulWidget {
 
 class _CodigoAccesoState extends State<CodigoAcceso> {
   TextEditingController _codigoController;
+  UserPreferences _pref;
   PMSProvider _provider;
   bool _bloquear = false;
 
@@ -24,6 +26,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
     super.initState();
     _codigoController = new TextEditingController(text: "MC0yMTE0MzU0",);
     _provider         = new PMSProvider(); //Provide PMS Services
+    _pref             = new UserPreferences();
   }
 
   @override
@@ -129,7 +132,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
     _bloquearPantalla(true);
 
     Reserva infoReserva = await _provider.dameReservacionByQR( _codigoController.text);
-
+    
     _bloquearPantalla(false);
 
     if(infoReserva == null) 
@@ -137,12 +140,25 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
     else {
       infoReserva.codigo = _codigoController.text;
 
-      if(infoReserva.ligadas.isEmpty)
+      if(infoReserva.ligadas.isEmpty){
+        _pref.ligadas = [];
         Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HabitacionTitular(reserva: infoReserva, result: infoReserva.result,)));
-      else
+      } else {
+        _setPrefReservasLigadas(infoReserva);
        Navigator.pushNamed(context, 'litaReserva', arguments: infoReserva);
-       
+      }
     }
+  }
+
+  void _setPrefReservasLigadas(Reserva reserva){
+    List<String> lista = [];
+    lista.add(reserva.result.idReserva.toString());
+
+    reserva.ligadas.forEach((r) { 
+      lista.add(r.idReserva.toString());
+    });
+
+    _pref.ligadas = lista;
   }
 
   void _bloquearPantalla(bool status){

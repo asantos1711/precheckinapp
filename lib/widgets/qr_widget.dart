@@ -5,6 +5,7 @@ class QRCode extends StatelessWidget {
   final String code;
   final bool showText;
   final Widget separation = SizedBox(height: 10.0,);
+  Size _size;
 
   QRCode({
     @required this.code,
@@ -14,6 +15,8 @@ class QRCode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _size = MediaQuery.of(context).size;
+
     return Column(
         children: _body()
     );
@@ -40,7 +43,7 @@ class QRCode extends StatelessWidget {
         data: code,
         version: QrVersions.auto,
         backgroundColor: Colors.white,
-        size: 200.0,
+        size: _size.width * 0.4,
         gapless: true,
       ),
     );

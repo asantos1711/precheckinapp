@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/pages/InformacionAdicional.dart';
+import 'package:precheckin/pages/mixins/hotel_mixin.dart';
 import 'package:precheckin/styles/styles.dart';
 
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/models/reserva_model.dart';
-import 'package:precheckin/utils/hotel_utils.dart';
 import 'package:precheckin/utils/fecha_util.dart' as futil;
 import 'package:precheckin/widgets/aerolinea_widget.dart';
 import 'package:precheckin/widgets/paises_widget.dart';
@@ -25,7 +25,7 @@ class HabitacionTitular extends StatefulWidget {
   _HabitacionTitularState createState() => _HabitacionTitularState();
 }
 
-class _HabitacionTitularState extends State<HabitacionTitular> with TickerProviderStateMixin{
+class _HabitacionTitularState extends State<HabitacionTitular> with TickerProviderStateMixin, HotelMixin{
 
   Reserva _reserva;  
   Result _result;
@@ -35,8 +35,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   double height;
   double width;
   double space;
-  final _backgroundBloqueado = Color(0XFFF5F5F5);
-  final _boxDecorationDefault = BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey, width: 1)));
   TextEditingController _controllerNombre = new TextEditingController();
   TextEditingController _controllerCP = new TextEditingController();
   TextEditingController _controllerCiudad = new TextEditingController();
@@ -58,11 +56,17 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   void initState() {
     super.initState();
    
-    _controllerFechaVuelo.text = "${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}";
     _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
-    _reserva = this.widget.reserva;  
-    _result  = this.widget.result;
+    _reserva    = this.widget.reserva;  
+    _result     = this.widget.result;
+
+    _controllerFechaVuelo.text = (_result.vuelos[0].fechasalida.isEmpty) 
+          ? "${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}"
+          : futil.splitFecha(_result.vuelos[0].fechasalida);
+
   }
+
+
 
 
   @override
@@ -86,8 +90,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     _controllerCiudad.text    = _result.titular.ciudad ?? "";
     _controllerVuelo.text     = _result.vuelos.isNotEmpty ?(_result.vuelos[0].vuelollegada ?? "") : "";
     _controllerVueloFS.text   = _result.vuelos.isNotEmpty ? futil.splitFecha(_result.vuelos[0].fechasalida ?? "") : "";
-    _fechaVuelo               = _result.vuelos.isNotEmpty ? DateTime.parse(_result.vuelos[0].fechallegada.replaceAll('-', "")) : null;
-    
+    _fechaVuelo               = _result.vuelos[0].fechallegada.isNotEmpty ? DateTime.parse(futil.splitFecha(_result.vuelos[0].fechallegada)) : null;
+
     _pais                     = (_pais == null) ? _result.titular.pais : _pais; //Validacion para que cambie el valor del pais
     _estado                   = (_estado == null) ? _result.estado : _estado; //Validacion para que cambie el valor del estado
     _aerolinea                = (_aerolinea == null) ? (_result.vuelos.isNotEmpty ? (_result.vuelos[0].aerolinea1 ?? "") : "") ?? "" : _aerolinea;
@@ -109,8 +113,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   Widget _body() {
     return ListView(
       children: <Widget>[
-       _seccionReserva(),
-       _seccionTitular(),
+        infoReserva(context, _reserva, _result),
+        _seccionTitular(),
         _seccionContacto(),
         _seccionVuelo(),
         _buttonContinuar(),
@@ -118,26 +122,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     );
   }
 
-  Widget _seccionReserva(){
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal:10.0, vertical:10.0),
-      decoration: BoxDecoration(
-        color: _backgroundBloqueado,
-      ),
-      child: Column(
-        children: <Widget>[
-          _hotel(),
-          _numeroReservacion(),
-          _llegadaSalida(),
-          _huespedes(),
-          _tipoHabitacion(),
-          _planViaje(),
-          _requeEspeciales(),
-        ]
-      ),
-    );
-  }
   
   Widget _seccionTitular(){
     return Container(
@@ -156,7 +140,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal:10.0, vertical:10.0),
       decoration: BoxDecoration(
-        color: _backgroundBloqueado
+        color: backgroundBloqueado
       ),
       child: Column(
         children: <Widget>[
@@ -164,354 +148,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         ]
       ),
     );
-  }
-
-  Widget _seccionVuelo(){
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical:10.0),
-      child: Column(
-        children: <Widget>[
-          _infoVuelo(),
-        ]
-      ),
-    );
-  }
-
-  Widget _hotel(){
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, top: 7),
-      width: (width-40),
-      decoration: _boxDecorationDefault,
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(
-                'Hotel',
-                style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                )
-            ),
-          ),
-          SizedBox(height: 5,),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text( _reserva.nombreHotel, style: TextStyle(fontSize: 18) ),
-            ),
-          ),
-          SizedBox(height: 5,)
-        ],
-      )
-    );
-  }
-
-  Widget _numeroReservacion(){
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, top: 7),
-      width: (width-40),
-      decoration: _boxDecorationDefault,
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(
-                Translations.of(context).text('no_reserva'),
-                style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                )
-            ),
-          ),
-          SizedBox(height: 5,),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(
-                    _result.idReserva.toString(),
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          ),
-          SizedBox(height: 5,)
-        ],
-      )
-    );
-  }
-
-  Widget _llegadaSalida(){
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, top: 7),
-      width: (width-40),
-      decoration: _boxDecorationDefault,
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text(
-                      Translations.of(context).text('llegada'),
-                      style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                      )
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    child: Text(
-                      Translations.of(context).text('salida'),
-                      style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                      )
-                  ),
-                ),
-              ],
-            )
-          ),
-          SizedBox(height: 5,),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text(
-                      _result.fechaCheckin,
-                      style: TextStyle(fontSize: 18),
-                      )
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    child: Text(
-                      _result.fechaCheckout,
-                      style: TextStyle(fontSize: 18),
-                      )
-                  ),
-                ),
-              ],
-            )
-          ),
-          SizedBox(height: 5,)
-        ],
-      )
-    );
-  }
-
-  Widget _huespedes(){
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, top: 7),
-      width: (width-40),
-      decoration: _boxDecorationDefault,
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            child: Row(
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    Translations.of(context).text('huespedes'),
-                    style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                  )
-                )
-              ],
-            )
-          ),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text(
-                      '${_result.numeroAdultos} '+Translations.of(context).text('adultos'),
-                      style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
-                      )
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    child: Text(
-                      '${_result.numeroAdolecentes} '+Translations.of(context).text('adolecentes'),
-                      style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
-                      )
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    child: Text(
-                      '${_result.numeroNinios} '+Translations.of(context).text('ninos'),
-                      style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
-                      )
-                  ),
-                ),
-              ],
-            )
-          ),
-          SizedBox(height: 5,),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text(
-                      '+18',
-                      style: TextStyle(fontSize: 18),
-                      )
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    child: Text(
-                      '+12 a -18',
-                      style: TextStyle(fontSize: 18),
-                      )
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    child: Text(
-                      '-12',
-                      style: TextStyle(fontSize: 18),
-                      )
-                  ),
-                ),
-              ],
-            )
-          ),
-          SizedBox(height: 5,)
-        ],
-      )
-    );
-  }
-
-  Widget _tipoHabitacion(){
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, top: 7),
-      width: (width-40),
-      decoration: _boxDecorationDefault,
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(
-                Translations.of(context).text('tipo_habitacion'),
-                style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                )
-            ),
-          ),
-          SizedBox(height: 5,),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(_result.tipoHabitacion?.descripcion ?? '',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          ),
-          SizedBox(height: 5,)
-        ],
-      )
-    );
-  }
-  
-  Widget _planViaje(){
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, top: 7, bottom: 10),
-      width: (width-40),
-      //decoration: _decoration(),
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(
-                Translations.of(context).text('plan_viaje'),
-                style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                )
-            ),
-          ),
-          SizedBox(height: 5,),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: EdgeInsets.only(left:10),
-              child: Text(getClavePlan(_result.idClub.toString(), _reserva.plana),
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          ),
-          SizedBox(height: 5,)
-        ],
-      )
-    );
-  }
-  
-  Widget _requeEspeciales(){
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
-      width: (width - 40),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: _listaEspecialRequest(),
-      )
-    );
-  }
-
-  List<Widget> _listaEspecialRequest() {
-    List<Widget> widgets = [];
-
-    widgets..add(Text(Translations.of(context).text('reque_especiales'),style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16)))
-            ..add(SizedBox(height: 10.0));
-
-    _reserva.especialRequest.forEach( (r){
-      Widget widget = Text("${r.subcategoria}*");
-
-      widgets..add(widget)
-              ..add(SizedBox(height: 10.0));
-    });
-
-    widgets.add(
-      Container(
-        width: double.infinity,
-        child: Text(Translations.of(context).text('sujeto_dispo'),style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16), textAlign: TextAlign.end)
-      )
-            
-    );
-
-    return widgets;
   }
 
   Widget _infoTitular(){
@@ -540,7 +176,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   color: _blue
                 ),
               ),
-              decoration: _boxDecorationDefault,
+              decoration: boxDecorationDefault,
             ),
           ),
           SizedBox(height: 5,),
@@ -690,14 +326,14 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   fontSize: 16
                 ),
               ),
-              decoration: _boxDecorationDefault,
+              decoration: boxDecorationDefault,
             ),
           ),
           SizedBox(height: 5,),
           Container(
             margin: EdgeInsets.only(left: 10, right: 10, top: 7),
             width: (width-40),
-            decoration: _boxDecorationDefault,
+            decoration: boxDecorationDefault,
             alignment: Alignment.center,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -728,7 +364,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
           Container(
             margin: EdgeInsets.only(left: 10, right: 10, top: 7),
             width: (width-40)/2,
-            decoration:_boxDecorationDefault,
+            decoration:boxDecorationDefault,
             alignment: Alignment.center,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -761,6 +397,19 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     );
   }
   
+  Widget _seccionVuelo(){
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical:10.0),
+      child: Column(
+        children: <Widget>[
+          _infoVuelo(),
+        ]
+      ),
+    );
+  }
+
+
   Widget _infoVuelo(){
     Color _blue = Color.fromARGB(255,63, 90, 166);
     return Container(
@@ -786,7 +435,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   color: _blue
                 ),
               ),
-              decoration: _boxDecorationDefault,
+              decoration: boxDecorationDefault,
             ),
           ),
           SizedBox(height: 5,),
@@ -802,7 +451,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
               valorInicial: _controllerAerolinea.text,
               onTap: (value) {
 
-                _controllerAerolinea.text = value;
+                _controllerAerolinea.text    = value;
+                _result.vuelos[0].aerolinea1 = value;
                 
               },
             ),
@@ -862,7 +512,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
       setState(() {
         _fechaVuelo = picked;
         print(_fechaVuelo.toString());
-        _result.vuelos[0].fechallegada = _fechaVuelo.toString();
+        _result.vuelos[0].fechasalida = futil.splitFecha(_fechaVuelo.toString());
         _controllerFechaVuelo.text ="${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}";
       });
     }

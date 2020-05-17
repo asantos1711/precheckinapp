@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:precheckin/pages/mixins/hotel_mixin.dart';
 
 import 'package:precheckin/providers/aerolinea_provider.dart';
 import 'package:precheckin/search/aerolineas_search.dart';
@@ -17,7 +18,7 @@ class AerolineasWidget extends StatefulWidget {
 }
 
 
-class _AerolineasWidgetState extends State<AerolineasWidget> {
+class _AerolineasWidgetState extends State<AerolineasWidget>{
   String _titulo;
   TextEditingController _ctrlAeroliner;
   AerolineaProvider _provider;
@@ -31,6 +32,8 @@ class _AerolineasWidgetState extends State<AerolineasWidget> {
     _ctrlAeroliner   = new TextEditingController();
     _provider        = new AerolineaProvider();
     _aeroLineas      = [];
+
+   
   }
 
 
@@ -47,6 +50,7 @@ class _AerolineasWidgetState extends State<AerolineasWidget> {
         
         _aeroLineas = snapshot.data.aerolineas;
         _valor = _getValorInicial();
+        _ctrlAeroliner.text = _valor;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
