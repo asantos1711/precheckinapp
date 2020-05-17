@@ -78,17 +78,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   @override
   Widget build(BuildContext context) {
-    _reserva.politicas.forEach((element) {
-      print('Pliticas=================');
-      print('claveidioma ${element.claveidioma}');
-      print('seg_obj_dej ${element.seg_obj_dej}');
-      print('seg_acu_est ${element.seg_acu_est}');
-      print('seg_san_amb ${element.seg_san_amb}');
-      print('seg_acu_prom ${element.seg_acu_prom}');
-      print('seg_avi_priv ${element.seg_avi_priv}');
-      print('seg_acu_reg ${element.seg_acu_reg}');
-    });
-    
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return GestureDetector(
@@ -501,7 +490,8 @@ _onAlertWithCustomContentPressed(context) {
               pageBuilder: 
               (context, animation1, animation2) => 
               ViewWebView(
-                mostrar: 'https://www.google.com/',
+                valor: 'politicas_procedimientos',
+                politicas: _reserva.politicas,
                 title:Translations.of(context).text('politicas_procedimientos'),
               ),
             ));
@@ -528,7 +518,8 @@ _onAlertWithCustomContentPressed(context) {
               pageBuilder: 
               (context, animation1, animation2) => 
               ViewWebView(
-                mostrar: 'https://www.sunsetworldresorts.com/es/resorts/hacienda-tres-rios-resort-spa-nature-park/politica-de-privacidad/',
+                valor : 'reglamento_hotel',
+                politicas: _reserva.politicas,
                 title: Translations.of(context).text('reglamento_hotel'),
               ),
             ));
@@ -554,7 +545,8 @@ _onAlertWithCustomContentPressed(context) {
             PageRouteBuilder(
               pageBuilder: (context, animation1, animation2) => 
               ViewWebView(
-                mostrar:'https://www.google.com/',
+                valor: 'aviso_privacidad',
+                politicas: _reserva.politicas,
                 title: Translations.of(context).text('aviso_privacidad'),
               ),
             ));
