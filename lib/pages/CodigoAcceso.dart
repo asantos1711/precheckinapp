@@ -142,8 +142,10 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
 
       if(infoReserva.ligadas.isEmpty){
         _pref.ligadas = [];
+        _pref.tieneLigadas = false;
         Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HabitacionTitular(reserva: infoReserva, result: infoReserva.result,)));
       } else {
+        _pref.tieneLigadas = true;
         _setPrefReservasLigadas(infoReserva);
        Navigator.pushNamed(context, 'litaReserva', arguments: infoReserva);
       }
