@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/qr_widget.dart';
 
 class VerQR extends StatelessWidget {
   String _qr;
+  Size _size;
   static GlobalKey screen = new GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     _qr = ModalRoute.of(context).settings.arguments;
+    _size = MediaQuery.of(context).size;
+
 
     return Scaffold(
       body: Stack(
@@ -60,7 +64,7 @@ class VerQR extends StatelessWidget {
 
   Widget _codigosQR(BuildContext context) {
     return Container(
-        margin: EdgeInsets.symmetric(vertical: 100.0),
+        margin: EdgeInsets.symmetric(vertical: _size.height * 0.1),
         child: Column(
           children: <Widget>[
             QRCode(
@@ -77,15 +81,11 @@ class VerQR extends StatelessWidget {
       width: 120.0,
       margin: EdgeInsets.symmetric(vertical: 14.0),
       child: RaisedButton(
-          child: Text("Nuevo Codigo"),
+          child: Text(Translations.of(context).text('nuevo_code')),
           shape: StadiumBorder(),
           color: Color.fromRGBO(255, 255, 255, 0.5),
           elevation: 12.0,
-          onPressed: () {
-
-            Navigator.pushNamed(context, 'nuevoCodigo');
-            
-          }),
+          onPressed: () => Navigator.pushNamed(context, 'nuevoCodigo')),
     );
   }
 

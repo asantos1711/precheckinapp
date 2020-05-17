@@ -93,7 +93,7 @@ class Result {
       status            : json['idstatus'] ?? "",
       titular           : titular,
       acompaniantes     : acompaniantes,
-      vuelos            : json['vuelos'] != null ? List<Vuelos>.from( json['vuelos'].map( (v) => Vuelos.fromJson(v) ) ) : [],
+      vuelos            : json['vuelos'].length > 0 ? List<Vuelos>.from( json['vuelos'].map( (v) => Vuelos.fromJson(v) ) ) : [new Vuelos()],
       acuerdos          : json['tarreg'] != null ? Acuerdos.fromJson(json['tarreg']) : null,
       tipoHabitacion  : json['tipohabitacion']  != null ? TipoHabitacion.fromJson(json['tipohabitacion']) : null,
     );

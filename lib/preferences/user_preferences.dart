@@ -26,15 +26,11 @@ class UserPreferences {
     _pref.setString("idioma", idioma);
   }
 
-
-
-
-
-  bool get ligadas {
-    return _pref.getBool("ligadas") ?? false;
+  List<String> get ligadas {
+    return _pref.getStringList("ligadas");
   }
 
-  set ligadas(bool value){
-    _pref.setBool("ligadas", value);
+  set ligadas(List<String> value){
+    _pref.setStringList("ligadas", value);
   }
 }

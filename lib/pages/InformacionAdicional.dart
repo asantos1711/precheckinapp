@@ -7,6 +7,7 @@ import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
+import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
@@ -56,6 +57,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   Map<Acompaniantes,SignatureController> mapControllerSiganture = Map<Acompaniantes,SignatureController>();
 
   final SignatureController _controller = SignatureController();
+  UserPreferences _pref = new UserPreferences();
 
 
 
@@ -66,7 +68,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     _qr = _persistence.qr;
     _reserva = this.widget.reserva;
     _result = this.widget.result;
-
   }
 
   _botonDisable(){
@@ -174,13 +175,22 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
     _bloquearPantalla(false);
 
-    if(status){
-      if(!_qr.contains(_reserva.codigo))
-        _qr.add(_reserva.codigo);
+    if(status) {
 
-      _persistence.qr = _qr;
+      if(_pref.ligadas.isEmpty) {
+        if(!_qr.contains(_reserva.codigo))
+          _qr.add(_reserva.codigo);
 
-      Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
+        _persistence.qr = _qr;
+
+        Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
+      } else {
+        _pref.ligadas.remove(_result.idReserva.toString());
+        Navigator.pushNamed(context, 'litaReserva', arguments: _reserva);
+      }
+
+
+
     }
     else {
       tools.showAlert(context, "No se logro guardar los datos");

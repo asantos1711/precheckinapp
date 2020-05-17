@@ -1,4 +1,5 @@
 import 'package:precheckin/models/commons/especial_request_model.dart';
+import 'package:precheckin/models/commons/politicas_model.dart';
 import 'package:precheckin/models/commons/result_model.dart';
 export 'package:precheckin/models/commons/result_model.dart';
 
@@ -10,6 +11,7 @@ class Reserva {
   List<EspecialRequest> especialRequest;
   Map<String,String> plana;
   List<Result> ligadas;
+  List<Politicas> politicas;
 
   Reserva({
     this.idioma,
@@ -19,6 +21,7 @@ class Reserva {
     this.especialRequest,
     this.plana,
     this.ligadas,
+    this.politicas,
   });
 
   factory Reserva.formJson( Map<String,dynamic> json ){
@@ -34,7 +37,8 @@ class Reserva {
       codigo          : "",
       especialRequest : json['especialrequest'] != null ? List<EspecialRequest>.from( json['especialrequest'].map( (l)=> EspecialRequest.fromJson(l)) ) : [],
       plana           : Map.from(json["plana"]).map((k, v) => MapEntry<String, String>(k, v)),
-      ligadas         : rl 
+      ligadas         : rl ,
+      politicas       : json['politicasyreglamentos'] != null ? List<Politicas>.from( json['politicasyreglamentos'].map( (p)=>Politicas.fromJson(p) )) : []
     );
   }
 }

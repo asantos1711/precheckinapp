@@ -46,15 +46,9 @@ class ListaQR extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: ListTile(
-          leading: Icon(Icons.blur_linear),
           title: Text(qr['hotel']),
           subtitle: Text(qr['titular']),
-          trailing: Column(
-            children: <Widget>[
-              Text( Translations.of(context).text('habitacion') ),
-              Text(qr['cuarto'],style: TextStyle(fontSize: 30.0),),
-            ],
-          ),
+          trailing: Icon(Icons.blur_linear),
           onTap: () => Navigator.pushNamed(context, "verQR", arguments: qr['codigo'])
         ),
       );

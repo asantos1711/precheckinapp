@@ -1,5 +1,6 @@
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/commons/result_model.dart';
+import 'package:precheckin/models/commons/vuelos_model.dart';
 import 'package:precheckin/utils/fecha_util.dart' as futil;
 
 
@@ -16,13 +17,6 @@ class SaveData {
       this.idhotel,
       this.rh,
     });
-
-    factory SaveData.fromJson(Map<String, dynamic> json) => SaveData(
-        dbdatostmp : Dbdatostmp.fromJson(json["dbdatostmp"]),
-        iduser     : json["iduser"],
-        idhotel    : json["idhotel"],
-        rh         : Rh.fromJson(json["rh"]),
-    );
 
     factory SaveData.fromResult(Result result){
       return new SaveData(
@@ -41,14 +35,11 @@ class SaveData {
     };
 }
 
+
 class Dbdatostmp {
     Dbdatostmp();
-
-    factory Dbdatostmp.fromJson(Map<String, dynamic> json) => Dbdatostmp(
-    );
-
-    Map<String, dynamic> toJson() => {
-    };
+    factory Dbdatostmp.fromJson(Map<String, dynamic> json) => Dbdatostmp();
+    Map<String, dynamic> toJson() => {};
 }
 
 class Rh {
@@ -66,6 +57,7 @@ class Rh {
   String cpsocio;
   String usuarioregistro;
   List<Vecaco> vecaco;
+  List<Vuelos> vuelos;
 
   Rh({
       this.idreserva,
@@ -82,24 +74,8 @@ class Rh {
       this.cpsocio,
       this.usuarioregistro,
       this.vecaco,
+      this.vuelos,
   });
-
-  factory Rh.fromJson(Map<String, dynamic> json) => Rh(
-      idreserva       : json["idreserva"],
-      idcliente       : json["idcliente"],
-      uclub           : json["uclub"],
-      idstatus        : json["idstatus"],
-      nombre          : json["nombre"],
-      direccion       : json["direccion"],
-      ciudad          : json["ciudad"],
-      telefono        : json["telefono"],
-      emailhogar      : json["emailhogar"],
-      pais            : json["pais"],
-      estado          : json["estado"],
-      cpsocio         : json["cpsocio"],
-      usuarioregistro : json["usuarioregistro"],
-      vecaco          : List<Vecaco>.from(json["vecaco"].map((x) => Vecaco.fromJson(x))),
-  );
 
   factory Rh.fromResult(Result result){
     List<Vecaco> vecacos = [Vecaco.fromAcompaniante(result.titular)];
@@ -123,6 +99,7 @@ class Rh {
       cpsocio         : result.codigoPostal,
       usuarioregistro : "JDELGADO",
       vecaco          : vecacos,
+      vuelos          : result.vuelos,
     );
   }
 
@@ -141,6 +118,7 @@ class Rh {
     "cpsocio": cpsocio,
     "usuarioregistro": usuarioregistro,
     "vecaco": List<dynamic>.from(vecaco.map((x) => x.toJson())),
+    "vuelos": List<dynamic>.from(vuelos.map((v) => v.toJson())),
   };
 }
 
@@ -177,25 +155,7 @@ class Vecaco {
       this.istitular,
     });
 
-    factory Vecaco.fromJson(Map<String, dynamic> json) => Vecaco(
-      club            : json["club"],
-      idcliente       : json["idcliente"],
-      idacompaniantes : json["idacompaniantes"],
-      nombre          : json["nombre"],
-      fechanac        : json["fechanac"],
-      imagefront      : json["imagefront"],
-      imageback       : json["imageback"],
-      imagesign       : json["imagesign"],
-      pais            : json["pais"],
-      sexo            : json["sexo"],
-      idcard          : json["idcard"],
-      documenttype    : json["documenttype"],
-      documentexpdate : json["documentexpdate"],
-      istitular       : json["istitular"],
-    );
-
     factory Vecaco.fromAcompaniante(Acompaniantes acompaniante) {
-
       return new Vecaco(
         club            : acompaniante.club,
         idcliente       : acompaniante.idcliente,
