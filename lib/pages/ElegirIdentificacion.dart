@@ -251,7 +251,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         onPressed: () async {
           if(_isSelect == null){
             Fluttertoast.showToast(
-              msg: "Selecciona un tipo de documento",
+              msg: Translations.of(context).text('selec_tipo_doc'),
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
               timeInSecForIosWeb: 1,
@@ -349,8 +349,30 @@ _idDocument () async {
       } ,
       context: context,
       image: Image.asset('assets/images/id_back.png'),
-      title: Translations.of(context).text('foto_titulo_dos'),
-      content: Container(child: Text(Translations.of(context).text('foto_body_dos')),),
+      title: '',
+      content: Column(
+        children: <Widget>[
+        Container(
+          height: 70,
+          child: AutoSizeText(
+            Translations.of(context).text('foto_titulo_dos'),
+            style: TextStyle(fontWeight: FontWeight.bold),
+            //maxLines: 2,
+            maxFontSize: 25.0 ,
+            minFontSize: 10.0 ,
+          )
+        ),
+        Container(
+          height: 90,
+          child: AutoSizeText(
+            Translations.of(context).text('foto_body_dos'),
+            //maxLines: 4,
+            maxFontSize: 17.0 ,
+            minFontSize: 10.0 ,
+          )
+        ),
+        ],
+      ),
       buttons: [
         DialogButton(
           color: Colors.white,
@@ -380,10 +402,12 @@ _idDocument () async {
       ]
     ).show();
   }
+
   _alertaFinId(File file1,file2){
     Alert(
       closeFunction:(){
         print('Se cerró la alerta');
+        Navigator.pop(context);
       } ,
       context: context,
       title: Translations.of(context).text('foto_fin_titulo'),

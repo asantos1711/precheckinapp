@@ -118,7 +118,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
     return Align(
         alignment: Alignment.centerLeft,
         child: Container(
-            width: ((width - 30) *0.45),
+            width: ((width - 30) *0.40),
             child:  new Theme(
               data: Theme.of(context).copyWith(
                 primaryColor: Color.fromRGBO(191, 52, 26, 1),
@@ -126,17 +126,32 @@ class _CardAcompananteState extends State<CardAcompanante> {
                 splashColor: Color.fromRGBO(191, 52, 26, 1),
               ),
               child: new Builder(
-                builder: (context) =>new TextFormField(
-                  controller: _controllerFechaEdad,
-                  decoration: InputDecoration(
-                    hintMaxLines: 4,
-                    labelStyle: TextStyle(fontSize: 14),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    labelText: Translations.of(context).text('fec_nacimiento')
-                  ),
-                  readOnly: true,
-                  onTap: () => _selectDate(context),
-                ) ,
+                builder: (context) => new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top: 10, bottom: 0),
+                      child: Text(
+                        Translations.of(context).text('fec_nacimiento'),
+                        style: TextStyle(fontSize: 10),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 0),
+                      child: new TextFormField(
+                        controller: _controllerFechaEdad,
+                        //decoration: InputDecoration(
+                          //hintMaxLines: 4,
+                          //labelStyle: TextStyle(fontSize: 14),
+                          //floatingLabelBehavior: FloatingLabelBehavior.always,
+                          //labelText: Translations.of(context).text('fec_nacimiento')
+                        //),
+                        readOnly: true,
+                        onTap: () => _selectDate(context),
+                      ) 
+                    )
+                  ],
+                ),
               )
             )
         )

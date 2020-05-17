@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/pages/InformacionAdicional.dart';
 import 'package:precheckin/styles/styles.dart';
@@ -610,7 +611,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   child: TextFormField(
                     controller: _controllerCP,
                     decoration: InputDecoration(
-                      labelText: Translations.of(context).text('cod_postal')
+                      labelText: Translations.of(context).text('cod_postal'),
                     ),
                     onChanged: (cp){
 
@@ -841,7 +842,9 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                     decoration: InputDecoration(
                         labelText: Translations.of(context).text('no_vuelo')
                     ),
-                    onChanged: (numeroVuelo) => _result.vuelos[0].vuelollegada = numeroVuelo,
+                    onChanged: (numeroVuelo){
+                         _result.vuelos[0].vuelollegada = numeroVuelo;
+                    },
                   )
               )
             ],
@@ -856,8 +859,9 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         context: context,
         locale: Translations.of(context).locale,
         initialDate: _fechaVuelo,
-        firstDate: DateTime(1910),
-        lastDate: DateTime.now());
+        firstDate:_fechaVuelo,
+        lastDate: DateTime(2099)
+      );
     if (picked != null && picked != _fechaVuelo) {
       setState(() {
         _fechaVuelo = picked;

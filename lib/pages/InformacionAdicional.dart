@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
@@ -44,6 +45,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   bool _recibirInfoBool = true;
   bool _poliReglaBool = true;
   bool _bloquear = false;
+  int cant_adultos, cant_menores;
   QRPersistence _persistence = new QRPersistence();
   List<String> _qr;
 
@@ -201,7 +203,10 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         child: MaterialButton(
           onPressed: () {
             setState(() {
-              _onAlertWithCustomContentPressed(context);
+              //Para verificar la densidad
+              if(_condicionAgregarAcom('0')){
+                _onAlertWithCustomContentPressed(context);
+              }
             });
           },
           color: Colors.blue,
@@ -214,6 +219,76 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
           shape: CircleBorder(),
         ));
   }
+
+  
+  bool _condicionAgregarAcom(String nuevaEdad){
+    int adultos = 1;//inicio en 1 por el titular
+    int menores=0;
+    int densiadultos = 1;//inicio en 1 por el titular
+    int densimenores=0;
+    int edad;
+    int _nuevaEdad = int.parse(nuevaEdad);
+    _reserva.result.acompaniantes.forEach((element) { 
+      edad =int.parse(element.edad);
+      if(edad<18){
+        menores++;
+      }else if(edad>=18){
+        adultos++;
+      }
+    });
+    print("Adultos:  $adultos");
+    print("Menore:  $menores");
+
+    double densidadTotal  = double.parse(_reserva.result.tipoHabitacion.densidad) ;
+    densiadultos = densidadTotal.floor();
+    densimenores = ((densidadTotal-densiadultos)*10).floor();
+
+    print('desnsidad ${_reserva.result.tipoHabitacion.densidad}');
+    print("densiAdultos:  $densiadultos");
+    print("densiMenore:  $densimenores");
+
+    if(adultos>= densiadultos && menores>=densimenores){
+      print("no se puede agregar acompañante");
+      _toast( "Haz alcanzado el máximo de acompañantes");
+      return false;
+    }
+
+
+    if(_nuevaEdad<18){
+      menores++;
+      if(menores <= densimenores){
+        print("se puede agregar menor ");
+
+        return true;
+      }else{
+        print("no se puede agregar menor");
+        _toast( "Haz alcanzado el máximo de acompañantes menores");
+        return false;
+      }
+    }else if(_nuevaEdad>=18){
+      adultos++;
+      if(adultos <= densiadultos){
+        print("se puede agregar mayor");
+        return true;
+      }else{
+        print("no se puede agregar mayor");
+        _toast( "Haz alcanzado el máximo de acompañantes adultos");
+        return false;
+      }
+    }
+
+  }
+
+  Widget _toast(String text){
+    Fluttertoast.showToast(
+      msg: text,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      fontSize: 20.0
+    );
+  }
+
 
   Widget _recibirInfo() {
     return CheckTextBold(
@@ -285,13 +360,19 @@ _onAlertWithCustomContentPressed(context) {
             onPressed: () {
               setState(() {
                 
-
-                mapControllerSiganture[_aco] =_sigController;
-                _aco.istitular = false;
-                _result.acompaniantes.add(_aco);
-                mapControllerSiganture[_aco] =_sigController;
+                if(_condicionAgregarAcom(_aco.edad)){
+                  mapControllerSiganture[_aco] =_sigController;
+                  _aco.istitular = false;
+                  _result.acompaniantes.add(_aco);
+                  mapControllerSiganture[_aco] =_sigController;
+                }
+                
               });
               Navigator.pop(context);
+              if(_condicionAgregarAcom(_aco.edad))
+                Fluttertoast(
+
+                );
             } ,
             child: Text(
               Translations.of(context).text('agregar'),
