@@ -14,6 +14,7 @@ import 'package:path/path.dart' show join;
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:mrzflutterplugin/mrzflutterplugin.dart';
+import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../models/ScanerModel.dart';
@@ -212,7 +213,16 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
   Widget _appbar() {
     return new AppBar(
       leading: Container(),
-      title: Text(Translations.of(context).text('doc_identificacion'),style:TextStyle(fontFamily: "Montserrat", fontSize: 17.0,)),
+      title: Container(
+        width: MediaQuery.of(context).size.width/2,
+          child: AutoSizeText(
+            Translations.of(context).text('doc_identificacion'),
+            style: appbarTitle,
+            maxLines: 1,
+            maxFontSize: 25.0 ,
+            minFontSize: 5.0 ,
+          )
+        ),
       actions: <Widget>[
         Padding(
           padding: EdgeInsets.only(right: 20.0),

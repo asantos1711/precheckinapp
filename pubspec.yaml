@@ -43,6 +43,7 @@ dependencies:
   path:
   camera_camera: ^1.0.31
   auto_size_text: ^2.1.0
+  flutter_html: ^1.0.0
 
 dev_dependencies:
   flutter_test:

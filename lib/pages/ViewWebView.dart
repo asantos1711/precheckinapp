@@ -1,15 +1,16 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ViewWebView extends StatefulWidget {
-  String url;
+  String mostrar;
   String title;
   ViewWebView({
-    @required this.url,
+    @required this.mostrar,
     @required this.title
   });
   @override
@@ -20,13 +21,13 @@ class _ViewWebViewState extends State<ViewWebView> {
   ScrollController _scrollController = new ScrollController();
   Completer<WebViewController> _controller = Completer<WebViewController>();
   double width;
-  String url;
+  String mostrar;
   String title;
 
   @override
   void initState() {
     // TODO: implement initState
-    url = this.widget.url;
+    mostrar = this.widget.mostrar;
     title = this.widget.title;
     super.initState();
   }
@@ -37,38 +38,29 @@ class _ViewWebViewState extends State<ViewWebView> {
       //extendBodyBehindAppBar: true,
       //backgroundColor: Colors.white,
       appBar: _appBar(),
-      body:   _webView(), 
+      body:   _contenido(), 
     ); 
   }
 
-  Widget _webView(){
-    return WebView(
-      initialUrl: url,
-      javascriptMode: JavascriptMode.unrestricted,
-      onWebViewCreated: (WebViewController webViewController) {
-        _controller.complete(webViewController);
-      },          
-      navigationDelegate: (NavigationRequest request) {
-        if (request.url.startsWith(url)) {
-          //print('blocking navigation to $request}');
-          return NavigationDecision.prevent;
-        }
-        //print('allowing navigation to $request');
-        return NavigationDecision.navigate;
-      },
-      onPageStarted: (String url) {
-        print('Page started loading: $url');
-      },
-      onPageFinished: (String url) {
-        //print('Page finished loading: $url');
-      },
-      gestureNavigationEnabled: true,
-    );
+  Widget _contenido(){
+    /* return Html(
+      data: """<div>Hola</div>""",
+    ); */
   }
+
   _appBar(){
     String _t = title[0].toUpperCase()+title.substring(1);
     return AppBar(
-      title: Text(_t,style: appbarTitle),
+      title:Container(
+        width: MediaQuery.of(context).size.width/2,
+          child: AutoSizeText(
+            _t,
+            style: appbarTitle,
+            maxLines: 1,
+            maxFontSize: 25.0 ,
+            minFontSize: 5.0 ,
+          )
+        ),
       centerTitle: true,
     );
   }

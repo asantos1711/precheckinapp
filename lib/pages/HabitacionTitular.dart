@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -106,7 +107,16 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   Widget _appBar(){
     return AppBar(
       leading: Container(),
-      title:Text(Translations.of(context).text('info_reservacion'),  style: appbarTitle),
+      title:Container(
+        width: MediaQuery.of(context).size.width/2,
+          child: AutoSizeText(
+            Translations.of(context).text('info_reservacion'),
+            style: appbarTitle,
+            maxLines: 1,
+            maxFontSize: 25.0 ,
+            minFontSize: 5.0 ,
+          )
+        ),
       centerTitle: true,
     );
   }

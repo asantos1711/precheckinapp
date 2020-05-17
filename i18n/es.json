@@ -69,5 +69,8 @@
   "foto_titulo_dos":"Haz la segunda foto:\nreverso del documento de identificación",
   "foto_body_dos":"Asegúrate de que haya buena iluminación y ajusta el reverso del documento de identificación hasta que encaje dentro del borde blanco. Toca el icono de la cámara cuando lo tengas todo listo.",
   "foto_fin_titulo":"Las fotos se capturaron correctamente.",
-  "reservation_list": "Lista de Reservaciones"
+  "reservation_list": "Lista de Reservaciones",
+  "max_adultos":"Haz alcanzado el máximo de acompañantes adultos",
+  "max_menores":"Haz alcanzado el máximo de acompañantes menores",
+  "max_acompanantes":"Haz alcanzado el máximo de acompañantes"
 }

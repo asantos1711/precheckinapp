@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,7 +8,6 @@ import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
-import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
@@ -57,7 +57,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   Map<Acompaniantes,SignatureController> mapControllerSiganture = Map<Acompaniantes,SignatureController>();
 
   final SignatureController _controller = SignatureController();
-  UserPreferences _pref = new UserPreferences();
 
 
 
@@ -65,10 +64,10 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   void initState() {
     super.initState();
     _controller.addListener((){});
-
     _qr = _persistence.qr;
     _reserva = this.widget.reserva;
     _result = this.widget.result;
+
   }
 
   _botonDisable(){
@@ -79,8 +78,17 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   @override
   Widget build(BuildContext context) {
+    _reserva.politicas.forEach((element) {
+      print('Pliticas=================');
+      print('claveidioma ${element.claveidioma}');
+      print('seg_obj_dej ${element.seg_obj_dej}');
+      print('seg_acu_est ${element.seg_acu_est}');
+      print('seg_san_amb ${element.seg_san_amb}');
+      print('seg_acu_prom ${element.seg_acu_prom}');
+      print('seg_avi_priv ${element.seg_avi_priv}');
+      print('seg_acu_reg ${element.seg_acu_reg}');
+    });
     
-
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return GestureDetector(
@@ -176,25 +184,13 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
     _bloquearPantalla(false);
 
-    if(status) {
+    if(status){
+      if(!_qr.contains(_reserva.codigo))
+        _qr.add(_reserva.codigo);
 
-      if(!_pref.tieneLigadas) {
-        if(!_qr.contains(_reserva.codigo))
-          _qr.add(_reserva.codigo);
+      _persistence.qr = _qr;
 
-        _persistence.qr = _qr;
-
-        Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
-      } else {
-        List<String> l = _pref.ligadas;
-        l.remove(_result.idReserva.toString());
-        _pref.ligadas = l;
-
-        Navigator.pushNamed(context, 'litaReserva', arguments: _reserva);
-      }
-
-
-
+      Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
     }
     else {
       tools.showAlert(context, "No se logro guardar los datos");
@@ -263,7 +259,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
     if(adultos>= densiadultos && menores>=densimenores){
       print("no se puede agregar acompañante");
-      _toast( "Haz alcanzado el máximo de acompañantes");
+      _toast(Translations.of(context).text('max_acompanantes'));//Toast
       return false;
     }
 
@@ -276,7 +272,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         return true;
       }else{
         print("no se puede agregar menor");
-        _toast( "Haz alcanzado el máximo de acompañantes menores");
+        _toast(Translations.of(context).text('max_menores'));//Toast
         return false;
       }
     }else if(_nuevaEdad>=18){
@@ -286,7 +282,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         return true;
       }else{
         print("no se puede agregar mayor");
-        _toast( "Haz alcanzado el máximo de acompañantes adultos");
+        _toast( Translations.of(context).text('max_adultos'));//Toast
         return false;
       }
     }
@@ -491,6 +487,7 @@ _onAlertWithCustomContentPressed(context) {
       onChange:(boo){
         setState(() {
           _poliReglaBool = !_poliReglaBool;
+          _reserva.result.acuerdos.reglamento = toInt(_poliReglaBool);
         });
         _botonDisable();
       } ,
@@ -504,7 +501,7 @@ _onAlertWithCustomContentPressed(context) {
               pageBuilder: 
               (context, animation1, animation2) => 
               ViewWebView(
-                url: 'https://www.google.com/',
+                mostrar: 'https://www.google.com/',
                 title:Translations.of(context).text('politicas_procedimientos'),
               ),
             ));
@@ -531,7 +528,7 @@ _onAlertWithCustomContentPressed(context) {
               pageBuilder: 
               (context, animation1, animation2) => 
               ViewWebView(
-                url: 'https://www.sunsetworldresorts.com/es/resorts/hacienda-tres-rios-resort-spa-nature-park/politica-de-privacidad/',
+                mostrar: 'https://www.sunsetworldresorts.com/es/resorts/hacienda-tres-rios-resort-spa-nature-park/politica-de-privacidad/',
                 title: Translations.of(context).text('reglamento_hotel'),
               ),
             ));
@@ -557,7 +554,7 @@ _onAlertWithCustomContentPressed(context) {
             PageRouteBuilder(
               pageBuilder: (context, animation1, animation2) => 
               ViewWebView(
-                url:'https://www.google.com/',
+                mostrar:'https://www.google.com/',
                 title: Translations.of(context).text('aviso_privacidad'),
               ),
             ));
@@ -570,8 +567,18 @@ _onAlertWithCustomContentPressed(context) {
   Widget _appBar() {
     return AppBar(
       leading: Container(),
-      title: Text(Translations.of(context).text('info_reservacion'),style: appbarTitle),
+      title:Container(
+        width: MediaQuery.of(context).size.width/2,
+          child: AutoSizeText(
+            Translations.of(context).text('info_reservacion'),
+            style: appbarTitle,
+            maxLines: 1,
+            maxFontSize: 25.0 ,
+            minFontSize: 5.0 ,
+          )
+        ),
       centerTitle: true,
     );
   }
+  int toInt(bool val) => val ? 1 : 0;
 }

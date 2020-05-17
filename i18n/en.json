@@ -67,5 +67,8 @@
   "foto_titulo_dos":"Take the second photo:\nback of the identification document",
   "foto_body_dos":"Make sure there is good lighting and adjust the back of the ID until it fits inside the white border. Tap the camera icon when you have everything ready.",
   "foto_fin_titulo":"The photos were captured correctly.",
-  "reservation_list": "Reservation List"
+  "reservation_list": "Reservation List",
+  "max_adultos":"You have reached the maximum of adult companions.",
+  "max_menores":"You have reached the maximum number of minor companions.",
+  "max_acompanantes":"You have reached the maximum number of companions."
 }
