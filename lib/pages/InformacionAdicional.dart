@@ -163,7 +163,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         onPressed: _enableButton == false ? null : () =>_saveData(),
         child: Text(
           Translations.of(context).text('finalizar'),
-          style: TextStyle(fontSize: 20.0),
+          style: TextStyle(fontSize: 20.0, fontFamily: 'Montserrat',fontWeight: FontWeight.bold),
         ),
       ));
   }
@@ -223,7 +223,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
               }
             });
           },
-          color: Colors.blue,
+          color: Color.fromRGBO(0, 165, 227, 1),
           textColor: Colors.white,
           child: Icon(
             FontAwesomeIcons.plus,
@@ -580,9 +580,9 @@ _onAlertWithCustomContentPressed(context) {
     return AppBar(
       leading: Container(),
       title:Container(
-        width: MediaQuery.of(context).size.width/2,
+        width: MediaQuery.of(context).size.width/0.7,
           child: AutoSizeText(
-            Translations.of(context).text('info_reservacion'),
+            Translations.of(context).text('info_acompanantes'),
             style: appbarTitle,
             maxLines: 1,
             maxFontSize: 25.0 ,

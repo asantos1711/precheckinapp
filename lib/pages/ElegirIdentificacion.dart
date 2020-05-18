@@ -128,8 +128,15 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             margin: EdgeInsets.all(5),
             child: Icon(Icons.lock)
           ),
-          Expanded(
-            child: Text(Translations.of(context).text('no_compartir'))
+          Container(
+            width: MediaQuery.of(context).size.width-74,
+            child: AutoSizeText(
+              Translations.of(context).text('no_compartir'),
+              style: greyText,
+              maxLines: 2,
+              maxFontSize: 25.0 ,
+              minFontSize: 8.0 ,
+            ),
           )
         ],
       )
@@ -168,7 +175,10 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
                   children: <Widget>[
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(Translations.of(context).text(doc.name)),
+                      child: Text(
+                        Translations.of(context).text(doc.name),
+                        style: greyText.copyWith(fontWeight: FontWeight.w700),
+                      ),
                     ),
                     Align(
                       alignment: Alignment.centerRight,
@@ -205,7 +215,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
       padding: EdgeInsets.all(20),
       child: Text(
         Translations.of(context).text('selec_tipo_doc'),
-        style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600,)
+        style: greyText.copyWith(fontSize: 30, fontWeight: FontWeight.bold)
       ),
     );
   }
@@ -277,7 +287,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         },
         child: Text(
           Translations.of(context).text('continuar'),
-          style: TextStyle(fontSize: 20.0),
+          style: TextStyle(fontSize: 20.0, fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
         ),
       )
     );
@@ -297,7 +307,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           height: 70,
           child: AutoSizeText(
             Translations.of(context).text('foto_titulo_uno'),
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: greyText.copyWith(fontWeight: FontWeight.bold),
             //maxLines: 2,
             maxFontSize: 25.0 ,
             minFontSize: 10.0 ,
@@ -307,6 +317,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           height: 90,
           child: AutoSizeText(
             Translations.of(context).text('foto_body_uno'),
+            style: greyText,
             //maxLines: 4,
             maxFontSize: 17.0 ,
             minFontSize: 10.0 ,
@@ -323,7 +334,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           } ,
           child: Text(
             Translations.of(context).text('continuar'),
-            style: TextStyle(color: Colors.blueAccent, fontSize: 20),
+            style: lightBlueText.copyWith( fontSize: 20),
           ),
         )
       ]
@@ -333,29 +344,33 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
 _idDocument () async {
   double width = MediaQuery.of(context).size.width;
   File file1 = await  Navigator.push(
-    context, 
-    MaterialPageRoute(
-      builder: (context) => Camera(
-        imageMask: Container(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => Camera(
+          imageMask: Container(
             width:width,
             height: width*0.55,
-             decoration: BoxDecoration(
+              decoration: BoxDecoration(
               border: Border.all(width: 5, color: Colors.grey.withAlpha(500) ),
             ), 
-        ) 
+          ) 
+        )
       )
-    )
-  );
+    );
 
    List<int> imageBytes= await file1.readAsBytes();
     String base64Image = base64Encode(imageBytes);
-    acompaniantes.imagefront = base64Image; 
+    setState(() {
+      acompaniantes.imagefront = base64Image; 
+    });
     log('file ${acompaniantes.imagefront}');
     debugPrint('file ${acompaniantes.imagefront}');
 
     Alert(
       closeFunction:(){
         print('Se cerró la alerta');
+        acompaniantes.imagefront = '';
+        acompaniantes.imageback = '';
       } ,
       context: context,
       image: Image.asset('assets/images/id_back.png'),
@@ -366,7 +381,7 @@ _idDocument () async {
           height: 70,
           child: AutoSizeText(
             Translations.of(context).text('foto_titulo_dos'),
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: greyText.copyWith(fontWeight: FontWeight.bold),
             //maxLines: 2,
             maxFontSize: 25.0 ,
             minFontSize: 10.0 ,
@@ -376,6 +391,7 @@ _idDocument () async {
           height: 90,
           child: AutoSizeText(
             Translations.of(context).text('foto_body_dos'),
+            style: greyText,
             //maxLines: 4,
             maxFontSize: 17.0 ,
             minFontSize: 10.0 ,
@@ -399,14 +415,18 @@ _idDocument () async {
               )));
               List<int> imageBytes1= await file2.readAsBytes();
               String base64Image1 = base64Encode(imageBytes1);
-              acompaniantes.imageback= base64Image1; 
+              setState(() {
+                acompaniantes.imageback = base64Image1; 
+              });
+
+              
               log('file ${acompaniantes.imageback}');
               debugPrint('file ${acompaniantes.imageback}');
             _alertaFinId(file1,file2);
           } ,
           child: Text(
             Translations.of(context).text('continuar'),
-            style: TextStyle(color: Colors.blueAccent, fontSize: 20),
+            style: lightBlueText.copyWith( fontSize: 20),
           ),
         )
       ]
@@ -420,6 +440,7 @@ _idDocument () async {
         Navigator.pop(context);
       } ,
       context: context,
+      style: AlertStyle(titleStyle: greyText.copyWith(fontWeight:FontWeight.bold )),
       title: Translations.of(context).text('foto_fin_titulo'),
       content: Column(
         children: <Widget>[
@@ -442,7 +463,7 @@ _idDocument () async {
           } ,
           child: Text(
             Translations.of(context).text('finalizar'),
-            style: TextStyle(color: Colors.blueAccent, fontSize: 20),
+            style: lightBlueText.copyWith( fontSize: 20),
           ),
         )
       ]
@@ -461,7 +482,7 @@ _idDocument () async {
           height: 70,
           child: AutoSizeText(
             Translations.of(context).text('instruccion_scanner'),
-            //style: TextStyle(fontWeight: FontWeight.bold),
+            style: greyText.copyWith(fontWeight: FontWeight.w700),
             //maxLines: 2,
             maxFontSize: 25.0 ,
             minFontSize: 10.0 ,
@@ -476,7 +497,7 @@ _idDocument () async {
           } ,
           child: Text(
             Translations.of(context).text('continuar'),
-            style: TextStyle(color: Colors.blueAccent, fontSize: 20),
+            style: lightBlueText.copyWith(fontSize: 20),
           ),
         )
       ]
@@ -552,13 +573,15 @@ _idDocument () async {
     setState(() {
       _scanerModel = res;
       _result = scannerResult;
-      acompaniantes.documenttype = _scanerModel.documentTypeReadable;
+      acompaniantes.documenttype = _scanerModel.documentTypeReadable??'';
       acompaniantes.imagefront = _scanerModel?.full_image ??'';
       acompaniantes.nombre = _scanerModel.givenNamesReadable;
 
       log('imagefront: ${acompaniantes.imagefront}');
     });
-    _scanerModel.documentTypeReadable!=null ?_alertScannerR() : (){}; 
+    (_scanerModel.documentTypeReadable!='' && acompaniantes.imagefront!='') 
+    ?_alertScannerR() : 
+    _alertNoFound(); 
   }
 
   _alertScannerR(){
@@ -566,7 +589,6 @@ _idDocument () async {
     return Alert(
         closeFunction:(){
           print('Se cerró la alerta');
-          Navigator.pop(context);
           Navigator.pop(context);
         } ,
         image: new Image.memory(bytes),
@@ -578,7 +600,7 @@ _idDocument () async {
               height: 70,
               child: AutoSizeText(
                 Translations.of(context).text('fin_escaneo_titulo'),
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: greyText.copyWith(fontWeight: FontWeight.bold),
                 //maxLines: 2,
                 maxFontSize: 25.0 ,
                 minFontSize: 10.0 ,
@@ -588,6 +610,7 @@ _idDocument () async {
               height: 90,
               child: AutoSizeText(
                 Translations.of(context).text('fin_escaneo_body'),
+                style: greyText.copyWith(fontWeight: FontWeight.w700),
                 //maxLines: 4,
                 maxFontSize: 17.0 ,
                 minFontSize: 10.0 ,
@@ -604,9 +627,58 @@ _idDocument () async {
             } ,
             child: Text(
               Translations.of(context).text('finalizar'),
-              style: TextStyle(color: Colors.blueAccent, fontSize: 20),
+              style: lightBlueText.copyWith(fontSize: 20),
             ),
           )
+        ]
+      ).show();
+  }
+
+  _alertNoFound(){
+    return Alert(
+        closeFunction:(){
+          print('Se cerró la alerta');
+          Navigator.pop(context);
+        } ,
+        context: context,
+        title: '',
+        content: Column(
+          children: <Widget>[
+            Container(
+              height: 70,
+              child: AutoSizeText(
+                'No se encontró pasaporte',
+                style: greyText.copyWith(fontWeight: FontWeight.bold),
+                //maxLines: 2,
+                maxFontSize: 25.0 ,
+                minFontSize: 10.0 ,
+              )
+            ),
+          ],
+        ),
+        buttons: [
+          DialogButton(
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            } ,
+            child: Text(
+              Translations.of(context).text('finalizar'),
+              style: lightBlueText.copyWith(fontSize: 20),
+            ),
+          ),
+          DialogButton(
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+              startScanning();
+            } ,
+            child: Text(
+              Translations.of(context).text('intentar_nuevo'),
+              style: lightBlueText.copyWith(fontSize: 20),
+            ),
+          ),
         ]
       ).show();
   }

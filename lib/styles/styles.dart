@@ -21,6 +21,24 @@ TextStyle etiqueta = TextStyle(
 TextStyle valor = TextStyle(
   fontFamily: "Montserrat", 
   fontWeight: FontWeight.bold,
+)
+;
+TextStyle greyText = TextStyle(
+  fontFamily: "Montserrat", 
+  color: Color.fromRGBO(95, 96, 98, 1),
+);
+
+TextStyle blueAcentText = TextStyle(
+  fontFamily: "Montserrat", 
+  color: Color.fromRGBO(25, 42, 89, 1),
+);
+TextStyle lightBlueText = TextStyle(
+  fontFamily: "Montserrat", 
+  color: Color.fromRGBO(0, 165, 227, 1),
+);
+
+TextStyle onlyFont = TextStyle(
+  fontFamily: "Montserrat", 
 );
 
 TextStyle titulos = TextStyle(
@@ -28,6 +46,7 @@ TextStyle titulos = TextStyle(
   fontSize: 16.0,
   color: Color.fromARGB(255,63, 90, 166)
 );
+
 
 
 

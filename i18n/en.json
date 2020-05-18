@@ -28,6 +28,7 @@
   "ciudad": "City",
   "cod_postal": "ZIP Code",
   "info_contacto": "Contact Information",
+  "info_acompanantes": "Information of companions",
   "mail": "E-mail",
   "telefono": "Phone number",
   "agre_info_vuelo": "Add Flight Information",
@@ -72,5 +73,7 @@
   "max_menores":"You have reached the maximum number of minor companions.",
   "max_acompanantes":"You have reached the maximum number of companions.",
   "firma_aco":"Companion Signature",
-  "invalid_storage_code" : "Your storage codes are invalid. Please capture a new code"
+  "invalid_storage_code" : "Your storage codes are invalid. Please capture a new code",
+  "intentar_nuevo":"Try again",
+  "pais":"Country"
 }

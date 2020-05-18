@@ -1,6 +1,7 @@
 import 'package:age/age.dart';
 import 'package:flutter/material.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
+import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/docIdentificacion.dart';
 
@@ -143,12 +144,13 @@ class _CardAcompananteState extends State<CardAcompanante> {
                       padding: EdgeInsets.only(top: 10, bottom: 0),
                       child: Text(
                         Translations.of(context).text('fec_nacimiento'),
-                        style: TextStyle(fontSize: 10),
+                        style: greyText.copyWith(fontSize: 10,fontWeight: FontWeight.w200),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 0),
                       child: new TextFormField(
+                        style: greyText.copyWith(fontWeight: FontWeight.bold),
                         controller: _controllerFechaEdad,
                         //decoration: InputDecoration(
                           //hintMaxLines: 4,
@@ -180,7 +182,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
               children: <Widget>[
                 Text(
                   Translations.of(context).text('edad'),
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                  style: greyText.copyWith(fontWeight: FontWeight.w600, fontSize: 13),
                 ),
                 SizedBox(
                   height: 5,
@@ -188,7 +190,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
                 Text(
                     '${_acompaniante?.edad ?? 0} ' +
                         Translations.of(context).text('anios'),
-                    style: TextStyle(fontSize: 15))
+                    style: greyText.copyWith(fontSize: 15))
               ],
             )));
   }

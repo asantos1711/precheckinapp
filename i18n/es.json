@@ -21,6 +21,7 @@
   "reque_especiales": "Requerimientos especiales",
   "sujeto_dispo": "*Sujeto a disponibilidad",
   "info_titular": "Información del Titular",
+  "info_acompanantes": "Información de acompañantes",
   "nombre": "Nombre",
   "apellido": "Apellido",
   "pais_recidencia": "País de residencia",
@@ -74,5 +75,7 @@
   "max_menores":"Haz alcanzado el máximo de acompañantes menores",
   "max_acompanantes":"Haz alcanzado el máximo de acompañantes",
   "firma_aco":"Firma de acompañante",
-  "invalid_storage_code" : "Los códigos Almacendados son invalidos. Capture un nuevo código"
+  "invalid_storage_code" : "Los códigos Almacendados son invalidos. Capture un nuevo código",
+  "intentar_nuevo":"Intentar de nuevo",
+  "pais":"País"
 }

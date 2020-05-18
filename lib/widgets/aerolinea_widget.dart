@@ -4,6 +4,7 @@ import 'package:precheckin/pages/mixins/hotel_mixin.dart';
 import 'package:precheckin/providers/aerolinea_provider.dart';
 import 'package:precheckin/search/aerolineas_search.dart';
 import 'package:precheckin/models/aerolineas_model.dart';
+import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 
 
@@ -55,9 +56,10 @@ class _AerolineasWidgetState extends State<AerolineasWidget>{
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(_titulo),
+            Text(_titulo, style: greyText,),
             TextField(
               controller: _ctrlAeroliner,
+              style: greyText.copyWith(fontWeight: FontWeight.bold),
               onTap: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
                 Aerolinea aerolinea = await showSearch(context: context, delegate: AerolineasSearch(aeroLineas: _aeroLineas), query: _valor);

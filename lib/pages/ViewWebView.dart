@@ -112,11 +112,11 @@ class _ViewWebViewState extends State<ViewWebView> {
     String _t = title[0].toUpperCase()+title.substring(1);
     return AppBar(
       title:Container(
-        width: MediaQuery.of(context).size.width/2,
+        width: MediaQuery.of(context).size.width/0.7,
           child: AutoSizeText(
             _t,
             style: appbarTitle,
-            maxLines: 1,
+            maxLines: 2,
             maxFontSize: 25.0 ,
             minFontSize: 5.0 ,
           )
