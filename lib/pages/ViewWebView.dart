@@ -53,13 +53,22 @@ class _ViewWebViewState extends State<ViewWebView> {
       //extendBodyBehindAppBar: true,
       //backgroundColor: Colors.white,
       appBar: _appBar(),
+      floatingActionButton: _floatButton(),
       body:   new ListView(
+        controller: _scrollController,
         children: <Widget>[
           _contenido()
         ],
       ), 
     ); 
   }
+
+   _floatButton(){
+     return FloatingActionButton(
+        onPressed: () =>  _scrollController.jumpTo(_scrollController.position.minScrollExtent),
+        child: Icon(Icons.arrow_upward),
+     );
+   }
 
    _dataHtml(){
     Politicas poli;
@@ -100,7 +109,7 @@ class _ViewWebViewState extends State<ViewWebView> {
               border: Border.all(width: 6),
               backgroundColor: Colors.grey,
             ), */
-            fontSize: FontSize(31),
+            fontSize: FontSize(15),
     //              color: Colors.white,
           ),
         }

@@ -228,7 +228,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           child: AutoSizeText(
             Translations.of(context).text('doc_identificacion'),
             style: appbarTitle,
-            maxLines: 1,
+            maxLines: 2,
             maxFontSize: 25.0 ,
             minFontSize: 5.0 ,
           )

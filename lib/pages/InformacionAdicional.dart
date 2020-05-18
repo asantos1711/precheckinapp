@@ -195,28 +195,58 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   Widget _agregarAco() {
     return Container(
-        color: Colors.white,
-        margin: EdgeInsets.only(top: 10, bottom: 10),
-        width: width,
-        alignment: Alignment.center,
-        child: MaterialButton(
-          onPressed: () {
-            setState(() {
-              //Para verificar la densidad
-              if(_condicionAgregarAcom('0')){
-                _onAlertWithCustomContentPressed(context);
-              }
-            });
-          },
-          color: Color.fromRGBO(0, 165, 227, 1),
-          textColor: Colors.white,
-          child: Icon(
-            FontAwesomeIcons.plus,
-            size: 24,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            color: Colors.white,
+            margin: EdgeInsets.only(top: 10, bottom: 10),
+            alignment: Alignment.center,
+            child: MaterialButton(
+              onPressed: () {
+                setState(() {
+                  //Para verificar la densidad
+                  if(_condicionAgregarAcom('0')){
+                    _onAlertWithCustomContentPressed(context);
+                  }
+                });
+              },
+              color: Color.fromRGBO(0, 165, 227, 1),
+              textColor: Colors.white,
+              child: Icon(
+                FontAwesomeIcons.plus,
+                size: 24,
+              ),
+              padding: EdgeInsets.all(16),
+              shape: CircleBorder(),
+            )
           ),
-          padding: EdgeInsets.all(16),
-          shape: CircleBorder(),
-        ));
+          Container(
+            color: Colors.white,
+            margin: EdgeInsets.only(top: 10, bottom: 10),
+            alignment: Alignment.center,
+            child: MaterialButton(
+              onPressed: () {
+                setState(() {
+                  //Para verificar la densidad
+                  if(_condicionAgregarAcom('0')){
+                    _onAlertWithCustomContentPressed(context);
+                  }
+                });
+              },
+              color: Color.fromRGBO(0, 165, 227, 1),
+              textColor: Colors.white,
+              child: Icon(
+                FontAwesomeIcons.plus,
+                size: 24,
+              ),
+              padding: EdgeInsets.all(16),
+              shape: CircleBorder(),
+            )
+          )
+        ],
+      )
+    );
   }
 
   
@@ -569,7 +599,7 @@ _onAlertWithCustomContentPressed(context) {
           child: AutoSizeText(
             Translations.of(context).text('info_acompanantes'),
             style: appbarTitle,
-            maxLines: 1,
+            maxLines: 2,
             maxFontSize: 25.0 ,
             minFontSize: 5.0 ,
           )

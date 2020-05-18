@@ -34,8 +34,11 @@ class _CardAcompananteState extends State<CardAcompanante> {
     // TODO: implement initState
     _signature = this.widget.signature;
     _acompaniante = this.widget.acompaniante;
+    print("PREFECHA NACIMIENTO ===" +_acompaniante.fechanac);
     _fecaNac = DateTime.parse(_acompaniante.fechanac.replaceAll('-', ""));
     _date = _fecaNac;
+    
+    //git add -_fecaNac.;
     _controllerText.text = _acompaniante?.nombre;
     print("FECHA NACIMIENTO ===" + _fecaNac.toString());
     super.initState();
@@ -59,6 +62,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
             .years
             .toString();
         print("EDAD===" + _acompaniante.edad);
+        print("Fecha===" + "${_acompaniante.fechanac}");
         _controllerFechaEdad.text =
             "${_fecaNac.day.toString()}/${_fecaNac.month.toString()}/${_fecaNac.year.toString()}";
       });
