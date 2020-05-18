@@ -73,6 +73,7 @@
   "max_menores":"You have reached the maximum number of minor companions.",
   "max_acompanantes":"You have reached the maximum number of companions.",
   "firma_aco":"Companion Signature",
+  "invalid_storage_code" : "Your storage codes are invalid. Please capture a new code",
   "intentar_nuevo":"Try again",
   "pais":"Country"
 }

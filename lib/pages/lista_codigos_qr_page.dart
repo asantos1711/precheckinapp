@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:precheckin/tools/translation.dart';
+import 'package:precheckin/utils/tools_util.dart';
 import 'package:precheckin/widgets/lista_qr_widget.dart';
 
 class ListaCodigosQR extends StatelessWidget {
@@ -13,20 +14,9 @@ class ListaCodigosQR extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          _imagenFondo(),
+          imagenFondo(),
           _contenido(context),
         ],
-      )
-    );
-  }
-
-  Widget _imagenFondo() {
-    return Container(
-      height: double.infinity,
-      width: double.infinity,
-      child: Image.asset(
-        "assets/images/background.png",
-        fit: BoxFit.cover,
       )
     );
   }
@@ -35,19 +25,11 @@ class ListaCodigosQR extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: <Widget>[
-          _logo(),
+          logo(),
           Expanded(child: _codigosQR(context),),
           _btnNuevoCodigo(context)
         ],
       ),
-    );
-  }
-
-  Widget _logo(){
-    return SvgPicture.asset(
-      'assets/images/sunset_logo.svg',
-      semanticsLabel: 'Acme Logo',
-      color: Colors.white,
     );
   }
 
@@ -60,7 +42,6 @@ class ListaCodigosQR extends StatelessWidget {
 
   Widget _btnNuevoCodigo(BuildContext context){
     return Container(
-      width: 120.0,
       margin: EdgeInsets.symmetric(vertical:14.0),
       child: RaisedButton(
         child: Text( Translations.of(context).text('nuevo_code') ), 

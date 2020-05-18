@@ -26,12 +26,12 @@ class UserPreferences {
     _pref.setString("idioma", idioma);
   }
 
-  List<String> get ligadas {
-    return _pref.getStringList("ligadas");
+  List<String> get reservasProcesadas {
+    return _pref.getStringList("reservasProcesadas") ?? [];
   }
 
-  set ligadas(List<String> value){
-    _pref.setStringList("ligadas", value);
+  set reservasProcesadas(List<String> value){
+    _pref.setStringList("reservasProcesadas", value);
   }
 
   bool get tieneLigadas {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/providers/qr_provider.dart';
 import 'package:precheckin/tools/translation.dart';
 
@@ -11,6 +12,7 @@ import 'package:precheckin/tools/translation.dart';
 class ListaQR extends StatelessWidget {
   
   List<dynamic> _listaQR;
+  UserPreferences _pref = new UserPreferences();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class ListaQR extends StatelessWidget {
         _listaQR = snapshot.data;
 
         if(_listaQR.isEmpty)
-          return _sinCodigos();
+          return _sinCodigos(context);
         
         return ListView(
           children: _listaCodigos(context),
@@ -60,7 +62,9 @@ class ListaQR extends StatelessWidget {
   }
 
   //Mensaje que se muestra cuendo no se encuentran códigos a mostrar
-  Widget _sinCodigos() {
+  Widget _sinCodigos(BuildContext context) {
+    _pref.reservasProcesadas = [];
+
     return Container(
       width: double.infinity,
       margin: EdgeInsets.symmetric(vertical:14.0),
@@ -68,7 +72,7 @@ class ListaQR extends StatelessWidget {
       child: Center(
         child: ListTile(
           leading: Icon(Icons.warning),
-          title: Text("Favor de capturar codigo"),
+          title: Text(Translations.of(context).text('invalid_storage_code')),
         ),
       ),
     );

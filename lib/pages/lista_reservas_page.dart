@@ -33,7 +33,7 @@ class _ListaReservasState extends State<ListaReservas> {
   Widget build(BuildContext context) {
     _model = ModalRoute.of(context).settings.arguments;
 
-    print(_pref.ligadas);
+    print(_pref.reservasProcesadas);
 
     return Scaffold(
       appBar: AppBar(
@@ -51,22 +51,22 @@ class _ListaReservasState extends State<ListaReservas> {
 
   List<Widget> _reservas(BuildContext context){
     List<Widget> widgets = [ _reserva(context, _model.result) ];
+    _enableButton = _pref.reservasProcesadas.contains(_model.result.idReserva.toString());
 
     _model.ligadas.forEach((r) { 
+      if(_enableButton == false)
+        _enableButton = _pref.reservasProcesadas.contains(r.idReserva.toString());
+
       widgets.add( _reserva(context, r) );
     });
 
-    if(widgets.length > _pref.ligadas.length)
-      _enableButton = true;
-
     widgets.add(_buttonFinalizar(context));
-
 
     return widgets;
   }
 
   Widget _reserva(BuildContext context, Result res) {
-    bool procesado = _pref.ligadas.indexOf(res.idReserva.toString()) == -1;
+    bool procesado = _pref.reservasProcesadas.contains(res.idReserva.toString());
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal:10.0, vertical:10.0),

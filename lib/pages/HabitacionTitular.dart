@@ -135,6 +135,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   }
 
   
+
   Widget _seccionTitular(){
     return Container(
       width: double.infinity,
@@ -142,21 +143,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
       child: Column(
         children: <Widget>[
           _infoTitular(),
-        ]
-      ),
-    );
-  }
-
-  Widget _seccionContacto(){
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal:10.0, vertical:10.0),
-      decoration: BoxDecoration(
-        color: backgroundBloqueado
-      ),
-      child: Column(
-        children: <Widget>[
-          _infoContacto(),
         ]
       ),
     );
@@ -331,6 +317,21 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
       ),
     );
   }
+
+  Widget _seccionContacto(){
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal:10.0, vertical:10.0),
+      decoration: BoxDecoration(
+        color: backgroundBloqueado
+      ),
+      child: Column(
+        children: <Widget>[
+          _infoContacto(),
+        ]
+      ),
+    );
+  }
   
   Widget _infoContacto(){
     return Container(
@@ -347,14 +348,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             alignment: Alignment.centerLeft,
             child: Container(
               padding: EdgeInsets.only(bottom: 5, left:10),
-              width: width-20,
-              child: Text(
-                Translations.of(context).text('info_contacto'),
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16
-                ),
-              ),
+              width: double.infinity,
+              child: Text(Translations.of(context).text('info_contacto'),style: titulos,),
               decoration: boxDecorationDefault,
             ),
           ),
