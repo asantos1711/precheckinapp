@@ -73,5 +73,6 @@
   "max_adultos":"Haz alcanzado el máximo de acompañantes adultos",
   "max_menores":"Haz alcanzado el máximo de acompañantes menores",
   "max_acompanantes":"Haz alcanzado el máximo de acompañantes",
-  "firma_aco":"Firma de acompañante"
+  "firma_aco":"Firma de acompañante",
+  "invalid_storage_code" : "Los códigos Almacendados son invalidos. Capture un nuevo código"
 }

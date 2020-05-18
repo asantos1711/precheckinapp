@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/HabitacionTitular.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/utils/tools_util.dart' as tools;
+import 'package:precheckin/utils/tools_util.dart';
 
 class CodigoAcceso extends StatefulWidget {
 
@@ -24,7 +25,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
   @override
   void initState() {
     super.initState();
-    _codigoController = new TextEditingController(text: "MC0yMTE0MzU0",);
+    _codigoController = new TextEditingController();
     _provider         = new PMSProvider(); //Provide PMS Services
     _pref             = new UserPreferences();
   }
@@ -34,12 +35,12 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          _imagenFondo(),
+          imagenFondo(),
           SafeArea(
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  _logo(),
+                  logo(),
                   _textoIngresa(),
                   _textField(),
                   _ingresar(),
@@ -52,30 +53,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
       ),
     );
   }
-
-  Widget _imagenFondo() {
-    return Container(
-      height: double.infinity,
-      width: double.infinity,
-      child: Image.asset(
-        "assets/images/background.png",
-        fit: BoxFit.cover,
-      )
-    );
-  }
-
-  Widget _logo() {
-    return Container(
-        margin: EdgeInsets.only(top: 100.0),
-        width: double.infinity,
-        child: SvgPicture.asset(
-          'assets/images/sunset_logo.svg',
-          semanticsLabel: 'Acme Logo',
-          color: Colors.white,
-        ),
-    );
-  }
-
+  
   Widget _textoIngresa(){
     return Container(
       margin: EdgeInsets.only(top: 100.0),
@@ -140,28 +118,17 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
     else {
       infoReserva.codigo = _codigoController.text;
 
-      if(infoReserva.ligadas.isEmpty){
-        _pref.ligadas = [];
+      if(infoReserva.ligadas.isEmpty) {
         _pref.tieneLigadas = false;
         Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HabitacionTitular(reserva: infoReserva, result: infoReserva.result,)));
       } else {
         _pref.tieneLigadas = true;
-        _setPrefReservasLigadas(infoReserva);
        Navigator.pushNamed(context, 'litaReserva', arguments: infoReserva);
       }
     }
   }
 
-  void _setPrefReservasLigadas(Reserva reserva){
-    List<String> lista = [];
-    lista.add(reserva.result.idReserva.toString());
-
-    reserva.ligadas.forEach((r) { 
-      lista.add(r.idReserva.toString());
-    });
-
-    _pref.ligadas = lista;
-  }
+  
 
   void _bloquearPantalla(bool status){
     _bloquear = status;
