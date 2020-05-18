@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:signature/signature.dart';
 
@@ -36,7 +37,7 @@ class _SignatureWidgetState extends State<SignatureWidget> {
     _width = MediaQuery.of(context).size.width;
 
     Widget firma = (_capturar == true) ? _image() : _firma();
-    Widget titulo = (widget.title =='' || widget.title==null) ? Container() : Text(widget.title, style: TextStyle(fontSize: 20));
+    Widget titulo = (widget.title =='' || widget.title==null) ? Container() : Text(widget.title, style: greyText.copyWith(fontSize: 17));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -62,7 +63,9 @@ class _SignatureWidgetState extends State<SignatureWidget> {
           ),
           //SizedBox(height: 10.0,),
           FlatButton(
-            child: Text(Translations.of(context).text('change')),
+            child: Text(
+              Translations.of(context).text('change'),style: greyText,
+            ),
             color: Colors.white,
             onPressed: () => setState(() =>  _capturar = !_capturar ),
           ),
@@ -90,7 +93,7 @@ class _SignatureWidgetState extends State<SignatureWidget> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
                 FlatButton(
-                  child: Text(Translations.of(context).text('limpiar')),
+                  child: Text(Translations.of(context).text('limpiar'),style: greyText),
                   color: Colors.white,
                   onPressed: () => setState(() => _controller.clear()),
                 ),

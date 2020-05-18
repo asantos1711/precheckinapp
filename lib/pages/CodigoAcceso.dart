@@ -5,6 +5,7 @@ import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/HabitacionTitular.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/providers/pms_provider.dart';
+import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/utils/tools_util.dart' as tools;
 
@@ -83,6 +84,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
       child: Text(
         Translations.of(context).text('ingrese_codigo'), 
         style: TextStyle(
+          fontFamily: "Montserrat",
           color: Colors.white, 
           fontSize: 17, 
           fontWeight: FontWeight.w800
@@ -101,6 +103,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
       child: TextField(
         controller: _codigoController,
         textAlign: TextAlign.center,
+        style: greyText,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
@@ -119,6 +122,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
           Translations.of(context).text('ingresar'), 
           style: TextStyle(
             color: Colors.white, 
+            fontFamily: "Montserrat",
             fontSize: 21, 
             fontWeight: FontWeight.w800
           )

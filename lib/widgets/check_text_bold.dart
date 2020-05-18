@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:precheckin/styles/styles.dart';
 class CheckTextBold extends StatelessWidget {
   final String text; 
   final String textBold; 
@@ -29,7 +30,7 @@ class CheckTextBold extends StatelessWidget {
             alignment: Alignment.centerLeft,
             width: 40,
             child:new Checkbox(
-              activeColor: Colors.blue,
+              activeColor: Color.fromRGBO(0, 165, 227, 1),
               value: value,
               onChanged: onChange
             ),
@@ -38,13 +39,12 @@ class CheckTextBold extends StatelessWidget {
             width: width-40,
             child: RichText(text: TextSpan(
               text: text,
-              style: TextStyle(color: Colors.black),
+              style: greyText,
               children: <TextSpan>[
                 TextSpan(
                   text: textBold,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
+                  style: greyText.copyWith(
+                    fontWeight: FontWeight.bold,
                     decoration: TextDecoration.underline,
                   ),
                   recognizer: TapGestureRecognizer()

@@ -109,7 +109,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     return AppBar(
       leading: Container(),
       title:Container(
-        width: MediaQuery.of(context).size.width/2,
+        width: MediaQuery.of(context).size.width/0.7,
           child: AutoSizeText(
             Translations.of(context).text('info_reservacion'),
             style: appbarTitle,
@@ -203,8 +203,10 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   width: (width)/1.2,
                   child: TextFormField(
                     controller: _controllerNombre,
+                    style: greyText.copyWith(fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
-                      labelText: Translations.of(context).text('nombre')
+                      labelText: Translations.of(context).text('nombre'),
+                      labelStyle: greyText.copyWith(fontWeight: FontWeight.w200),
                     ),
 
                     onChanged: (nombre){
@@ -241,8 +243,10 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   width: (width-50)/2,
                   child: TextFormField(
                     controller: _controllerCiudad,
+                    style: greyText.copyWith(fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
-                      labelText: Translations.of(context).text('ciudad')
+                      labelText: Translations.of(context).text('ciudad'),
+                      labelStyle: greyText.copyWith(fontWeight: FontWeight.w200),
                     ),
                     onChanged: (ciudad) {
 
@@ -257,8 +261,10 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   width: (width-50)/2,
                   child: TextFormField(
                     controller: _controllerCP,
+                    style: greyText.copyWith(fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
                       labelText: Translations.of(context).text('cod_postal'),
+                      labelStyle: greyText.copyWith(fontWeight: FontWeight.w200),
                     ),
                     onChanged: (cp){
 
@@ -280,37 +286,48 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   Widget _dropdownPaises(){
     return Container(
       width: (width-50)/2,
-      padding: EdgeInsets.only(top: 19, right: 10),
-      child: PaisesWidget(
-        hotel:"0",
-        valorInicial: _pais ?? "MEX",
-        change: (pais){
-          setState(() {
-            _pais = pais;
-            _result.pais = pais;
-            _result.titular.pais = pais;
-          });
-        },
+      padding: EdgeInsets.only(top: 5, right: 10),
+      child:  Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(Translations.of(context).text('pais'), style: greyText.copyWith(fontWeight: FontWeight.w200),),
+          PaisesWidget(
+            hotel:"0",
+            valorInicial: _pais ?? "MEX",
+            change: (pais){
+              setState(() {
+                _pais = pais;
+                _result.pais = pais;
+                _result.titular.pais = pais;
+              });
+            },
+          )
+        ]
       ),
     );
   }
 
   Widget _dropdownEstado(){
-    
     return Container(
       width: (width-50)/2,
-      padding: EdgeInsets.only(top: 19, right: 10),
-      child: EstadosWidget(
-        hotel:"0",
-        pais: _pais,
-        valorInicial: _estado,
-        change: (estado){
-          setState(() {
-            _estado = estado;
-            _result.estado = estado;
-            _result.titular.estado = estado;
-          });
-        },
+      padding: EdgeInsets.only(top: 5, left: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(Translations.of(context).text('estado'), style: greyText.copyWith(fontWeight: FontWeight.w200),),
+          EstadosWidget(
+            hotel:"0",
+            pais: _pais,
+            valorInicial: _estado,
+            change: (estado){
+              setState(() {
+                _estado = estado;
+                _result.estado = estado;
+                _result.titular.estado = estado;
+              });
+            },
+          )
+        ],
       ),
     );
   }
@@ -441,10 +458,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
               width: width-20,
               child: Text(
                 Translations.of(context).text('agre_info_vuelo'),
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: _blue
+                style: blueAcentText.copyWith(
+                  fontWeight: FontWeight.bold
                 ),
               ),
               decoration: boxDecorationDefault,
@@ -484,15 +499,18 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                         primaryColor: Color.fromRGBO(191, 52, 26, 1),//Head background
                         accentColor: Color.fromRGBO(191, 52, 26, 1),
                         splashColor: Color.fromRGBO(191, 52, 26, 1),
-                        primaryTextTheme: TextTheme(headline: TextStyle(color: Color.fromRGBO(191, 52, 26, 1))) ,
-                        textTheme:TextTheme(headline: TextStyle(color: Color.fromRGBO(191, 52, 26, 1))) ,
-                        accentTextTheme: TextTheme(headline: TextStyle(color: Color.fromRGBO(191, 52, 26, 1)))
+                        primaryTextTheme: TextTheme(headline: greyText.copyWith(color: Color.fromRGBO(191, 52, 26, 1),fontWeight: FontWeight.bold)) ,
+                        textTheme:TextTheme(headline:greyText.copyWith(color: Color.fromRGBO(191, 52, 26, 1),fontWeight: FontWeight.bold)) ,
+                        accentTextTheme: TextTheme(headline:greyText.copyWith(color: Color.fromRGBO(191, 52, 26, 1),fontWeight: FontWeight.bold)) 
                       ),
                       child: new Builder(
                         builder: (context) =>new TextFormField(
                           controller: _controllerFechaVuelo,
                           decoration: InputDecoration(
-                              labelText: Translations.of(context).text('fec_salida')),
+                              labelText: Translations.of(context).text('fec_salida'),
+                              labelStyle:  greyText.copyWith(fontWeight: FontWeight.w200),
+                          ),
+                          style: greyText.copyWith(fontWeight: FontWeight.bold),
                           readOnly: true,
                           onTap: () => _selectDate(context),
                         ),
@@ -504,8 +522,10 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   width: (width-30)/2,
                   child: TextFormField(
                     controller: _controllerVuelo,
+                    style: greyText.copyWith(fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
-                        labelText: Translations.of(context).text('no_vuelo')
+                        labelText: Translations.of(context).text('no_vuelo'),
+                        labelStyle: greyText.copyWith(fontWeight: FontWeight.w200)
                     ),
                     onChanged: (numeroVuelo){
                          _result.vuelos[0].vuelollegada = numeroVuelo;
@@ -555,7 +575,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         },
         child: Text(
           Translations.of(context).text('continuar'),
-          style: TextStyle(fontSize: 20.0),
+          style: TextStyle(fontSize: 20.0, fontFamily: "Montserrat"),
         ),
       )
     );

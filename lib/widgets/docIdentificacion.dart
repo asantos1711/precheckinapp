@@ -7,6 +7,7 @@ import 'package:mrzflutterplugin/mrzflutterplugin.dart';
 import 'package:precheckin/models/ScanerModel.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
+import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -46,7 +47,7 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
         children: <Widget>[
           Expanded(
             child: Text(Translations.of(context).text('doc_identificacion'),
-              style: TextStyle(color: Colors.blueAccent,fontSize: 18),
+              style: lightBlueText.copyWith(fontSize: 15),
               maxLines: 2,
               ),
           ),
@@ -59,7 +60,6 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
                 child: InkWell(
                   splashColor: Colors.grey,
                     onTap: (){
-                      //startScanning();
                       Navigator.push(
                         context,
                         PageRouteBuilder(
@@ -69,7 +69,7 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
                     },
                     child:_condicionIcono()?
                       Icon(Icons.check_circle_outline, color:Colors.green, size: 30,):
-                      Icon(Icons.camera_alt, color: Colors.blue, size: 30,)
+                      Icon(Icons.camera_alt, color: Color.fromRGBO(0, 165, 227, 1), size: 30,)
                   )
               )
             ],
@@ -80,109 +80,14 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
   }
 
   bool _condicionIcono(){
-    bool condicion =  acompaniantes.imageback!=null
-    &&acompaniantes.imagefront !=null
-    &&acompaniantes.imageback.length>10
-    &&acompaniantes.imagefront.length>10 ;
+    bool condicion =  (acompaniantes.imageback!=null
+      &&acompaniantes.imagefront !=null
+      &&acompaniantes.imagefront !=''
+      &&acompaniantes.imagefront !=''
+      )
+      &&acompaniantes.imageback.length>10
+      &&acompaniantes.imagefront.length>10 ;
     print('condicion'+condicion.toString());
     return condicion;
-  }
-
-
-  Future<void> startScanning() async {
-    String scannerResult;
-    ScanerModel res;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      Mrzflutterplugin.setIDActive(true);
-      Mrzflutterplugin.setPassportActive(true);
-      Mrzflutterplugin.setVisaActive(true);
-
-      String jsonResultString = await Mrzflutterplugin.startScanner;
-
-      Map<String, dynamic> jsonResult = jsonDecode(jsonResultString);
-      res = ScanerModel.fromJson(jsonResult);
-
-      print('====JSonSacaner===');
-      jsonResult.forEach((key, value) {
-        print('${key}-: ${value}');
-      });
-      print('===================');
-      fullImage = jsonResult['full_image'];
-        
-      scannerResult = jsonResult.toString();
-      
-      print(scannerResult);
-    } on PlatformException catch (ex) {
-      String message = ex.message;
-      scannerResult = 'Scanning failed: $message';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) {return;};
-
-    setState(() {
-      _scanerModel = res;
-      _result = scannerResult;
-      acompaniantes.documenttype = _scanerModel.documentTypeReadable;
-      acompaniantes.idcard = _scanerModel.optionals;
-    });
-    _alerta(false);
-  }
-
-
-  _alerta(bool error){
-    Alert(
-        closeFunction:(){
-          print('Se cerró la alerta');
-        } ,
-        context: context,
-        title: "Datos Escaneados",
-        content: !error ? Container(child:_containerAlert()): Container(child: Text('No se escaneo ningun documento'),),
-        buttons: [
-          DialogButton(
-            color: Colors.white,
-            onPressed: () {
-              Navigator.pop(context);
-            } ,
-            child: Text(
-              Translations.of(context).text('finalizar'),
-              style: TextStyle(color: Colors.blueAccent, fontSize: 20),
-            ),
-          )
-        ]).show();
-  }
-
-  _containerAlert(){
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: <Widget>[
-          Divider(height: 1,color: Colors.grey,),
-          TextField(
-            readOnly:true,
-            controller: new TextEditingController(text: '${_scanerModel.givenNamesReadable}'),
-            decoration: InputDecoration(labelText: Translations.of(context).text('nombre')),
-          ),
-          TextField(
-            readOnly:true,
-            controller: new TextEditingController(text: '${_scanerModel.surname}'),
-            decoration: InputDecoration(labelText: Translations.of(context).text('apellido')),
-          ),
-          TextField(
-            readOnly:true,
-            controller: new TextEditingController(text: '${_scanerModel.sex}'),
-            decoration: InputDecoration(labelText: Translations.of(context).text('sexo')),
-          ),
-          TextField(
-            readOnly:true,
-            controller: new TextEditingController(text: '${_scanerModel.documentTypeRaw}'),
-            decoration: InputDecoration(labelText: Translations.of(context).text('tipo_docu')),
-          ),
-        ],
-      ),
-    );
   }
 }

@@ -28,6 +28,7 @@
   "ciudad": "City",
   "cod_postal": "ZIP Code",
   "info_contacto": "Contact Information",
+  "info_acompanantes": "Information of companions",
   "mail": "E-mail",
   "telefono": "Phone number",
   "agre_info_vuelo": "Add Flight Information",
@@ -71,5 +72,7 @@
   "max_adultos":"You have reached the maximum of adult companions.",
   "max_menores":"You have reached the maximum number of minor companions.",
   "max_acompanantes":"You have reached the maximum number of companions.",
-  "firma_aco":"Companion Signature"
+  "firma_aco":"Companion Signature",
+  "intentar_nuevo":"Try again",
+  "pais":"Country"
 }
