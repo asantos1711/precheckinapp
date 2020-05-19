@@ -440,19 +440,19 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                     )
               ),
               Container(
-                  padding: EdgeInsets.only(left: 10),
-                  width: (width-30)/2,
-                  child: TextFormField(
-                    controller: _controllerVuelo,
-                    style: greyText.copyWith(fontWeight: FontWeight.bold),
-                    decoration: InputDecoration(
-                        labelText: Translations.of(context).text('no_vuelo'),
-                        labelStyle: greyText.copyWith(fontWeight: FontWeight.w200)
-                    ),
-                    onChanged: (numeroVuelo){
-                         _result.vuelos[0].vuelollegada = numeroVuelo;
-                    },
-                  )
+                padding: EdgeInsets.only(left: 10),
+                width: (width-30)/2,
+                child: TextFormField(
+                  controller: _controllerVuelo,
+                  style: greyText.copyWith(fontWeight: FontWeight.bold),
+                  decoration: InputDecoration(
+                      labelText: Translations.of(context).text('no_vuelo'),
+                      labelStyle: greyText.copyWith(fontWeight: FontWeight.w200)
+                  ),
+                  onChanged: (numeroVuelo){
+                        _result.vuelos[0].vuelollegada = numeroVuelo;
+                  },
+                )
               )
             ],
           ),
@@ -463,24 +463,15 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
-        context: context,
-        locale: Translations.of(context).locale,
-        initialDate: _fechaVuelo,
-        firstDate:_fechaVuelo,
-        lastDate: DateTime(2099)
-      );
-
-
+      context: context,
+      locale: Translations.of(context).locale,
+      initialDate: _fechaVuelo,
+      firstDate:_fechaVuelo,
+      lastDate: DateTime(2099)
+    );
      
     if (picked != null) {
       setState(() {
-        Locale myLocale = Localizations.localeOf(context);
-        print("$myLocale----");
-        print("${myLocale.countryCode}----");
-        print("${myLocale.languageCode}----");
-
-        //print(DateTime.parse(picked, "YYYY-MM-dd'T'HH:mm:ss.sssZ"))
-        //print();
         _fechaVuelo = picked;
         _result.vuelos[0].fechasalida = futil.fechaISO8601FromDateTime(picked);
         _controllerFechaVuelo.text ="${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}";

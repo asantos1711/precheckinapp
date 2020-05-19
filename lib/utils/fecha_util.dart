@@ -19,24 +19,12 @@ String fechaISO8601fromString(String fecha){
 
 //Convierte un objeto DateTime a un String 
 //con formato ISO-8601
-String fechaISO8601FromDateTime(DateTime fecha){
-  String fechaFormato = fecha.toIso8601String();
-  /*print("ISO: ${fecha.toIso8601String()}");
-  print("UTC: ${fecha.toUtc()}");
-  print("UTC: ${fecha.timeZoneOffset}");
-  print("UTC: ${fecha.timeZoneName}");
-  print("UTC: ${fecha.toLocal()}");*/
-  
-  if(!fechaFormato.contains('Z'))
-    fechaFormato +=  'Z';
-
-  return fechaFormato;
-}
+String fechaISO8601FromDateTime(DateTime fecha) => fecha.toIso8601String()+'-05:00';
 
 
-//Quita el formato del String de la fecha
+//Convierte un String con formato(yyy-MM-dd ????)
+//regresa un String con formato(yyy-MM-dd)
 String splitFecha(String fecha){
-
   if(fecha == null || fecha.isEmpty)
     return "";
 
