@@ -236,7 +236,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
               shape: CircleBorder(),
             )
           ),
-          Container(
+          /*Container(
             color: Colors.white,
             margin: EdgeInsets.only(top: 10, bottom: 10),
             alignment: Alignment.center,
@@ -258,7 +258,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
               padding: EdgeInsets.all(16),
               shape: CircleBorder(),
             )
-          )
+          )*/
         ],
       )
     );
