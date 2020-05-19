@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/commons/acuerdos_model.dart';
 import 'package:precheckin/models/commons/tipo_habitacion_model.dart';
@@ -35,9 +37,9 @@ class Result {
     this.idCliente,
     this.fechaCheckin,
     this.fechaCheckout,
-    this.numeroAdultos,
-    this.numeroAdolecentes,
-    this.numeroNinios,
+    this.numeroAdultos = 0,
+    this.numeroAdolecentes = 0,
+    this.numeroNinios = 0,
     this.planViaje,
     this.requerimientos,
     this.nombreTitular,
@@ -98,4 +100,7 @@ class Result {
       tipoHabitacion  : json['tipohabitacion']  != null ? TipoHabitacion.fromJson(json['tipohabitacion']) : null,
     );
   }
+
+  //Obtiene el numero total de menores
+  int getTotalMenores() => numeroAdolecentes + numeroNinios;
 }

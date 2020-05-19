@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -47,7 +46,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   bool _recibirInfoBool = true;
   bool _poliProceBool = true;
   bool _bloquear = false;
-  int cant_adultos, cant_menores;
+  bool _agregarAcompaniantes = false;
   QRPersistence _persistence = new QRPersistence();
   UserPreferences _pref;
   List<String> _qr;
@@ -71,6 +70,8 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     _reserva = this.widget.reserva;
     _result = this.widget.result;
 
+    
+
   }
 
   _botonDisable(){
@@ -81,6 +82,26 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   @override
   Widget build(BuildContext context) {
+
+    //TODO: Borrar Todo esto:
+    /*_result.numeroAdultos     = 1;
+    _result.numeroAdolecentes = 0;
+    _result.numeroNinios      = 0;
+    print("Adultos: ${_result.numeroAdultos}");
+    print("Menores: ${_result.getTotalMenores()}");
+    
+    print("Maximo Adultod: ${_result.tipoHabitacion.maxAdultos}");
+    print("Maximo Menores: ${_result.tipoHabitacion.maxMenores}");
+
+
+    if((_result.numeroAdultos < _result.tipoHabitacion.maxAdultos) || (_result.getTotalMenores() < _result.tipoHabitacion.maxMenores))
+      _agregarAcompaniantes = true;*/
+
+
+
+
+
+
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return GestureDetector(
@@ -209,6 +230,13 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   }
 
   Widget _agregarAco() {
+
+
+
+
+
+
+
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -221,9 +249,9 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
               onPressed: () {
                 setState(() {
                   //Para verificar la densidad
-                  if(_condicionAgregarAcom('0')){
+                  //if(_condicionAgregarAcom('0')){
                     _onAlertWithCustomContentPressed(context);
-                  }
+                  //}
                 });
               },
               color: Color.fromRGBO(0, 165, 227, 1),
@@ -236,29 +264,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
               shape: CircleBorder(),
             )
           ),
-          /*Container(
-            color: Colors.white,
-            margin: EdgeInsets.only(top: 10, bottom: 10),
-            alignment: Alignment.center,
-            child: MaterialButton(
-              onPressed: () {
-                setState(() {
-                  //Para verificar la densidad
-                  if(_condicionAgregarAcom('0')){
-                    _onAlertWithCustomContentPressed(context);
-                  }
-                });
-              },
-              color: Color.fromRGBO(0, 165, 227, 1),
-              textColor: Colors.white,
-              child: Icon(
-                FontAwesomeIcons.plus,
-                size: 24,
-              ),
-              padding: EdgeInsets.all(16),
-              shape: CircleBorder(),
-            )
-          )*/
         ],
       )
     );
@@ -405,19 +410,19 @@ _onAlertWithCustomContentPressed(context) {
             onPressed: () {
               setState(() {
                 
-                if(_condicionAgregarAcom(_aco.edad)){
+                //if(_condicionAgregarAcom(_aco.edad)){
                   mapControllerSiganture[_aco] =_sigController;
                   _aco.istitular = false;
                   _result.acompaniantes.add(_aco);
                   mapControllerSiganture[_aco] =_sigController;
-                }
+                //}
                 
               });
               Navigator.pop(context);
-              if(_condicionAgregarAcom(_aco.edad))
+              /*if(_condicionAgregarAcom(_aco.edad))
                 Fluttertoast(
 
-                );
+                );*/
             } ,
             child: Text(
               Translations.of(context).text('agregar'),
