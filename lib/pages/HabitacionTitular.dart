@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/pages/InformacionAdicional.dart';
 import 'package:precheckin/pages/mixins/hotel_mixin.dart';
@@ -37,16 +36,14 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   double height;
   double width;
   double space;
-  TextEditingController _controllerNombre = new TextEditingController();
-  TextEditingController _controllerCP = new TextEditingController();
-  TextEditingController _controllerCiudad = new TextEditingController();
-  TextEditingController _controllerAerolinea = new TextEditingController();
-  TextEditingController _controllerVuelo = new TextEditingController();
-  TextEditingController _controllerVueloFS = new TextEditingController();
-  TextEditingController _controllerFechaVuelo = new TextEditingController();
+  DateTime _fechaVuelo;
+  TextEditingController _controllerNombre;
+  TextEditingController _controllerCiudad;
+  TextEditingController _controllerCP;
+  TextEditingController _controllerAerolinea;
+  TextEditingController _controllerFechaVuelo;
+  TextEditingController _controllerVuelo;
 
-  //DateTime _date = DateTime.now();
-  DateTime _fechaVuelo = DateTime.now();
 
 
   AnimationController _controller;
@@ -62,10 +59,19 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     _reserva    = this.widget.reserva;  
     _result     = this.widget.result;
 
-    _controllerFechaVuelo.text = (_result.vuelos[0].fechasalida.isEmpty) 
-          ? "${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}"
-          : futil.splitFecha(_result.vuelos[0].fechasalida);
+    _controllerNombre = new TextEditingController(text:_result.titular.nombre ?? "");
+    _controllerCiudad = new TextEditingController(text: _result.titular.ciudad ?? "");
+    _controllerCP     = new TextEditingController(text: _result.codigoPostal ?? "");
 
+    _controllerAerolinea  = new TextEditingController(text: (_result.vuelos.isNotEmpty) ? (_result.vuelos[0].aerolinea1 ?? "") : "");
+    _fechaVuelo           = _result.vuelos[0].fechasalida.isNotEmpty ? DateTime.parse(_result.vuelos[0].fechasalida) : DateTime.now();
+    _controllerFechaVuelo = new TextEditingController(text: (_result.vuelos[0].fechasalida.isEmpty) 
+                                  ? "${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}" 
+                                  : futil.splitFecha(_result.vuelos[0].fechasalida));
+    _controllerVuelo      = new TextEditingController(text: _result.vuelos.isNotEmpty ?(_result.vuelos[0].vuelollegada ?? "") : "");
+
+    if(_result.vuelos[0].fechallegada.isNotEmpty)
+      _result.vuelos[0].fechallegada = futil.fechaISO8601fromString(_result.vuelos[0].fechallegada);
   }
 
 
@@ -73,27 +79,18 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
   @override
   Widget build(BuildContext context) {
-    
     _inicializarDatos();//Inicializa las variables.
 
     return Scaffold(
       backgroundColor: Colors.white,
-        appBar: _appBar(),
-        body: _body(),
-        floatingActionButton: _floatButton(),
-      );
+      appBar: _appBar(),
+      body: _body(),
+      floatingActionButton: _floatButton(),
+    );
   }
 
 
   void _inicializarDatos() {
-    
-    _controllerNombre.text    = _result.titular.nombre ?? "";
-    _controllerCP.text        = _result.codigoPostal ?? "";
-    _controllerAerolinea.text = _result.vuelos.isNotEmpty ? (_result.vuelos[0].aerolinea1 ?? "") : "";
-    _controllerCiudad.text    = _result.titular.ciudad ?? "";
-    _controllerVuelo.text     = _result.vuelos.isNotEmpty ?(_result.vuelos[0].vuelollegada ?? "") : "";
-    _controllerVueloFS.text   = _result.vuelos.isNotEmpty ? futil.splitFecha(_result.vuelos[0].fechasalida ?? "") : "";
-    _fechaVuelo               = _result.vuelos[0].fechallegada.isNotEmpty ? DateTime.parse(futil.splitFecha(_result.vuelos[0].fechallegada)) : null;
 
     _pais                     = (_pais == null) ? _result.titular.pais : _pais; //Validacion para que cambie el valor del pais
     _estado                   = (_estado == null) ? _result.estado : _estado; //Validacion para que cambie el valor del estado
@@ -134,81 +131,38 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     );
   }
 
-  
 
   Widget _seccionTitular(){
     return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical:10.0),
-      child: Column(
-        children: <Widget>[
-          _infoTitular(),
-        ]
-      ),
-    );
-  }
-
-  Widget _infoTitular(){
-    Color _blue = Color.fromARGB(255,63, 90, 166);
-    return Container(
-      margin: EdgeInsets.only( bottom: 5),
-      padding: EdgeInsets.all(10),
-      width: width,
       color: Colors.white,
-      //decoration: _decoration(),
-      alignment: Alignment.center,
+      width: double.infinity,
+      margin: EdgeInsets.all(20.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: EdgeInsets.only(bottom: 5, left:10),
-              width: width-20,
-              child: Text(
-                Translations.of(context).text('info_titular'),
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: _blue
-                ),
-              ),
-              decoration: boxDecorationDefault,
-            ),
-          ),
-          SizedBox(height: 5,),
           Container(
-            padding: EdgeInsets.only(right: 15, left:15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(right: 10),
-                  width: (width)/1.2,
-                  child: TextFormField(
-                    controller: _controllerNombre,
-                    style: greyText.copyWith(fontWeight: FontWeight.bold),
-                    decoration: InputDecoration(
-                      labelText: Translations.of(context).text('nombre'),
-                      labelStyle: greyText.copyWith(fontWeight: FontWeight.w200),
-                    ),
-
-                    onChanged: (nombre){
-                      _result.nombreTitular = nombre;
-                      _result.titular.nombre = nombre;
-
-                    },
-
-                  )
-                ),
-                
-              ],
+              decoration: boxDecorationDefault,
+              width: double.infinity,
+              child: Text(Translations.of(context).text('info_titular'), style:titulos),
+            ),
+          SizedBox(height: 5.0,),
+          Container(
+            decoration: boxDecorationDefault,
+            width: double.infinity,
+            child: TextFormField(
+              controller: _controllerNombre,
+              style: greyText.copyWith(fontWeight: FontWeight.bold),
+              decoration: InputDecoration(
+                labelText: Translations.of(context).text('nombre'),
+                labelStyle: greyText.copyWith(fontWeight: FontWeight.w200),
+              ),
+              onChanged: (nombre){
+                _result.nombreTitular = nombre;
+                _result.titular.nombre = nombre;
+              },
             )
           ),
           Container(
-            padding: EdgeInsets.only(right: 15, left:15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,11 +172,11 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                 ],
             )
           ),
+          SizedBox(height: 5,),
           Container(
-            padding: EdgeInsets.only(right: 15, left:15),
+            width: double.infinity,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(right: 10),
@@ -235,10 +189,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                       labelStyle: greyText.copyWith(fontWeight: FontWeight.w200),
                     ),
                     onChanged: (ciudad) {
-
                       _result.ciudad = ciudad;
                       _result.titular.ciudad = ciudad;
-
                     },
                   )
                 ),
@@ -253,12 +205,9 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                       labelStyle: greyText.copyWith(fontWeight: FontWeight.w200),
                     ),
                     onChanged: (cp){
-
                       _result.codigoPostal = cp;
                       _result.titular.codigoPostal = cp;
-
                     },
-
                   )
                 )
               ],
@@ -317,42 +266,22 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
       ),
     );
   }
-
-  Widget _seccionContacto(){
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal:10.0, vertical:10.0),
-      decoration: BoxDecoration(
-        color: backgroundBloqueado
-      ),
-      child: Column(
-        children: <Widget>[
-          _infoContacto(),
-        ]
-      ),
-    );
-  }
   
-  Widget _infoContacto(){
+  Widget _seccionContacto(){
     return Container(
       margin: EdgeInsets.only( bottom: 5),
       padding: EdgeInsets.all(10),
-      width: width,
-      //decoration: _decoration(),
-      alignment: Alignment.center,
+      width: double.infinity,
+      decoration: BoxDecoration(color: backgroundBloqueado),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
+          Container(
               padding: EdgeInsets.only(bottom: 5, left:10),
               width: double.infinity,
               child: Text(Translations.of(context).text('info_contacto'),style: titulos,),
               decoration: boxDecorationDefault,
             ),
-          ),
           SizedBox(height: 5,),
           Container(
             margin: EdgeInsets.only(left: 10, right: 10, top: 7),
@@ -435,7 +364,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
 
   Widget _infoVuelo(){
-    Color _blue = Color.fromARGB(255,63, 90, 166);
+    
     return Container(
       padding: EdgeInsets.all(10),
       width: width,
@@ -472,10 +401,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             child: AerolineasWidget(
               valorInicial: _controllerAerolinea.text,
               onTap: (value) {
-
                 _controllerAerolinea.text    = value;
                 _result.vuelos[0].aerolinea1 = value;
-                
               },
             ),
           ),
@@ -542,11 +469,20 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         firstDate:_fechaVuelo,
         lastDate: DateTime(2099)
       );
-    if (picked != null && picked != _fechaVuelo) {
+
+
+     
+    if (picked != null) {
       setState(() {
+        Locale myLocale = Localizations.localeOf(context);
+        print("$myLocale----");
+        print("${myLocale.countryCode}----");
+        print("${myLocale.languageCode}----");
+
+        //print(DateTime.parse(picked, "YYYY-MM-dd'T'HH:mm:ss.sssZ"))
+        //print();
         _fechaVuelo = picked;
-        print(_fechaVuelo.toString());
-        _result.vuelos[0].fechasalida = futil.splitFecha(_fechaVuelo.toString());
+        _result.vuelos[0].fechasalida = futil.fechaISO8601FromDateTime(picked);
         _controllerFechaVuelo.text ="${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}";
       });
     }

@@ -87,7 +87,6 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
       )
       &&acompaniantes.imageback.length>10
       &&acompaniantes.imagefront.length>10 ;
-    print('condicion'+condicion.toString());
     return condicion;
   }
 }

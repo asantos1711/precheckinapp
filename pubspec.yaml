@@ -37,7 +37,6 @@ dependencies:
   fluttertoast: any
   image_picker_saver: ^0.3.0
   webview_flutter: ^0.3.21
-  autocomplete_textfield: ^1.7.3
   camera: any
   path_provider:
   path:

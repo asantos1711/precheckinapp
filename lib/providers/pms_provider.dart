@@ -9,8 +9,8 @@ import 'package:precheckin/models/save_data_model.dart';
 
 /// Clase para proveer los servicios de pms
 class PMSProvider {
-  //final String _url = 'http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app';
-  final String _url = 'http://10.194.18.59:8081/GroupSunsetPMSProxyServices/app';
+  final String _url = 'http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app';
+  //final String _url = 'http://10.194.18.59:8081/GroupSunsetPMSProxyServices/app';
   final String _usr = 'apphotel';
   final String _psw = 'hotel25012018';
   
@@ -123,7 +123,7 @@ class PMSProvider {
     {
       SaveData saveModel = SaveData.fromResult(result);
       final body         = saveModel.toJson();
-      //String s = jsonEncode(body);
+      String s = jsonEncode(body);
       final response     = await http.post(
         uri, 
         headers: headers, 
