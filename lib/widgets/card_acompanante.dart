@@ -1,9 +1,11 @@
-import 'package:age/age.dart';
 import 'package:flutter/material.dart';
+import 'package:age/age.dart';
+
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/docIdentificacion.dart';
+import 'package:precheckin/utils/tools_util.dart' as tools;
 
 class CardAcompanante extends StatefulWidget {
   Color primaryColor;
@@ -48,19 +50,10 @@ class _CardAcompananteState extends State<CardAcompanante> {
   }
 
   Future<Null> _selectDate(BuildContext context) async {
-    DateTime ahora = DateTime.now();
     DateTime firstDate = DateTime(1910);
     DateTime lastDate = DateTime.now();
     DateTime initialDate = _fecaNac;
 
-    if(!widget.adultos) 
-        firstDate = DateTime(lastDate.year - 17);
-
-    
-    if(!widget.menores && widget.nuevo){
-      initialDate = DateTime(ahora.year - 18, ahora.month, ahora.day);
-      lastDate = DateTime(ahora.year - 18, ahora.month, ahora.day);
-    }
 
     final DateTime picked = await showDatePicker(
       context: context,
@@ -70,19 +63,30 @@ class _CardAcompananteState extends State<CardAcompanante> {
       lastDate: lastDate
     );
     
-    if (picked != null && picked != _date)
+    if (picked != null && picked != _date) {
+      int age = Age.dateDifference(
+        fromDate      : picked,
+        toDate        : DateTime.now(),
+        includeToDate : false
+      ).years;
+
+      if(!widget.adultos && (age >= 18)) {
+        tools.showAlert(context, Translations.of(context).text("not_more_adults"));
+        return null;
+      }
+
+      if(!widget.menores && (age < 18)) {
+        tools.showAlert(context, Translations.of(context).text("not_more_minors"));
+        return null;
+      }
+
       setState(() {
-        _fecaNac = picked;
-        _acompaniante.fechanac = picked.toString();
-        _acompaniante.edad = Age.dateDifference(
-                fromDate: _fecaNac,
-                toDate: DateTime.now(),
-                includeToDate: false)
-            .years
-            .toString();
-        _controllerFechaEdad.text =
-            "${_fecaNac.day.toString()}/${_fecaNac.month.toString()}/${_fecaNac.year.toString()}";
+        _fecaNac                  = picked;
+        _acompaniante.edad        = age.toString();
+        _acompaniante.fechanac    = picked.toString();
+        _controllerFechaEdad.text = "${_fecaNac.day.toString()}/${_fecaNac.month.toString()}/${_fecaNac.year.toString()}";
       });
+    }
   }
 
   @override

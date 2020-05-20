@@ -33,7 +33,6 @@ Widget bloqueaPantalla(bool status) {
 void showAlert(BuildContext context, String message) {
 
   showDialog(
-
       context: context,
       barrierDismissible: true,
       builder: (context){
@@ -43,7 +42,7 @@ void showAlert(BuildContext context, String message) {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(message),
+              Text(message,textAlign: TextAlign.justify,),
             ],
           ),
           actions: <Widget>[

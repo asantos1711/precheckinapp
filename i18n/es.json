@@ -84,5 +84,7 @@
   "minor_more":"  Menores mas.",
   "alert": "Alerta",
   "name_age_invalid": "El nombre y la fecha de nacimiento son parametros requeridos",
-  "scan_qr" : "escanea el codigo QR" 
+  "scan_qr" : "escanea el codigo QR",
+  "not_more_adults":"La habitación no tiene capacidad para mas adultos",
+  "not_more_minors":"La habitación no tiene capacidad para mas menores"
 }

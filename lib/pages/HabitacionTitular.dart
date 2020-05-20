@@ -462,12 +462,16 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   }
 
   Future<Null> _selectDate(BuildContext context) async {
+    DateTime firstDate = new DateTime.now();
+    DateTime lastDate = new DateTime((firstDate.year + 50), firstDate.month, firstDate.day);
+
+
     final DateTime picked = await showDatePicker(
       context: context,
       locale: Translations.of(context).locale,
       initialDate: _fechaVuelo,
-      firstDate:_fechaVuelo,
-      lastDate: DateTime(2099)
+      firstDate: firstDate,
+      lastDate: lastDate
     );
      
     if (picked != null) {

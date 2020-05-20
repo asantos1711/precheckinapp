@@ -82,5 +82,7 @@
   "minor_more":"  Minors more",
   "alert": "Alert",
   "name_age_invalid": "the name and the first date are required params",
-  "scan_qr" : "scan the QR code" 
+  "scan_qr" : "scan the QR code",
+  "not_more_adults":"This room not have capacity for more adults",
+  "not_more_minors":"This room not have capacity for more minors"
 }
