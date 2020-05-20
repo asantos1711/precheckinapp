@@ -52,8 +52,6 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
-                //alignment: Alignment.centerRight,
-                //width: (width-20)/3,
                 child: InkWell(
                   splashColor: Colors.grey,
                     onTap: (){

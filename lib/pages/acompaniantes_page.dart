@@ -145,15 +145,11 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
   }
 
   Widget _cargoExtra() {
-    String cargo = Translations.of(context).text('cargo')+''+Translations.of(context).text('cargo_valor');
+    String cargo = Translations.of(context).text('cargo');
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Icon(FontAwesomeIcons.exclamationCircle , color: Colors.red, size: 15),
-        SizedBox(width: 10.0,),
-        Text(cargo, style: TextStyle(color: Colors.red, fontSize: 15),),
-      ],
+    return ListTile(
+      leading: Icon(FontAwesomeIcons.exclamationCircle , color: Colors.red, size: 15),
+      title: Text(cargo, style: TextStyle(color: Colors.red, fontSize: 15),),
     );
   }
 

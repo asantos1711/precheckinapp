@@ -39,13 +39,11 @@ class _CardAcompananteState extends State<CardAcompanante> {
     // TODO: implement initState
     _signature = this.widget.signature;
     _acompaniante = this.widget.acompaniante;
-    print("PREFECHA NACIMIENTO ===" +_acompaniante.fechanac);
     _fecaNac = DateTime.parse(_acompaniante.fechanac.replaceAll('-', ""));
     _date = _fecaNac;
     
     //git add -_fecaNac.;
     _controllerText.text = _acompaniante?.nombre;
-    print("FECHA NACIMIENTO ===" + _fecaNac.toString());
     super.initState();
   }
 
@@ -82,8 +80,6 @@ class _CardAcompananteState extends State<CardAcompanante> {
                 includeToDate: false)
             .years
             .toString();
-        print("EDAD===" + _acompaniante.edad);
-        print("Fecha===" + "${_acompaniante.fechanac}");
         _controllerFechaEdad.text =
             "${_fecaNac.day.toString()}/${_fecaNac.month.toString()}/${_fecaNac.year.toString()}";
       });
@@ -94,7 +90,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
     width = MediaQuery.of(context).size.width;
     _controllerFechaEdad.text =
         "${_fecaNac.day.toString()}/${_fecaNac.month.toString()}/${_fecaNac.year.toString()}";
-    //_controllerFechaEdad = new TextEditingController(text: _fecaNac.toString());
+    
     return Container(
         child: Column(
       children: <Widget>[
@@ -177,12 +173,6 @@ class _CardAcompananteState extends State<CardAcompanante> {
                       child: new TextFormField(
                         style: greyText.copyWith(fontWeight: FontWeight.bold),
                         controller: _controllerFechaEdad,
-                        //decoration: InputDecoration(
-                          //hintMaxLines: 4,
-                          //labelStyle: TextStyle(fontSize: 14),
-                          //floatingLabelBehavior: FloatingLabelBehavior.always,
-                          //labelText: Translations.of(context).text('fec_nacimiento')
-                        //),
                         readOnly: true,
                         onTap: () => _selectDate(context),
                       ) 
@@ -200,7 +190,6 @@ class _CardAcompananteState extends State<CardAcompanante> {
         alignment: Alignment.centerRight,
         child: Container(
             alignment: Alignment.centerRight,
-            //width: (width-30)/2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
