@@ -1,5 +1,5 @@
 {
-  "ingrese_codigo": "Enter your access code",
+  "ingrese_codigo": "Enter your access code or",
   "ingresar": "Enter",
   "nuevo_code": "New code",
   "habitacion": "Room",
@@ -75,5 +75,12 @@
   "firma_aco":"Companion Signature",
   "invalid_storage_code" : "Your storage codes are invalid. Please capture a new code",
   "intentar_nuevo":"Try again",
-  "pais":"Country"
+  "pais":"Country",
+  "add_companion" : "Add Companion",
+  "room_capacity":"Your room have a capacity for:",
+  "adult_more":"  Adults more",
+  "minor_more":"  Minors more",
+  "alert": "Alert",
+  "name_age_invalid": "the name and the first date are required params",
+  "scan_qr" : "scan the QR code" 
 }

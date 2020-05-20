@@ -10,11 +10,16 @@ class CardAcompanante extends StatefulWidget {
   Widget signature;
   Acompaniantes acompaniante;
   TextEditingController controllerText;
+  bool adultos;
+  bool menores;
+  bool nuevo;
   CardAcompanante({
     @required this.signature,
     this.primaryColor,
     @required this.acompaniante,
-    //@required this.controllerText
+    this.adultos = true,
+    this.menores = true,
+    this.nuevo = false
   });
 
   @override
@@ -45,16 +50,32 @@ class _CardAcompananteState extends State<CardAcompanante> {
   }
 
   Future<Null> _selectDate(BuildContext context) async {
+    DateTime ahora = DateTime.now();
+    DateTime firstDate = DateTime(1910);
+    DateTime lastDate = DateTime.now();
+    DateTime initialDate = _fecaNac;
+
+    if(!widget.adultos) 
+        firstDate = DateTime(lastDate.year - 17);
+
+    
+    if(!widget.menores && widget.nuevo){
+      initialDate = DateTime(ahora.year - 18, ahora.month, ahora.day);
+      lastDate = DateTime(ahora.year - 18, ahora.month, ahora.day);
+    }
+
     final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: _fecaNac,
-        locale: Translations.of(context).locale,
-        firstDate: DateTime(1910),
-        lastDate: DateTime.now());
+      context: context,
+      locale: Translations.of(context).locale,
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate
+    );
+    
     if (picked != null && picked != _date)
       setState(() {
         _fecaNac = picked;
-        _acompaniante.fechanac = _fecaNac.toString();
+        _acompaniante.fechanac = picked.toString();
         _acompaniante.edad = Age.dateDifference(
                 fromDate: _fecaNac,
                 toDate: DateTime.now(),

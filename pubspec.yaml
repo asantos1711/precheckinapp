@@ -31,7 +31,7 @@ dependencies:
   shared_preferences: any
   signature: any
   age: ^0.0.1
-  mrzflutterplugin: any
+  mrzflutterplugin: ^0.1.3
   qr_flutter: ^3.1.0
   rflutter_alert: ^1.0.3
   fluttertoast: any
@@ -43,6 +43,7 @@ dependencies:
   camera_camera: ^1.0.31
   auto_size_text: ^2.1.0
   flutter_html: ^1.0.0
+  barcode_scan: ^3.0.1
 
 dev_dependencies:
   flutter_test:

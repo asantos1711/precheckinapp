@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:precheckin/tools/translation.dart';
 
 
 //Widget que se muestra para bloquear la pantalla
@@ -38,7 +39,7 @@ void showAlert(BuildContext context, String message) {
       builder: (context){
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text("Alerta"),
+          title: Text(Translations.of(context).text("alert")),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

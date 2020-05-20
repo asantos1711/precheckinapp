@@ -8,7 +8,7 @@ import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/utils/tools_util.dart' as tools;
-import 'package:precheckin/utils/tools_util.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 
 class CodigoAcceso extends StatefulWidget {
 
@@ -36,12 +36,12 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          imagenFondo(),
+          tools.imagenFondo(),
           SafeArea(
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  logo(),
+                  tools.logo(),
                   _textoIngresa(),
                   _textField(),
                   _ingresar(),
@@ -59,17 +59,24 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
     return Container(
       margin: EdgeInsets.only(top: 100.0),
       alignment: Alignment.center,
-      child: Text(
-        Translations.of(context).text('ingrese_codigo'), 
-        style: TextStyle(
-          fontFamily: "Montserrat",
-          color: Colors.white, 
-          fontSize: 17, 
-          fontWeight: FontWeight.w800
-        )
+      child: Column(
+        children: <Widget>[
+          Text(Translations.of(context).text('ingrese_codigo'), style: defaultCodeCapture),
+          InkWell(
+            child: Text(Translations.of(context).text('scan_qr'), style: qrCodeCapture,),
+            onTap: () async {
+              var result = await BarcodeScanner.scan();
+              if(result.rawContent.isNotEmpty){
+                _codigoController.text = result.rawContent;
+                _showReserva(context);
+              }
+            },
+          )
+        ],
       )
     );
   }
+
 
   Widget _textField(){
     return  Container(

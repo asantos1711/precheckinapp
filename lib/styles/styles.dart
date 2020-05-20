@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
 Color backgroundBloqueado = Color(0XFFF5F5F5);
 
@@ -21,6 +22,7 @@ TextStyle etiqueta = TextStyle(
 TextStyle valor = TextStyle(
   fontFamily: "Montserrat", 
   fontWeight: FontWeight.bold,
+  color: Colors.black
 )
 ;
 TextStyle greyText = TextStyle(
@@ -47,6 +49,21 @@ TextStyle titulos = TextStyle(
   color: Color.fromARGB(255,63, 90, 166)
 );
 
+
+TextStyle defaultCodeCapture = TextStyle(
+  fontFamily: "Montserrat",
+  color: Colors.white, 
+  fontSize: 17, 
+  fontWeight: FontWeight.w800
+);
+
+TextStyle qrCodeCapture = TextStyle(
+  fontFamily: "Montserrat",
+  color: Colors.black, 
+  fontSize: 17, 
+  fontWeight: FontWeight.w800,
+  decoration: TextDecoration.underline
+);
 
 
 
