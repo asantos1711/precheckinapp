@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
+import 'package:precheckin/pages/acompaniantes_page.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/providers/pms_provider.dart';
@@ -83,10 +84,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   @override
   Widget build(BuildContext context) {
 
-    //TODO: Borrar Todo esto:
-    /*_result.numeroAdultos     = 1;
-    _result.numeroAdolecentes = 0;
-    _result.numeroNinios      = 0;
+
     print("Adultos: ${_result.numeroAdultos}");
     print("Menores: ${_result.getTotalMenores()}");
     
@@ -95,7 +93,10 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
 
     if((_result.numeroAdultos < _result.tipoHabitacion.maxAdultos) || (_result.getTotalMenores() < _result.tipoHabitacion.maxMenores))
-      _agregarAcompaniantes = true;*/
+      _agregarAcompaniantes = true;
+
+      
+
 
 
 
@@ -232,12 +233,27 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   Widget _agregarAco() {
 
 
-
-
-
+    if(!_agregarAcompaniantes)
+      return Container();
 
 
     return Container(
+      margin: EdgeInsets.all(10.0),
+      alignment: Alignment.center,
+      child: MaterialButton(
+        color: Color.fromRGBO(0, 165, 227, 1),
+        textColor: Colors.white,
+        child: Icon(FontAwesomeIcons.plus,size: 24,),
+        padding: EdgeInsets.all(16),
+        shape: CircleBorder(),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AcompaniantesPage(reserva: _reserva, result: _result,))),
+      )
+    );
+
+
+
+
+    /*return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -266,7 +282,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
           ),
         ],
       )
-    );
+    );*/
   }
 
   

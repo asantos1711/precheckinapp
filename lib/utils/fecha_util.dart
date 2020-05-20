@@ -25,10 +25,15 @@ String fechaISO8601FromDateTime(DateTime fecha) => fecha.toIso8601String()+'-05:
 //Convierte un String con formato(yyy-MM-dd ????)
 //regresa un String con formato(yyy-MM-dd)
 String splitFecha(String fecha){
+  List<String> fechaAR = [];
+
   if(fecha == null || fecha.isEmpty)
     return "";
 
-  List<String> fechaAR = fecha.trim().split(" ");
+  if(fecha.contains("T"))
+    fechaAR = fecha.trim().split("T");
+  else
+    fechaAR = fecha.trim().split(" ");
 
   return (fechaAR.isNotEmpty) ? fechaAR[0] : "";
 }

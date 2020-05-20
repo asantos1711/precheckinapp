@@ -1,8 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:signature/signature.dart';
 

@@ -1,15 +1,12 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mrzflutterplugin/mrzflutterplugin.dart';
 import 'package:precheckin/models/ScanerModel.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class DocIdentificacion extends StatefulWidget {
   Acompaniantes acompaniantes;
