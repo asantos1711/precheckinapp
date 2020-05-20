@@ -29,9 +29,9 @@ class Estado{
 
   factory Estado.fromJson(Map<String, dynamic> json){
     return Estado(
-        clavepais    : json['clavepais'],
-        claveestado  : json['claveestado'],
-        nombreestado : json ['nombreestado']
+        clavepais    : json['clavepais'].toString().trim(),
+        claveestado  : json['claveestado'].toString().trim(),
+        nombreestado : json ['nombreestado'].toString().trim()
     );
   }
 

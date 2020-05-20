@@ -30,6 +30,20 @@ dependencies:
   provider: any
   shared_preferences: any
   signature: any
+  age: ^0.0.1
+  mrzflutterplugin: any
+  qr_flutter: ^3.1.0
+  rflutter_alert: ^1.0.3
+  fluttertoast: any
+  image_picker_saver: ^0.3.0
+  webview_flutter: ^0.3.21
+  camera: any
+  path_provider:
+  path:
+  camera_camera: ^1.0.31
+  auto_size_text: ^2.1.0
+  flutter_html: ^1.0.0
+  barcode_scan: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -47,6 +61,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/json/
     - i18n/en.json
     - i18n/es.json
   #  - images/a_dot_ham.jpeg
@@ -74,5 +89,9 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: fonts/Montserrat-Regular.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

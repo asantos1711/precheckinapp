@@ -1,4 +1,4 @@
-package com.example.precheckin
+package com.sunset.precheckin
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

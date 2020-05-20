@@ -1,65 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/HabitacionTitular.dart';
-import 'package:precheckin/pages/InformacionAdicional.dart';
+import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/providers/pms_provider.dart';
+import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
+import 'package:precheckin/utils/tools_util.dart' as tools;
+import 'package:barcode_scan/barcode_scan.dart';
 
 class CodigoAcceso extends StatefulWidget {
-  String language;
-  CodigoAcceso(this.language);
+
   @override
   _CodigoAccesoState createState() => _CodigoAccesoState();
+
 }
 
 class _CodigoAccesoState extends State<CodigoAcceso> {
-  final formKey = GlobalKey<FormState>();
-  double height;
-  double width;
-  double space;
-  String _language;
   TextEditingController _codigoController;
+  UserPreferences _pref;
+  PMSProvider _provider;
+  bool _bloquear = false;
 
   @override
   void initState() {
-    _language = this.widget.language;
-    _codigoController = new TextEditingController(text: "2114607",);
-
-
     super.initState();
+    _codigoController = new TextEditingController();
+    _provider         = new PMSProvider(); //Provide PMS Services
+    _pref             = new UserPreferences();
   }
 
   @override
   Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
-    space =height/6;
-
-    return Stack(
-      children: <Widget>[
-        Image.asset(
-            "assets/images/background.png",
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          tools.imagenFondo(),
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  tools.logo(),
+                  _textoIngresa(),
+                  _textField(),
+                  _ingresar(),
+                ],
+              ),
+            )
           ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          body: ListView(
-            physics: ScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-            children: <Widget>[
-              SizedBox(height: space,),
-              _logo(),
-              _bandera(),
-              _textoIngresa(),
-              _textField(),
-              _ingresar()
-          ],
-        )
+          tools.bloqueaPantalla(_bloquear),
+        ],
+      ),
+    );
+  }
+  
+  Widget _textoIngresa(){
+    return Container(
+      margin: EdgeInsets.only(top: 100.0),
+      alignment: Alignment.center,
+      child: Column(
+        children: <Widget>[
+          Text(Translations.of(context).text('ingrese_codigo'), style: defaultCodeCapture),
+          InkWell(
+            child: Text(Translations.of(context).text('scan_qr'), style: qrCodeCapture,),
+            onTap: () async {
+              var result = await BarcodeScanner.scan();
+              if(result.rawContent.isNotEmpty){
+                _codigoController.text = result.rawContent;
+                _showReserva(context);
+              }
+            },
+          )
+        ],
       )
-      ],
+    );
+  }
+
+
+  Widget _textField(){
+    return  Container(
+      margin: EdgeInsets.symmetric(vertical:40.0, horizontal:40.0),
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(255, 255, 255, 0.5),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: TextField(
+        controller: _codigoController,
+        textAlign: TextAlign.center,
+        style: greyText,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+      )
     );
   }
 
@@ -67,121 +102,47 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
     return Container(
       margin: EdgeInsets.all(20),
       alignment: Alignment.center,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          InkWell(
-            splashColor: Color.fromARGB(100, 255,255,255),
-            onTap: (){
-              _showReserva(context);
-              /* Navigator.push(
-                context,
-                PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) => InformacionAdicional(),
-                )
-              ); */
-            },
-            child: Container(
-              child: Text(
-                Translations.of(context).text('btn_ingresar'), 
-                style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800)
-              )
-            )
+      child: InkWell(
+        child: Text(
+          Translations.of(context).text('ingresar'), 
+          style: TextStyle(
+            color: Colors.white, 
+            fontFamily: "Montserrat",
+            fontSize: 21, 
+            fontWeight: FontWeight.w800
           )
-        ]
+        ),
+        onTap: () => _showReserva(context),
       )
     ); 
   }
 
   Future _showReserva(BuildContext contex) async {
-    PMSProvider provider = new PMSProvider(); //Provide PMS Services
-    Reserva infoReserva = await provider.dameReservacion(hotel: "0", idreserva: _codigoController.text);
-    Navigator.pushNamed(context, 'reserva',arguments: infoReserva.result); //Navegacion por nombre pasando argumentos.
+    _bloquearPantalla(true);
+
+    Reserva infoReserva = await _provider.dameReservacionByQR( _codigoController.text);
+    
+    _bloquearPantalla(false);
+
+    if(infoReserva == null) 
+      tools.showAlert(context, "No se encontro información");
+    else {
+      infoReserva.codigo = _codigoController.text;
+
+      if(infoReserva.ligadas.isEmpty) {
+        _pref.tieneLigadas = false;
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HabitacionTitular(reserva: infoReserva, result: infoReserva.result,)));
+      } else {
+        _pref.tieneLigadas = true;
+       Navigator.pushNamed(context, 'litaReserva', arguments: infoReserva);
+      }
+    }
   }
 
-  Widget _textField(){
-    return  Container(
-            margin: EdgeInsets.all(20),
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(100, 255, 255, 255),
-                    borderRadius:BorderRadius.circular(20),
-                  ),
-                  width: width-40,
-                  child: TextField(
-                    controller: _codigoController,
-                    textAlign: TextAlign.center,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(color: Colors.white)
-                      ),
-                    ),
-                  ),
-                )
-              ]
-            )
-          );
-  }
+  
 
-  Widget _textoIngresa(){
-    return Container(
-      margin: EdgeInsets.all(20),
-      alignment: Alignment.center,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            Translations.of(context).text('txt_ingresar'), 
-            style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w500)
-          )
-        ]
-      )
-    );
-  }
-
-  Widget _bandera(){
-    return Container(
-      margin: EdgeInsets.all(20),
-      alignment: Alignment.center,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          InkWell(
-            onTap: (){
-              Navigator.pop(context);
-            },
-            splashColor: Colors.blue.withAlpha(70),
-            child: Container(
-              margin: EdgeInsets.all(20.0),
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                shape: BoxShape.circle
-              ),
-              child: _imagenBandera(),
-            )
-          ),
-        ],
-      )
-    );
-  }
-
-  Widget _imagenBandera(){
-    if(_language == 'es')
-      return Image.asset('assets/images/mex_circle.png');
-    else if(_language == 'en')
-      return Image.asset('assets/images/usa_circle.png');
-  }
-
-  Widget _logo(){
-    return SvgPicture.asset(
-      'assets/images/sunset_logo.svg',
-      semanticsLabel: 'Acme Logo',
-      color: Colors.white,
-    );
+  void _bloquearPantalla(bool status){
+    _bloquear = status;
+      setState(() {});
   }
 }

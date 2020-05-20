@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:precheckin/tools/translation.dart';
 import 'package:signature/signature.dart';
 
 class CustomSignature extends StatefulWidget {
   SignatureController controller;
   CustomSignature({
-    this.controller
+    this.controller,
   });
 
   @override
@@ -12,7 +13,7 @@ class CustomSignature extends StatefulWidget {
 }
 
 class _CustomSignatureState extends State<CustomSignature> {
-  SignatureController _controller ;//= SignatureController(penStrokeWidth: 5, penColor: Colors.red);
+  SignatureController _controller ;
   double width;
 
   @override
@@ -21,6 +22,7 @@ class _CustomSignatureState extends State<CustomSignature> {
     _controller = this.widget.controller;
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,12 +60,23 @@ class _CustomSignatureState extends State<CustomSignature> {
               mainAxisAlignment: MainAxisAlignment.end,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
+                /* FlatButton(
+                  color: Colors.white,
+                  onPressed: () {
+                    setState(() async {
+                      var data = await _controller.toPngBytes();
+                      _acompaniantes.imagesign = base64.encode(data);
+                      debugPrint(_acompaniantes.imagesign);
+                    });
+                  },
+                  child: Text(Translations.of(context).text('guardar'))
+                ), */
                 FlatButton(
                   color: Colors.white,
                   onPressed: () {
                     setState(() => _controller.clear());
                   },
-                  child: Text('Limpiar')
+                  child: Text(Translations.of(context).text('limpiar'))
                 )
               ],
             ),

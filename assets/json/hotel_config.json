@@ -1,0 +1,71 @@
+{
+    "nombreApp" : "precheckin",
+    "hoteles_config": [
+        {
+            "id"            : "1",
+            "nombre"        : "Royal Sunset",
+            "logo"          : "",
+            "reglamento_es" : "",
+            "reglamento_en" : "",
+            "politicas_es"  : "",
+            "politicas_en"  : "",
+            "privacidad_es" : "",
+            "privacidad_en" : ""
+        },
+        {
+            "id"            : "2",
+            "nombre"        : "Sunset Marina",
+            "logo"          : "",
+            "reglamento_es" : "",
+            "reglamento_en" : "",
+            "politicas_es"  : "",
+            "politicas_en"  : "",
+            "privacidad_es" : "",
+            "privacidad_en" : ""
+        },
+        {
+            "id"            : "3",
+            "nombre"        : "Fishermen Village",
+            "logo"          : "",
+            "reglamento_es" : "",
+            "reglamento_en" : "",
+            "politicas_es"  : "",
+            "politicas_en"  : "",
+            "privacidad_es" : "",
+            "privacidad_en" : ""
+        },
+        {
+            "id"            : "4",
+            "nombre"        : "Laguna Suites",
+            "logo"          : "",
+            "reglamento_es" : "",
+            "reglamento_en" : "",
+            "politicas_es"  : "",
+            "politicas_en"  : "",
+            "privacidad_es" : "https://www.sunsetworldresorts.com/es/resorts/laguna-suites-golf-spa/politica-de-privacidad/",
+            "privacidad_en" : "https://www.sunsetworldresorts.com/resorts/laguna-suites-golf-spa/privacy-policy/"
+        },
+        {
+            "id"            : "8 Ocean Spa",
+            "nombre"        : "",
+            "logo"          : "",
+            "reglamento_es" : "",
+            "reglamento_en" : "",
+            "politicas_es"  : "",
+            "politicas_en"  : "",
+            "privacidad_es" : "",
+            "privacidad_e," : ""
+        },
+        {
+            "id"            : "9",
+            "nombre"        : "Hacienda Tres Rios",
+            "logo"          : "",
+            "reglamento_es" : "",
+            "reglamento_en" : "",
+            "politicas_es"  : "",
+            "politicas_en"  : "",
+            "privacidad_es" : "https://www.sunsetworldresorts.com/es/resorts/hacienda-tres-rios-resort-spa-nature-park/politica-de-privacidad/",
+            "privacidad_e," : "https://www.sunsetworldresorts.com/resorts/hacienda-tres-rios-resort-spa-nature-park/privacy-policy/"
+        }
+    ]
+}

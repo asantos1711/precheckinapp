@@ -1,12 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:precheckin/models/commons/acompaniantes_model.dart';
 
 import 'package:precheckin/models/reserva_model.dart';
+import 'package:precheckin/models/save_data_model.dart';
 
 
 
 /// Clase para proveer los servicios de pms
 class PMSProvider {
+  final String _url = 'http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app';
+  //final String _url = 'http://10.194.18.59:8081/GroupSunsetPMSProxyServices/app';
+  final String _usr = 'apphotel';
+  final String _psw = 'hotel25012018';
   
 
 
@@ -17,24 +23,164 @@ class PMSProvider {
   ///el número de hotel que se consulata y String [idreserva], es
   ///el identificador de la reservación a consultar.
   Future<Reserva> dameReservacion({String hotel="0", String idreserva}) async {
-    final uri      = 'http://10.194.18.59:8081/GroupSunsetPMSProxyServices/pms/dameReservacion';
-    final headers  = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8","Accept": "application/json"};
-    final  body    = { 'pnohotel': hotel, 'idreserva': idreserva };
-    Reserva reserva;
+    Reserva reserva; 
+    String uri           = '$_url/dameReservacion';
+    String authorization = 'Basic '+base64Encode(utf8.encode('$_usr:$_psw'));
 
+    Map<String, String> headers = {
+      "Content-Type"  : "application/x-www-form-urlencoded; charset=utf-8",
+      "Accept"        : "application/json",
+      "Authorization" : authorization
+    };
 
-    try {
+    Map<String, String> body = {
+      'pnohotel'  : hotel,
+      'idreserva' : "2114605"
+    };
 
-      final response = await http.post(uri, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
+    try
+    {
+      final response    = await http.post(uri, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
       final decodedData = json.decode( utf8.decode(response.bodyBytes) );
-      reserva = Reserva.formJson(decodedData);
-
-    } catch (e){
+      print(decodedData);
+      reserva           = Reserva.formJson(decodedData);
+    }
+    catch (e)
+    {
       print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
     }
-
 
     return reserva;
   }
 
+
+
+
+  ///Obtiene la información de la reservación.
+  ///
+  ///Consula al servicio dameReservacionByQrkey del PMS para obtner la información
+  ///de la reservación. Requiere de los parámetros: String [hotel], es
+  ///el número de hotel que se consulata y String [qr], es
+  ///el identificador de la reservación a consultar.
+  Future<Reserva> dameReservacionByQR(String qr) async {
+    Reserva reserva;
+    String uri           = '$_url/dameReservacionByQrkey';
+    String authorization = 'Basic '+base64Encode(utf8.encode('$_usr:$_psw'));
+
+    Map<String, String> headers = {
+      "Content-Type"  : "application/x-www-form-urlencoded; charset=utf-8",
+      "Accept"        : "application/json",
+      "Authorization" : authorization
+    };
+
+    Map<String, String> body = {
+      'qrkey': qr 
+    };
+
+    try
+    {
+      final response    = await http.post(uri, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
+      final decodedData = json.decode( utf8.decode(response.bodyBytes) );
+      reserva           = Reserva.formJson(decodedData);
+
+      if(reserva.result.titular == null)
+        reserva.result.titular = Acompaniantes.fromResult(reserva.result);
+
+
+      if(reserva.result.titular == null)
+        reserva = null;
+
+
+      if(reserva.result.status.toString().trim().toLowerCase() != "r")
+        reserva = null;
+    } 
+    catch (e)
+    {
+      print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
+    }
+
+    return reserva;
+  }
+
+
+  ///Actualiza la infromacion de la reservacion
+  ///
+  ///realiza la consulta al servicio actualizaHospedajeJson para 
+  ///actualizar los datos de la reserva requiere de parametro
+  ///[result], que es del tipo [Result]
+  Future<dynamic> actualizaHospedaje(Result result) async {
+    bool status          = true;
+    String uri           = '$_url/actualizaHospedajeJson';
+    String authorization = 'Basic '+base64Encode(utf8.encode('$_usr:$_psw'));
+
+    Map<String, String> headers = {
+      "Content-Type"  : "application/json",
+      "Accept"        : "application/json",
+      "Authorization" : authorization
+    };
+
+    try
+    {
+      SaveData saveModel = SaveData.fromResult(result);
+      final body         = saveModel.toJson();
+      String s = jsonEncode(body);
+      final response     = await http.post(
+        uri, 
+        headers: headers, 
+        body: jsonEncode(body),
+        encoding: Encoding.getByName("utf-8")
+      );
+
+      status = json.decode(response.body);
+    } 
+    catch (e)
+    {
+      print("No fue posible Guardar la información de la reservación!. Se genero la siguinte excepcion:\n$e");
+      status = false;
+    }
+    
+    return status;
+  }
+
+
+  Future<Null> validarVuelo({String carrier, String flightnumber, String fecha}) async {
+    String uri           = '$_url/isValidFligth';
+    String authorization = 'Basic '+base64Encode(utf8.encode('$_usr:$_psw'));
+    Map<String, String> headers = {
+      "Content-Type"  : "application/x-www-form-urlencoded; charset=utf-8",
+      "Accept"        : "application/json",
+      "Authorization" : authorization
+    };
+
+    Map<String, String> body = {
+      "carrier"       : carrier,
+      "flightnumber"  : flightnumber,
+      "fecha"         : fecha
+    };
+
+    try
+    {
+      final response    = await http.post(uri, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
+      final decodedData = json.decode( utf8.decode(response.bodyBytes) );
+      /*reserva           = Reserva.formJson(decodedData);
+
+      if(reserva.result.titular == null)
+        reserva.result.titular = Acompaniantes.fromResult(reserva.result);
+
+
+      if(reserva.result.titular == null)
+        reserva = null;
+
+
+      if(reserva.result.status.toString().trim().toLowerCase() != "r")
+        reserva = null;*/
+    } 
+    catch (e)
+    {
+      print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
+    }
+
+
+    return null;
+  }
 }

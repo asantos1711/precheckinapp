@@ -18,12 +18,16 @@ class Translations {
   }
 
   String text(String key) {
+    if(_localizedValues==null)
+      return '';
+
     return _localizedValues[key] ?? '** $key not found';
   }
 
   static Future<Translations> load(Locale locale) async {
     Translations translations = new Translations(locale);
     String jsonContent = await rootBundle.loadString("i18n/${locale.languageCode}.json");
+
     _localizedValues = json.decode(jsonContent);
     return translations;
   }

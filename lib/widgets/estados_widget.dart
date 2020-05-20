@@ -17,7 +17,7 @@ import 'package:precheckin/providers/estado_provider.dart';
 class EstadosWidget extends StatelessWidget {
   final String hotel;
   final String pais;
-  final String valorInicial;
+  String valorInicial;
   final Function change;
 
   EstadoProvider _provider = new EstadoProvider();
@@ -33,6 +33,7 @@ class EstadosWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return FutureBuilder(
       future: _provider.getListaEstados(hotel:hotel, pais: pais),
       builder: (BuildContext context, AsyncSnapshot<List<Estado>> snapshot) {
@@ -40,34 +41,47 @@ class EstadosWidget extends StatelessWidget {
           return Center(child: CircularProgressIndicator(),);
         
         _estados = snapshot.data;
+        valorInicial = _verificarValorInicial(valorInicial);
 
-        return _crearDropDown();
+        return DropdownButton(
+          isExpanded: true,
+          items: _getItems(),
+          value: valorInicial,
+          onChanged: change,
+        );
       },
     );
   }
 
 
-  Widget _crearDropDown() {
-    return DropdownButton(
-      isExpanded: true,
-      items: _getItems(),
-      value: valorInicial,
-      onChanged: change,
-    );
-  }
-
-  //Forma la lista de los items apartir de la lista de paises obtenida del provider
+  //Forma la lista de los items apartir de la lista de estados obtenida del provider
   List<DropdownMenuItem<String>> _getItems() {
     List<DropdownMenuItem<String>> lista = new List();
 
     _estados.forEach( (estado) {
       lista.add(DropdownMenuItem(
-        child: Text(estado.nombreestado),
-        value: estado.claveestado,
+        child: Text(estado.nombreestado ?? ''),
+        value: estado.claveestado ?? '',
       ));
     });
 
     return lista;
+  }
+
+
+  //Valida que la clve de estado que biene en valor inicial este entre los que trar e
+  //servicio de estadps.
+  String _verificarValorInicial(String val){
+    String e = "-";
+    
+    for (var i = 0; i < _estados.length; i++) {
+      if(val == _estados[i].claveestado) {
+        e = val;
+        break;
+      }
+    }
+
+    return e;
   }
 
 }

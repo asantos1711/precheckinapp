@@ -1,38 +1,49 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/pages/InformacionAdicional.dart';
-import 'package:precheckin/tools/translation.dart';
+import 'package:precheckin/pages/mixins/hotel_mixin.dart';
+import 'package:precheckin/styles/styles.dart';
 
-import 'package:precheckin/providers/pms_provider.dart';
-import 'package:precheckin/providers/estado_provider.dart';
+import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/models/reserva_model.dart';
+import 'package:precheckin/utils/fecha_util.dart' as futil;
+import 'package:precheckin/widgets/aerolinea_widget.dart';
 import 'package:precheckin/widgets/paises_widget.dart';
 import 'package:precheckin/widgets/estados_widget.dart';
 
 class HabitacionTitular extends StatefulWidget {
+  Reserva reserva;
+  Result result;
+
+  HabitacionTitular({
+    @required this.reserva,
+    @required this.result,
+  });
+
+
   @override
   _HabitacionTitularState createState() => _HabitacionTitularState();
 }
 
-class _HabitacionTitularState extends State<HabitacionTitular> with TickerProviderStateMixin{
+class _HabitacionTitularState extends State<HabitacionTitular> with TickerProviderStateMixin, HotelMixin{
 
+  Reserva _reserva;  
+  Result _result;
+  String _pais;
+  String _estado;
+  String _aerolinea;
   double height;
   double width;
   double space;
-  TextEditingController _controllerNoReservacion = new TextEditingController(text: '465');
-  TextEditingController _controllerLlegada = new TextEditingController(text: '12/11/2020');
-  TextEditingController _controllerSalida = new TextEditingController(text: '20/11/2020');
-  TextEditingController _controllerAdultos = new TextEditingController(text: '465');
-  TextEditingController _controllerAdolocentes = new TextEditingController(text: '465');
-  TextEditingController _controllerNinos = new TextEditingController(text: '465');
-  TextEditingController _controllerNombre = new TextEditingController();
-  TextEditingController _controllerPais = new TextEditingController();
-  TextEditingController _controllerEstado = new TextEditingController();
-  TextEditingController _controllerCiudad = new TextEditingController();
-  TextEditingController _controllerCP = new TextEditingController();
-  TextEditingController _controllerEmail = new TextEditingController();
-  TextEditingController _controllerTelfono = new TextEditingController();
+  DateTime _fechaVuelo;
+  TextEditingController _controllerNombre;
+  TextEditingController _controllerCiudad;
+  TextEditingController _controllerCP;
+  TextEditingController _controllerAerolinea;
+  TextEditingController _controllerFechaVuelo;
+  TextEditingController _controllerVuelo;
+
 
 
   AnimationController _controller;
@@ -40,285 +51,242 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   Map<String,String> _opcionesFloat = new  Map<String,String>();
 
 
-
-  
-  Result _infoReserva;
-
-
-
   @override
   void initState() {
     super.initState();
-    
-    _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
    
+    _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+    _reserva    = this.widget.reserva;  
+    _result     = this.widget.result;
+
+    _controllerNombre = new TextEditingController(text:_result.titular.nombre ?? "");
+    _controllerCiudad = new TextEditingController(text: _result.titular.ciudad ?? "");
+    _controllerCP     = new TextEditingController(text: _result.codigoPostal ?? "");
+
+    _controllerAerolinea  = new TextEditingController(text: (_result.vuelos.isNotEmpty) ? (_result.vuelos[0].aerolinea1 ?? "") : "");
+    _fechaVuelo           = _result.vuelos[0].fechasalida.isNotEmpty ? DateTime.parse(_result.vuelos[0].fechasalida) : DateTime.now();
+    _controllerFechaVuelo = new TextEditingController(text: (_result.vuelos[0].fechasalida.isEmpty) 
+                                  ? "${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}" 
+                                  : futil.splitFecha(_result.vuelos[0].fechasalida));
+    _controllerVuelo      = new TextEditingController(text: _result.vuelos.isNotEmpty ?(_result.vuelos[0].vuelollegada ?? "") : "");
+
+    if(_result.vuelos[0].fechallegada.isNotEmpty)
+      _result.vuelos[0].fechallegada = futil.fechaISO8601fromString(_result.vuelos[0].fechallegada);
   }
-  
 
 
 
 
   @override
   Widget build(BuildContext context) {
-    _infoReserva = ModalRoute.of(context).settings.arguments; //Obtiene la informacion que biene de los argumentos.
     _inicializarDatos();//Inicializa las variables.
 
-    _opcionesFloat["1"] = Translations.of(context).text('opcion_duda').toString();
-    _opcionesFloat["2"] = Translations.of(context).text('opcion_error').toString();
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
-
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-
-      },
-      child:Scaffold(
-        appBar: _appBar(),
-        floatingActionButton: _floatButton(),
-        body: _body(),
-      )
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: _appBar(),
+      body: _body(),
+      floatingActionButton: _floatButton(),
     );
   }
 
- 
 
   void _inicializarDatos() {
 
-    _controllerNoReservacion.text = _infoReserva.id.toString();
-    _controllerLlegada.text = _infoReserva.fechaCheckin;
-    _controllerSalida.text = _infoReserva.fechaCheckout;
-    _controllerAdultos.text = _infoReserva.numeroAdultos.toString();
-    _controllerAdolocentes.text = _infoReserva.numeroAdolecentes.toString();
-    _controllerNinos.text = _infoReserva.numeroNinios.toString();
-    _controllerNombre.text = _infoReserva.nombreTitular;
-    _controllerPais.text = _infoReserva.pais;
-    _controllerEstado.text = _infoReserva.estado;
-    _controllerCiudad.text = _infoReserva.ciudad;
-    _controllerCP.text = _infoReserva.codigoPostal;
-    _controllerEmail.text = _infoReserva.email;
-    _controllerTelfono.text = _infoReserva.telefono;
+    _pais                     = (_pais == null) ? _result.titular.pais : _pais; //Validacion para que cambie el valor del pais
+    _estado                   = (_estado == null) ? _result.estado : _estado; //Validacion para que cambie el valor del estado
+    _aerolinea                = (_aerolinea == null) ? (_result.vuelos.isNotEmpty ? (_result.vuelos[0].aerolinea1 ?? "") : "") ?? "" : _aerolinea;
 
-    _pais = (_pais == null) ? _infoReserva.pais : _pais; //Validacion para que cambie el valor del pais
-    _estado = (_estado == null) ? _infoReserva.estado : _estado; //Validacion para que cambie el valor del estado
-
-    return null;
+    _opcionesFloat["1"]       = Translations.of(context).text('opcion_duda').toString();
+    _opcionesFloat["2"]       = Translations.of(context).text('opcion_error').toString();
+    height                    = MediaQuery.of(context).size.height;
+    width                     = MediaQuery.of(context).size.width;
   }
 
-
+  Widget _appBar(){
+    return AppBar(
+      leading: Container(),
+      title:Container(
+        width: MediaQuery.of(context).size.width/0.7,
+          child: AutoSizeText(
+            Translations.of(context).text('info_reservacion'),
+            style: appbarTitle,
+            maxLines: 2,
+            maxFontSize: 25.0 ,
+            minFontSize: 5.0 ,
+          )
+        ),
+      centerTitle: true,
+    );
+  }
 
   Widget _body() {
     return ListView(
       children: <Widget>[
-        //_testPaises(),
-        //_testEstado(),
-        _numeroReservacion(),
-        _llegadaSalida(),
-        _huespedes(),
-        _tipoHabitacion(),
-        _planViaje(),
-        _requeEspeciales(),
-        _infoTitular(),
-        _infoContacto(),
-        _infoVuelo(),
+        infoReserva(context, _reserva, _result),
+        _seccionTitular(),
+        _seccionContacto(),
+        _seccionVuelo(),
         _buttonContinuar(),
-        Container( height: 30, color: Colors.white,)
       ],
     );
-
   }
 
 
-
-
-
-  /*
-  *------------------------------
-  *------------------------------
-    TEST Widget: PaiesesWidget
-  *------------------------------
-  *------------------------------
-  */
-  String _pais;
-
-  Widget _dropdownPaises(){
-    
+  Widget _seccionTitular(){
     return Container(
-      width: (width-50)/2,
-      padding: EdgeInsets.only(top: 19, right: 10),
-      child: PaisesWidget(
-        hotel:"0",
-        valorInicial: _pais,
-        change: (pais){
-          setState(() {
-            _pais = pais;
-          });
-        },
-      ),
-    );
-  }
-  /*
-  *------------------------------
-  *------------------------------
-  *------------------------------
-  *------------------------------
-  *------------------------------
-  *------------------------------
-  */
-
-  /*
-  *------------------------------
-  *------------------------------
-    TEST Widget: EstadosWidget
-  *------------------------------
-  *------------------------------
-  */
-  String _estado;
-
-  Widget _dropdownEstado(){
-    
-    return Container(
-      width: (width-50)/2,
-      padding: EdgeInsets.only(top: 19, right: 10),
-      child: EstadosWidget(
-        hotel:"0",
-        pais: _pais,
-        valorInicial: _estado,
-        change: (estado){
-          setState(() {
-            _estado = estado;
-          });
-        },
-      ),
-    );
-  }
-  /*
-  *------------------------------
-  *------------------------------
-  *------------------------------
-  *------------------------------
-  *------------------------------
-  *------------------------------
-  */
-
-
-
-
-  Widget  _buttonContinuar(){
-    return Container(
-      width: width-20,
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
       color: Colors.white,
-      child:FlatButton(
-        color: Colors.deepOrange,
-        textColor: Colors.white,
-        disabledColor: Colors.grey,
-        disabledTextColor: Colors.black,
-        padding: EdgeInsets.all(8.0),
-        splashColor: Colors.orange,
-        onPressed: () {
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-                pageBuilder: (context, animation1, animation2) => InformacionAdicional(),
-            )
-          );
-        },
-        child: Text(
-          "Continuar",
-          style: TextStyle(fontSize: 20.0),
-        ),
-      )
-    );
-  }
-
-  Widget _infoVuelo(){
-    Color _blue = Color.fromARGB(255,63, 90, 166);
-    return Container(
-      padding: EdgeInsets.all(10),
-      width: width,
-      color: Colors.white,
-      //decoration: _decoration(),
-      alignment: Alignment.center,
+      width: double.infinity,
+      margin: EdgeInsets.all(20.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: EdgeInsets.only(bottom: 5, left:10),
-              width: width-20,
-              child: Text(
-                'Agregar Información del vuelo',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: _blue
-                ),
-              ),
-              decoration: _decoration(),
+          Container(
+              decoration: boxDecorationDefault,
+              width: double.infinity,
+              child: Text(Translations.of(context).text('info_titular'), style:titulos),
             ),
+          SizedBox(height: 5.0,),
+          Container(
+            decoration: boxDecorationDefault,
+            width: double.infinity,
+            child: TextFormField(
+              controller: _controllerNombre,
+              style: greyText.copyWith(fontWeight: FontWeight.bold),
+              decoration: InputDecoration(
+                labelText: Translations.of(context).text('nombre'),
+                labelStyle: greyText.copyWith(fontWeight: FontWeight.w200),
+              ),
+              onChanged: (nombre){
+                _result.nombreTitular = nombre;
+                _result.titular.nombre = nombre;
+              },
+            )
+          ),
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _dropdownPaises(),
+                _dropdownEstado(),
+                ],
+            )
           ),
           SizedBox(height: 5,),
           Container(
-            padding: EdgeInsets.only(left: 10),
-            width: width-30,
-            child: TextFormField(
-              decoration: InputDecoration(
-                labelText: "No. De Vuelo"
-              ),
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(right: 10),
+                  width: (width-50)/2,
+                  child: TextFormField(
+                    controller: _controllerCiudad,
+                    style: greyText.copyWith(fontWeight: FontWeight.bold),
+                    decoration: InputDecoration(
+                      labelText: Translations.of(context).text('ciudad'),
+                      labelStyle: greyText.copyWith(fontWeight: FontWeight.w200),
+                    ),
+                    onChanged: (ciudad) {
+                      _result.ciudad = ciudad;
+                      _result.titular.ciudad = ciudad;
+                    },
+                  )
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 10),
+                  width: (width-50)/2,
+                  child: TextFormField(
+                    controller: _controllerCP,
+                    style: greyText.copyWith(fontWeight: FontWeight.bold),
+                    decoration: InputDecoration(
+                      labelText: Translations.of(context).text('cod_postal'),
+                      labelStyle: greyText.copyWith(fontWeight: FontWeight.w200),
+                    ),
+                    onChanged: (cp){
+                      _result.codigoPostal = cp;
+                      _result.titular.codigoPostal = cp;
+                    },
+                  )
+                )
+              ],
             )
           ),
-          Container(
-            padding: EdgeInsets.only(left: 10),
-            width: (width-30)/2,
-            child: TextFormField(
-              decoration: InputDecoration(
-                labelText: "Fecha de Salida"
-              ),
-            )
-          )
         ],
       )
     );
   }
 
+  Widget _dropdownPaises(){
+    return Container(
+      width: (width-50)/2,
+      padding: EdgeInsets.only(top: 5, right: 10),
+      child:  Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(Translations.of(context).text('pais'), style: greyText.copyWith(fontWeight: FontWeight.w200),),
+          PaisesWidget(
+            hotel:"0",
+            valorInicial: _pais ?? "MEX",
+            change: (pais){
+              setState(() {
+                _pais = pais;
+                _result.pais = pais;
+                _result.titular.pais = pais;
+              });
+            },
+          )
+        ]
+      ),
+    );
+  }
 
-  Widget _infoContacto(){
+  Widget _dropdownEstado(){
+    return Container(
+      width: (width-50)/2,
+      padding: EdgeInsets.only(top: 5, left: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(Translations.of(context).text('estado'), style: greyText.copyWith(fontWeight: FontWeight.w200),),
+          EstadosWidget(
+            hotel:"0",
+            pais: _pais,
+            valorInicial: _estado,
+            change: (estado){
+              setState(() {
+                _estado = estado;
+                _result.estado = estado;
+                _result.titular.estado = estado;
+              });
+            },
+          )
+        ],
+      ),
+    );
+  }
+  
+  Widget _seccionContacto(){
     return Container(
       margin: EdgeInsets.only( bottom: 5),
       padding: EdgeInsets.all(10),
-      width: width,
-      //decoration: _decoration(),
-      alignment: Alignment.center,
+      width: double.infinity,
+      decoration: BoxDecoration(color: backgroundBloqueado),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
+          Container(
               padding: EdgeInsets.only(bottom: 5, left:10),
-              width: width-20,
-              child: Text(
-                'Información del Contacto',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16
-                ),
-              ),
-              decoration: _decoration(),
+              width: double.infinity,
+              child: Text(Translations.of(context).text('info_contacto'),style: titulos,),
+              decoration: boxDecorationDefault,
             ),
-          ),
           SizedBox(height: 5,),
           Container(
             margin: EdgeInsets.only(left: 10, right: 10, top: 7),
             width: (width-40),
-            decoration: _decoration(),
+            decoration: boxDecorationDefault,
             alignment: Alignment.center,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -328,7 +296,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerLeft,
                   child: Container(
                     child: Text(
-                      'Correo Electronico',
+                      Translations.of(context).text('mail'),
                       style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
                       )
                   ),
@@ -337,8 +305,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    child: Text(_controllerEmail.text,
-                      style: TextStyle(fontSize: 18),
+                    child: Text(_result.email,
+                      style: TextStyle(fontSize: 15),
                     ),
                   ),
                 ),
@@ -349,7 +317,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
           Container(
             margin: EdgeInsets.only(left: 10, right: 10, top: 7),
             width: (width-40)/2,
-            decoration: _decoration(),
+            decoration:boxDecorationDefault,
             alignment: Alignment.center,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -359,7 +327,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   alignment: Alignment.centerLeft,
                   child: Container(
                     child: Text(
-                      'Teléfono',
+                      Translations.of(context).text('telefono'),
                       style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
                       )
                   ),
@@ -368,7 +336,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    child: Text(_controllerTelfono.text,
+                    child: Text(_result.telefono,
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
@@ -381,11 +349,23 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
       )
     );
   }
-
-  Widget _infoTitular(){
-    Color _blue = Color.fromARGB(255,63, 90, 166);
+  
+  Widget _seccionVuelo(){
     return Container(
-      margin: EdgeInsets.only( bottom: 5),
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical:10.0),
+      child: Column(
+        children: <Widget>[
+          _infoVuelo(),
+        ]
+      ),
+    );
+  }
+
+
+  Widget _infoVuelo(){
+    
+    return Container(
       padding: EdgeInsets.all(10),
       width: width,
       color: Colors.white,
@@ -401,434 +381,125 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
               padding: EdgeInsets.only(bottom: 5, left:10),
               width: width-20,
               child: Text(
-                'Información del Titular',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: _blue
+                Translations.of(context).text('agre_info_vuelo'),
+                style: blueAcentText.copyWith(
+                  fontWeight: FontWeight.bold
                 ),
               ),
-              decoration: _decoration(),
+              decoration: boxDecorationDefault,
             ),
           ),
           SizedBox(height: 5,),
+
+
+
+
+
           Container(
-            padding: EdgeInsets.only(right: 15, left:15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(right: 10),
-                  width: (width-50)/2,
-                  child: TextFormField(
-                    controller: _controllerNombre,
-                    decoration: InputDecoration(
-                      labelText: "Nombre"
-                    ),
-                  )
-                ),
-                Container(
+            padding: EdgeInsets.only(left: 10),
+            width: width-30,
+            child: AerolineasWidget(
+              valorInicial: _controllerAerolinea.text,
+              onTap: (value) {
+                _controllerAerolinea.text    = value;
+                _result.vuelos[0].aerolinea1 = value;
+              },
+            ),
+          ),
+
+
+
+
+          Row(
+            children: <Widget>[
+              Container(
                   padding: EdgeInsets.only(left: 10),
-                  width: (width-50)/2,
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: "Apellido"
-                    ),
-                  )
-                )
-              ],
-            )
-          ),
-          Container(
-            padding: EdgeInsets.only(right: 15, left:15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _dropdownPaises(),
-                _dropdownEstado(),
-                /* Container(
-                  padding: EdgeInsets.only(right: 10),
-                  width: (width-50)/2,
-                  child: TextFormField(
-                    controller: _controllerPais,
-                    decoration: InputDecoration(
-                      labelText: "País de residencia"
-                    ),
-                  )
-                ), */
-                /* Container(
-                  padding: EdgeInsets.only(left: 10),
-                  width: (width-50)/2,
-                  child: TextFormField(
-                    controller: _controllerEstado,
-                    decoration: InputDecoration(
-                      labelText: "Estado"
-                    ),
-                  )
-                ), */
-              ],
-            )
-          ),
-          Container(
-            padding: EdgeInsets.only(right: 15, left:15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(right: 10),
-                  width: (width-50)/2,
-                  child: TextFormField(
-                    controller: _controllerCiudad,
-                    decoration: InputDecoration(
-                      labelText: "Ciudad"
-                    ),
-                  )
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 10),
-                  width: (width-50)/2,
-                  child: TextFormField(
-                    controller: _controllerCP,
-                    decoration: InputDecoration(
-                      labelText: "Código Postal"
-                    ),
-                  )
-                )
-              ],
-            )
-          ),
-        ],
-      )
-    );
-  }
-
-  Widget _requeEspeciales(){
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
-      width: (width-40),
-      //decoration: _decoration(),
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(
-                'Requerimientos especiales',
-                style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                )
-            ),
-          ),
-          SizedBox(height: 5,),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: EdgeInsets.only(left:10),
-              child: Text(_infoReserva.requerimientos,
-                style: TextStyle(fontSize: 18),
+                  width: (width-30)/2,
+                  child: new Theme(
+                      data: ThemeData(
+                        primarySwatch: Colors.red,
+                        primaryColor: Color.fromRGBO(191, 52, 26, 1),//Head background
+                        accentColor: Color.fromRGBO(191, 52, 26, 1),
+                        splashColor: Color.fromRGBO(191, 52, 26, 1),
+                        primaryTextTheme: TextTheme(headline: greyText.copyWith(color: Color.fromRGBO(191, 52, 26, 1),fontWeight: FontWeight.bold)) ,
+                        textTheme:TextTheme(headline:greyText.copyWith(color: Color.fromRGBO(191, 52, 26, 1),fontWeight: FontWeight.bold)) ,
+                        accentTextTheme: TextTheme(headline:greyText.copyWith(color: Color.fromRGBO(191, 52, 26, 1),fontWeight: FontWeight.bold)) 
+                      ),
+                      child: new Builder(
+                        builder: (context) =>new TextFormField(
+                          controller: _controllerFechaVuelo,
+                          decoration: InputDecoration(
+                              labelText: Translations.of(context).text('fec_salida'),
+                              labelStyle:  greyText.copyWith(fontWeight: FontWeight.w200),
+                          ),
+                          style: greyText.copyWith(fontWeight: FontWeight.bold),
+                          readOnly: true,
+                          onTap: () => _selectDate(context),
+                        ),
+                      )
+                    )
               ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: EdgeInsets.only(left:10),
-              child: Text(_infoReserva.requerimientos,
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          ),
-          SizedBox(height: 5,),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              //padding: EdgeInsets.only(left:10),
-              child: Text('*Sujeto a disponibilidad',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
-              ),
-            ),
-          ),
-        ],
-      )
-    );
-  }
-
-  Widget _planViaje(){
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, top: 7, bottom: 10),
-      width: (width-40),
-      //decoration: _decoration(),
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(
-                'Plan de viaje',
-                style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
+              Container(
+                padding: EdgeInsets.only(left: 10),
+                width: (width-30)/2,
+                child: TextFormField(
+                  controller: _controllerVuelo,
+                  style: greyText.copyWith(fontWeight: FontWeight.bold),
+                  decoration: InputDecoration(
+                      labelText: Translations.of(context).text('no_vuelo'),
+                      labelStyle: greyText.copyWith(fontWeight: FontWeight.w200)
+                  ),
+                  onChanged: (numeroVuelo){
+                        _result.vuelos[0].vuelollegada = numeroVuelo;
+                  },
                 )
-            ),
+              )
+            ],
           ),
-          SizedBox(height: 5,),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: EdgeInsets.only(left:10),
-              child: Text(_infoReserva.planViaje,
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          ),
-          SizedBox(height: 5,)
         ],
       )
     );
   }
 
-  Widget _tipoHabitacion(){
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      locale: Translations.of(context).locale,
+      initialDate: _fechaVuelo,
+      firstDate:_fechaVuelo,
+      lastDate: DateTime(2099)
+    );
+     
+    if (picked != null) {
+      setState(() {
+        _fechaVuelo = picked;
+        _result.vuelos[0].fechasalida = futil.fechaISO8601FromDateTime(picked);
+        _controllerFechaVuelo.text ="${_fechaVuelo.day}/${_fechaVuelo.month}/${_fechaVuelo.year}";
+      });
+    }
+  }
+
+
+  Widget  _buttonContinuar(){
     return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, top: 7),
-      width: (width-40),
-      decoration: _decoration(),
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(
-                'Tipo de habitación',
-                style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                )
-            ),
-          ),
-          SizedBox(height: 5,),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(_infoReserva.tipoHabitacion,
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          ),
-          SizedBox(height: 5,)
-        ],
+      width: width-20,
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+      color: Colors.white,
+      child:FlatButton(
+        textColor: Colors.white,
+        disabledColor: Colors.grey,
+        disabledTextColor: Colors.black,
+        color: Theme.of(context).primaryColor,
+        padding: EdgeInsets.all(8.0),
+        splashColor: Colors.orange,
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => InformacionAdicional(reserva: _reserva, result: _result,)));
+        },
+        child: Text(
+          Translations.of(context).text('continuar'),
+          style: TextStyle(fontSize: 20.0, fontFamily: "Montserrat"),
+        ),
       )
-    );
-  }
-
-  Widget _huespedes(){
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, top: 7),
-      width: (width-40),
-      decoration: _decoration(),
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            child: Row(
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    'Huespedes',
-                    style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                  )
-                )
-              ],
-            )
-          ),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text(
-                      '${_infoReserva.numeroAdultos} Adultos',
-                      style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
-                      )
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    child: Text(
-                      '${_infoReserva.numeroAdolecentes} Adolecentes',
-                      style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
-                      )
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    child: Text(
-                      '${_infoReserva.numeroNinios} Niños',
-                      style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16),
-                      )
-                  ),
-                ),
-              ],
-            )
-          ),
-          SizedBox(height: 5,),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text(
-                      '+18',
-                      style: TextStyle(fontSize: 18),
-                      )
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    child: Text(
-                      '+12 a -18',
-                      style: TextStyle(fontSize: 18),
-                      )
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    child: Text(
-                      '-12',
-                      style: TextStyle(fontSize: 18),
-                      )
-                  ),
-                ),
-              ],
-            )
-          ),
-          SizedBox(height: 5,)
-        ],
-      )
-    );
-  }
-
-  Widget _llegadaSalida(){
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, top: 7),
-      width: (width-40),
-      decoration: _decoration(),
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text(
-                      'Llegada',
-                      style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                      )
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    child: Text(
-                      'Salida',
-                      style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                      )
-                  ),
-                ),
-              ],
-            )
-          ),
-          SizedBox(height: 5,),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text(
-                      _infoReserva.fechaCheckin,
-                      style: TextStyle(fontSize: 18),
-                      )
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    child: Text(
-                      _infoReserva.fechaCheckout,
-                      style: TextStyle(fontSize: 18),
-                      )
-                  ),
-                ),
-              ],
-            )
-          ),
-          SizedBox(height: 5,)
-        ],
-      )
-    );
-  }
-
-  Widget _numeroReservacion(){
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, top: 7),
-      width: (width-40),
-      decoration: _decoration(),
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(
-                'No. De Reservación',
-                style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),
-                )
-            ),
-          ),
-          SizedBox(height: 5,),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              child: Text(
-                _infoReserva.id.toString(),
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          ),
-          SizedBox(height: 5,)
-        ],
-      )
-    );
-  }
-
-  BoxDecoration _decoration (){
-    return BoxDecoration(
-      border: Border(bottom: BorderSide(color: Colors.grey, width: 1))
     );
   }
 
@@ -856,7 +527,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
                   child: Container(
                     padding: EdgeInsets.all(10),
                     color: Colors.white,
-                    child: Text(_opcionesFloat[(index+1).toString()], style: TextStyle(fontSize: 18, color: Colors.deepOrange),)
+                    child: Text(_opcionesFloat[(index+1).toString()], style: TextStyle(fontSize: 18, color:  Color(0xFFE87200)),)
                   ),
                 ),
           ),
@@ -886,13 +557,5 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
           ),
         ),
       );
-  }
-
-  Widget _appBar(){
-    return AppBar(
-      backgroundColor: Colors.deepOrange,
-      leading: Container(),
-      title:Text('Información de reservación') ,
-    );
   }
 }
