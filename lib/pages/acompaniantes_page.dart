@@ -30,11 +30,14 @@ class AcompaniantesPage extends StatefulWidget {
 class _AcompaniantesPageState extends State<AcompaniantesPage> {
   Reserva _reserva;
   Result _result;
-  int _maxAdutos;
-  int _maxMenores;
+  int _maxAdutos = 5;
+  int _maxMenores = 5;
   Acompaniantes _acompaniante;
   SignatureController _sigController;
   List<Acompaniantes> _listaAcompaniantes;
+  Size _size;
+  double _height;
+  double _width;
 
   @override
   void initState() {
@@ -42,8 +45,9 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
 
     _reserva            = widget.reserva;
     _result             = widget.result;
-    _maxAdutos          = _result.tipoHabitacion.maxAdultos - _result.numeroAdultos;
-    _maxMenores         = _result.tipoHabitacion.maxMenores - _result.getTotalMenores();
+    //_maxAdutos          = _result.tipoHabitacion.maxAdultos - _result.numeroAdultos;
+    //_maxMenores         = _result.tipoHabitacion.maxMenores - _result.getTotalMenores();
+    //_maxMenores         = (_maxMenores < 0) ? 0 : _maxMenores;
     _listaAcompaniantes = _result.acompaniantes;
 
     _acompaniante                 = new Acompaniantes();
@@ -62,6 +66,10 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
 
   @override
   Widget build(BuildContext context) {
+    _size   = MediaQuery.of(context).size;
+    _height = _size.height;
+    _width  = _size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(Translations.of(context).text('add_companion')),
@@ -70,7 +78,7 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
       body: SingleChildScrollView(
         child: Column(
             children: <Widget>[
-              _instruccion(),
+              _infoDensidad(),
               _firma(),
               _cargoExtra(),
               _buttonContinuar(),
@@ -81,30 +89,10 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
   }
 
 
-  Widget _instruccion(){
+  Widget _infoDensidad(){
     Text titulo = Text(Translations.of(context).text('room_capacity'), style: titulos,);
-    Widget adultos = Container();
-    Widget menores = Container();
-
-    if(_maxAdutos > 0)
-      adultos = RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(text: _maxAdutos.toString(), style: titulos,),
-            TextSpan(text: Translations.of(context).text("adult_more"), style: valor,),
-          ]
-        ),
-      );
-
-    if(_maxMenores > 0)
-      menores = RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(text: _maxMenores.toString(), style: titulos,),
-            TextSpan(text: Translations.of(context).text("minor_more"), style: valor,),
-          ]
-        ),
-      );
+    Widget adultos = _adultos();
+    Widget menores = _menores();
 
     return Container(
       width: double.infinity,
@@ -117,12 +105,111 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
           titulo,
           SizedBox(height: 10.0,),
           adultos,
-          SizedBox(height: 10.0,),
-          menores
+          menores,
         ],
       ),
     );
   }
+
+
+  /** 
+   * Mostrar la etiqueda de los adutos
+   * y el boton para incrementar el número
+   * de adutos si la densidad de la
+   * habitación lo permita
+   */
+  Widget _adultos(){
+    Widget adultos = Container();
+    Widget incrementar = Container();
+
+    if(_maxMenores >= 2)
+      incrementar = IconButton(
+        icon: Icon(Icons.add_circle_outline, color:Colors.green),
+        splashColor: Colors.white,
+        onPressed: () async {
+          if(await tools.confimarAccion(context, Translations.of(context).text('add_adult_alert'))){
+            setState(() {
+              _maxAdutos++;
+              _maxMenores = _maxMenores-2;
+            });
+          }
+        },
+      );
+
+    if(_maxAdutos > 0 || _maxMenores >= 2) {
+      adultos = Container(
+        height: 35.0,
+        width: _width*0.5,
+        child: Row(
+          children: <Widget>[
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(text: _maxAdutos.toString(), style: titulos,),
+                  TextSpan(text: Translations.of(context).text("adult_more"), style: valor,),
+                ]
+              ),
+            ),
+            Expanded(child: Container(),),
+            incrementar
+          ],
+        ),
+      );
+    }
+
+    return adultos;
+  }
+
+
+  /** 
+   * Mostrar la etiqueda de los adutos
+   * y el boton para incrementar el número
+   * de adutos si la densidad de la
+   * habitación lo permita
+  */
+  Widget _menores(){
+    Widget menores = Container();
+    Widget incrementar = Container();
+
+    if(_maxAdutos > 0)
+      incrementar = IconButton(
+        icon: Icon(Icons.add_circle_outline, color:Colors.blue),
+        splashColor: Colors.white,
+        onPressed: () async {
+          if(await tools.confimarAccion(context, Translations.of(context).text('add_minor_alert'))){
+            setState(() {
+              _maxMenores++;
+              _maxAdutos--;
+            });
+          }
+        },
+      );
+
+    if(_maxAdutos > 0 || _maxMenores > 0)
+      menores = Container(
+        height: 35.0,
+        width: _width * 0.5,
+        child: Row(
+          children: <Widget>[
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(text: _maxMenores.toString(), style: titulos,),
+                  TextSpan(text: Translations.of(context).text("minor_more"), style: valor,),
+                ]
+              ),
+            ),
+            Expanded(child: Container(),),
+            incrementar
+          ],
+        ),
+      );
+
+    return menores;
+  }
+
+
+  
 
 
 

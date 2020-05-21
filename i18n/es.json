@@ -42,6 +42,7 @@
   "limpiar": "Limpiar",
   "cancel":"Cancelar",
   "change":"Cambiar",
+  "confirm":"Confirmar",
   "doc_identificacion": "Documento de identificación",
   "acompanantes": "Acompañantes",
   "fec_nacimiento": "Fecha de nacimiento",
@@ -86,5 +87,7 @@
   "name_age_invalid": "El nombre y la fecha de nacimiento son parametros requeridos",
   "scan_qr" : "escanea el codigo QR",
   "not_more_adults":"La habitación no tiene capacidad para mas adultos",
-  "not_more_minors":"La habitación no tiene capacidad para mas menores"
+  "not_more_minors":"La habitación no tiene capacidad para mas menores",
+  "add_adult_alert":"Esta acción necesita 2 espacios de menores.",
+  "add_minor_alert":"Esta acción necesita 1 espacios de adultos."
 }

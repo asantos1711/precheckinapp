@@ -17,15 +17,23 @@ class Acuerdos {
     this.idcliente       = 0,
   });
 
-  factory Acuerdos.fromJson(Map<String, dynamic> json){
-    return Acuerdos(
-      politicas       : json['estacuest']  ?? 0,
-      promociones     : json['estacuprom'] ?? 0,
-      reglamento      : json['estacureg']  ?? 0,
-      avisoPrivacidad : json['estavipriv'] ?? 0,
-      estobjdes       : json['estobjdes']  ?? 0,
-      estsanamb       : json['estsanamb']  ?? 0,
-      idcliente       : json['idcliente']  ?? 0,
-    );
-  }
+  factory Acuerdos.fromJson(Map<String, dynamic> json) => Acuerdos(
+    politicas       : json['estacuest']  ?? 0,
+    promociones     : json['estacuprom'] ?? 0,
+    reglamento      : json['estacureg']  ?? 0,
+    avisoPrivacidad : json['estavipriv'] ?? 0,
+    estobjdes       : json['estobjdes']  ?? 0,
+    estsanamb       : json['estsanamb']  ?? 0,
+    idcliente       : json['idcliente']  ?? 0,
+  );
+
+  Map<String,dynamic> toJson() => {
+    'estacuest'  : politicas,
+    'estacuprom' : promociones,
+    'estacureg'  : reglamento,
+    'estavipriv' : avisoPrivacidad,
+    'estobjdes'  : estobjdes,
+    'estsanamb'  : estsanamb,
+    'idcliente'  : idcliente,
+  };
 }

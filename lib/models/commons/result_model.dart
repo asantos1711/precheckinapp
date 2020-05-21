@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/commons/acuerdos_model.dart';
 import 'package:precheckin/models/commons/tipo_habitacion_model.dart';
