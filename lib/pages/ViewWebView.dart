@@ -2,15 +2,11 @@ import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html_textview_render/html_text_view.dart';
 import 'package:precheckin/models/commons/politicas_model.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/html_parser.dart';
-import 'package:flutter_html/style.dart';
 
 
 
@@ -99,8 +95,15 @@ class _ViewWebViewState extends State<ViewWebView> {
 
   Widget _contenido(){
     return Container(
+      padding: EdgeInsets.all(10),
       alignment: Alignment.center,
-      child: Html(
+      child: HtmlTextView(
+        data: dataHtml,
+      )
+
+    );
+  }
+  /* Html(
         data: dataHtml,
         style: {
           "div": Style(
@@ -113,9 +116,7 @@ class _ViewWebViewState extends State<ViewWebView> {
     //              color: Colors.white,
           ),
         }
-      )
-    );
-  }
+      ) */
 
   _appBar(){
     String _t = title[0].toUpperCase()+title.substring(1);
