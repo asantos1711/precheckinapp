@@ -71,6 +71,17 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     _qr = _persistence.qr;
     _reserva = this.widget.reserva;
     _result = this.widget.result;
+
+    //Promoción
+    _reserva.result.acuerdos.promociones = 1;
+    //Aviso de privacidad
+    _reserva.result.acuerdos.avisoPrivacidad = 1;
+    //Reglamento
+    _reserva.result.acuerdos.reglamento = 1;
+    //Ploiticas y procesos
+    _reserva.result.acuerdos.estsanamb = 1;
+    _reserva.result.acuerdos.estobjdes = 1;
+    _reserva.result.acuerdos.politicas = 1;
   }
 
   _botonDisable(){
