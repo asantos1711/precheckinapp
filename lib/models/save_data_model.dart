@@ -1,6 +1,7 @@
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/commons/result_model.dart';
 import 'package:precheckin/models/commons/vuelos_model.dart';
+import 'package:precheckin/models/commons/acuerdos_model.dart';
 import 'package:precheckin/utils/fecha_util.dart' as futil;
 
 
@@ -56,6 +57,7 @@ class Rh {
   String estado;
   String cpsocio;
   String usuarioregistro;
+  Acuerdos acuerdos;
   List<Vecaco> vecaco;
   List<Vuelos> vuelos;
 
@@ -73,6 +75,7 @@ class Rh {
       this.estado,
       this.cpsocio,
       this.usuarioregistro,
+      this.acuerdos,
       this.vecaco,
       this.vuelos,
   });
@@ -98,6 +101,7 @@ class Rh {
       estado          : result.estado,
       cpsocio         : result.codigoPostal,
       usuarioregistro : "JDELGADO",
+      acuerdos        : result.acuerdos,
       vecaco          : vecacos,
       vuelos          : result.vuelos,
     );
@@ -117,6 +121,7 @@ class Rh {
     "estado": estado,
     "cpsocio": cpsocio,
     "usuarioregistro": usuarioregistro,
+    "tarreg": acuerdos.toJson(),
     "vecaco": List<dynamic>.from(vecaco.map((x) => x.toJson())),
     "vuelos": List<dynamic>.from(vuelos.map((v) => v.toJson())),
   };

@@ -1,9 +1,11 @@
-import 'package:age/age.dart';
 import 'package:flutter/material.dart';
+import 'package:age/age.dart';
+
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/docIdentificacion.dart';
+import 'package:precheckin/utils/tools_util.dart' as tools;
 
 class CardAcompanante extends StatefulWidget {
   Color primaryColor;
@@ -39,30 +41,19 @@ class _CardAcompananteState extends State<CardAcompanante> {
     // TODO: implement initState
     _signature = this.widget.signature;
     _acompaniante = this.widget.acompaniante;
-    print("PREFECHA NACIMIENTO ===" +_acompaniante.fechanac);
     _fecaNac = DateTime.parse(_acompaniante.fechanac.replaceAll('-', ""));
     _date = _fecaNac;
     
     //git add -_fecaNac.;
     _controllerText.text = _acompaniante?.nombre;
-    print("FECHA NACIMIENTO ===" + _fecaNac.toString());
     super.initState();
   }
 
   Future<Null> _selectDate(BuildContext context) async {
-    DateTime ahora = DateTime.now();
     DateTime firstDate = DateTime(1910);
     DateTime lastDate = DateTime.now();
     DateTime initialDate = _fecaNac;
 
-    if(!widget.adultos) 
-        firstDate = DateTime(lastDate.year - 17);
-
-    
-    if(!widget.menores && widget.nuevo){
-      initialDate = DateTime(ahora.year - 18, ahora.month, ahora.day);
-      lastDate = DateTime(ahora.year - 18, ahora.month, ahora.day);
-    }
 
     final DateTime picked = await showDatePicker(
       context: context,
@@ -72,21 +63,30 @@ class _CardAcompananteState extends State<CardAcompanante> {
       lastDate: lastDate
     );
     
-    if (picked != null && picked != _date)
+    if (picked != null && picked != _date) {
+      int age = Age.dateDifference(
+        fromDate      : picked,
+        toDate        : DateTime.now(),
+        includeToDate : false
+      ).years;
+
+      if(!widget.adultos && (age >= 18)) {
+        tools.showAlert(context, Translations.of(context).text("not_more_adults"));
+        return null;
+      }
+
+      if(!widget.menores && (age < 18)) {
+        tools.showAlert(context, Translations.of(context).text("not_more_minors"));
+        return null;
+      }
+
       setState(() {
-        _fecaNac = picked;
-        _acompaniante.fechanac = picked.toString();
-        _acompaniante.edad = Age.dateDifference(
-                fromDate: _fecaNac,
-                toDate: DateTime.now(),
-                includeToDate: false)
-            .years
-            .toString();
-        print("EDAD===" + _acompaniante.edad);
-        print("Fecha===" + "${_acompaniante.fechanac}");
-        _controllerFechaEdad.text =
-            "${_fecaNac.day.toString()}/${_fecaNac.month.toString()}/${_fecaNac.year.toString()}";
+        _fecaNac                  = picked;
+        _acompaniante.edad        = age.toString();
+        _acompaniante.fechanac    = picked.toString();
+        _controllerFechaEdad.text = "${_fecaNac.day.toString()}/${_fecaNac.month.toString()}/${_fecaNac.year.toString()}";
       });
+    }
   }
 
   @override
@@ -94,7 +94,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
     width = MediaQuery.of(context).size.width;
     _controllerFechaEdad.text =
         "${_fecaNac.day.toString()}/${_fecaNac.month.toString()}/${_fecaNac.year.toString()}";
-    //_controllerFechaEdad = new TextEditingController(text: _fecaNac.toString());
+    
     return Container(
         child: Column(
       children: <Widget>[
@@ -177,12 +177,6 @@ class _CardAcompananteState extends State<CardAcompanante> {
                       child: new TextFormField(
                         style: greyText.copyWith(fontWeight: FontWeight.bold),
                         controller: _controllerFechaEdad,
-                        //decoration: InputDecoration(
-                          //hintMaxLines: 4,
-                          //labelStyle: TextStyle(fontSize: 14),
-                          //floatingLabelBehavior: FloatingLabelBehavior.always,
-                          //labelText: Translations.of(context).text('fec_nacimiento')
-                        //),
                         readOnly: true,
                         onTap: () => _selectDate(context),
                       ) 
@@ -200,7 +194,6 @@ class _CardAcompananteState extends State<CardAcompanante> {
         alignment: Alignment.centerRight,
         child: Container(
             alignment: Alignment.centerRight,
-            //width: (width-30)/2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

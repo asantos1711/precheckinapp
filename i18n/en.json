@@ -42,6 +42,7 @@
   "limpiar": "Clear",
   "cancel":"Cancel",
   "change":"Change",
+  "confirm":"Confirm",
   "doc_identificacion": "ID",
   "acompanantes": "Companion",
   "fec_nacimiento": "Date of birth",
@@ -51,7 +52,7 @@
   "aviso_privacidad": "Privacy Policy.",
   "recibir_info": "I agree to receive information and promotions from my Vacation Club electronically and/or by phone.",
   "finalizar": "Finish",
-  "cargo": "This request has a $",
+  "cargo": "This request will generate extra charges",
   "cargo_valor": "USD charge",
   "agregar": "Add",
   "selec_tipo_doc": "Select one type of ID.",
@@ -82,5 +83,9 @@
   "minor_more":"  Minors more",
   "alert": "Alert",
   "name_age_invalid": "the name and the first date are required params",
-  "scan_qr" : "scan the QR code" 
+  "scan_qr" : "scan the QR code",
+  "not_more_adults":"This room not have capacity for more adults",
+  "not_more_minors":"This room not have capacity for more minors",
+  "add_adult_alert":"This action needs 2 spaces of minors.",
+  "add_minor_alert":"This action needs 1 spaces of adults."
 }

@@ -91,7 +91,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
 
   void _inicializarDatos() {
-
     _pais                     = (_pais == null) ? _result.titular.pais : _pais; //Validacion para que cambie el valor del pais
     _estado                   = (_estado == null) ? _result.estado : _estado; //Validacion para que cambie el valor del estado
     _aerolinea                = (_aerolinea == null) ? (_result.vuelos.isNotEmpty ? (_result.vuelos[0].aerolinea1 ?? "") : "") ?? "" : _aerolinea;
@@ -101,6 +100,9 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     height                    = MediaQuery.of(context).size.height;
     width                     = MediaQuery.of(context).size.width;
   }
+
+
+
 
   Widget _appBar(){
     return AppBar(
@@ -120,6 +122,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   }
 
   Widget _body() {
+   // test();
     return ListView(
       children: <Widget>[
         infoReserva(context, _reserva, _result),
@@ -131,24 +134,28 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     );
   }
 
+  /*Future test() async {
+    AerolineaProvider p = AerolineaProvider();
+    p.getVuelos(DateTime.now());
+  }*/
+
 
   Widget _seccionTitular(){
     return Container(
       color: Colors.white,
-      width: double.infinity,
-      margin: EdgeInsets.all(20.0),
+      padding: EdgeInsets.all(20.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
-              decoration: boxDecorationDefault,
-              width: double.infinity,
-              child: Text(Translations.of(context).text('info_titular'), style:titulos),
-            ),
+            width: double.infinity,
+            decoration: boxDecorationDefault,
+            child: Text(Translations.of(context).text('info_titular'), style:titulos),
+          ),
           SizedBox(height: 5.0,),
           Container(
-            decoration: boxDecorationDefault,
             width: double.infinity,
+            decoration: boxDecorationDefault,
             child: TextFormField(
               controller: _controllerNombre,
               style: greyText.copyWith(fontWeight: FontWeight.bold),
@@ -227,7 +234,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         children: [
           Text(Translations.of(context).text('pais'), style: greyText.copyWith(fontWeight: FontWeight.w200),),
           PaisesWidget(
-            hotel:"0",
+            hotel:_result.idClub.toString() ?? '0',
             valorInicial: _pais ?? "MEX",
             change: (pais){
               setState(() {
@@ -251,7 +258,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         children: [
           Text(Translations.of(context).text('estado'), style: greyText.copyWith(fontWeight: FontWeight.w200),),
           EstadosWidget(
-            hotel:"0",
+            hotel:_result.idClub.toString() ?? '0',
             pais: _pais,
             valorInicial: _estado,
             change: (estado){
@@ -462,12 +469,16 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   }
 
   Future<Null> _selectDate(BuildContext context) async {
+    DateTime firstDate = new DateTime.now();
+    DateTime lastDate = new DateTime((firstDate.year + 50), firstDate.month, firstDate.day);
+
+
     final DateTime picked = await showDatePicker(
       context: context,
       locale: Translations.of(context).locale,
       initialDate: _fechaVuelo,
-      firstDate:_fechaVuelo,
-      lastDate: DateTime(2099)
+      firstDate: firstDate,
+      lastDate: lastDate
     );
      
     if (picked != null) {

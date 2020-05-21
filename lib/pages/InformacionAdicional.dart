@@ -65,14 +65,12 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   @override
   void initState() {
     super.initState();
+
     _pref = new UserPreferences();
     _controller.addListener((){});
     _qr = _persistence.qr;
     _reserva = this.widget.reserva;
     _result = this.widget.result;
-
-    
-
   }
 
   _botonDisable(){
@@ -85,12 +83,12 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   Widget build(BuildContext context) {
 
 
-    print("Adultos: ${_result.numeroAdultos}");
+   /* print("Adultos: ${_result.numeroAdultos}");
     print("Menores: ${_result.getTotalMenores()}");
     
     print("Maximo Adultod: ${_result.tipoHabitacion.maxAdultos}");
     print("Maximo Menores: ${_result.tipoHabitacion.maxMenores}");
-
+*/
 
     if((_result.numeroAdultos < _result.tipoHabitacion.maxAdultos) || (_result.getTotalMenores() < _result.tipoHabitacion.maxMenores))
       _agregarAcompaniantes = true;

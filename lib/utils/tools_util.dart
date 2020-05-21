@@ -33,7 +33,6 @@ Widget bloqueaPantalla(bool status) {
 void showAlert(BuildContext context, String message) {
 
   showDialog(
-
       context: context,
       barrierDismissible: true,
       builder: (context){
@@ -43,7 +42,7 @@ void showAlert(BuildContext context, String message) {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(message),
+              Text(message,textAlign: TextAlign.justify,),
             ],
           ),
           actions: <Widget>[
@@ -81,5 +80,39 @@ Widget logo() {
           semanticsLabel: 'Acme Logo',
           color: Colors.white,
         ),
+    );
+  }
+
+///Muestra una alerta para confirmar una acción,
+///
+///Este Future requiere de el contexto[context] en que se
+///esta operando y el String [contenido] que se quiere mostrar
+///en la alerta. Regresa un [bool] como respuesta,
+Future<bool> confimarAccion(BuildContext context, String contenido) async {
+    return await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context){
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          title: Text(Translations.of(context).text("alert")),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(contenido, textAlign: TextAlign.justify),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () => Navigator.of(context).pop(true), 
+              child: Text(Translations.of(context).text('confirm'))
+            ),
+            FlatButton(
+              onPressed: () => Navigator.of(context).pop(false), 
+              child: Text(Translations.of(context).text('cancel'), style: TextStyle(color: Theme.of(context).primaryColor),)
+            ),
+          ],
+        );
+      }
     );
   }

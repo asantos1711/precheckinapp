@@ -170,19 +170,15 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
                 decoration: _decoration(),
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
+                    ListTile(
+                      title: Text(
                         Translations.of(context).text(doc.name),
                         style: greyText.copyWith(fontWeight: FontWeight.w700),
                       ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
+                      trailing: InkWell(
                         onTap:(){
                             nameItem = doc.name;
                             idItem = item;

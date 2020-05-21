@@ -27,7 +27,7 @@ class PaisProvider{
       listaPaises = paises.pais;
 
     } catch (e){
-      print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
+      print("No fue posible obtener la lista de paises!. Se genero la siguinte excepcion:\n$e");
     }
 
     return listaPaises;
