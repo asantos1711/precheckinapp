@@ -571,6 +571,7 @@ _idDocument () async {
       _result = scannerResult;
       acompaniantes.documenttype = _scanerModel.documentTypeReadable??'';
       acompaniantes.imagefront = _scanerModel?.full_image ??'';
+      acompaniantes.imageback = _scanerModel?.portrait ??'';
       acompaniantes.nombre = _scanerModel.givenNamesReadable;
 
       log('imagefront: ${acompaniantes.imagefront}');
