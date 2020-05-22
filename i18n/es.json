@@ -1,5 +1,5 @@
 {
-  "ingrese_codigo": "Ingrese su código de acceso o",
+  "ingrese_codigo": "Ingrese su código de acceso",
   "ingresar": "Ingresar",
   "nuevo_code": "Nuevo Código",
   "habitacion": "Habitación",
@@ -89,5 +89,7 @@
   "not_more_adults":"La habitación no tiene capacidad para mas adultos",
   "not_more_minors":"La habitación no tiene capacidad para mas menores",
   "add_adult_alert":"Esta acción necesita 2 espacios de menores.",
-  "add_minor_alert":"Esta acción necesita 1 espacios de adultos."
+  "add_minor_alert":"Esta acción necesita 1 espacios de adultos.",
+  "invalid_date_adult_alert": "La fecha seleccionada debe ser igual o mayor a 18 años.",
+  "invalid_date_minor_alert": "La fecha seleccionada debe ser menor de 18 años."
 }

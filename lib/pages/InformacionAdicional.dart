@@ -94,14 +94,11 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   Widget build(BuildContext context) {
 
 
-   /* print("Adultos: ${_result.numeroAdultos}");
-    print("Menores: ${_result.getTotalMenores()}");
+    print("Adultos: ${_result.getTotalAdultos()}, Densidad: ${_result.tipoHabitacion.maxAdultos}");
+    print("Menores: ${_result.getTotalMenores()}, Densidad: ${_result.tipoHabitacion.maxMenores}");
     
-    print("Maximo Adultod: ${_result.tipoHabitacion.maxAdultos}");
-    print("Maximo Menores: ${_result.tipoHabitacion.maxMenores}");
-*/
 
-    if((_result.numeroAdultos < _result.tipoHabitacion.maxAdultos) || (_result.getTotalMenores() < _result.tipoHabitacion.maxMenores))
+    if((_result.getTotalAdultos() < _result.tipoHabitacion.maxAdultos) || (_result.getTotalMenores() < _result.tipoHabitacion.maxMenores))
       _agregarAcompaniantes = true;
 
       

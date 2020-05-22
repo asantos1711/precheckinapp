@@ -35,7 +35,6 @@ class _ViewWebViewState extends State<ViewWebView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     politicas = this.widget.politicas;
     valor = this.widget.valor;
     title = this.widget.title;
