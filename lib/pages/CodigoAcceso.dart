@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/HabitacionTitular.dart';
@@ -59,21 +60,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
     return Container(
       margin: EdgeInsets.only(top: 100.0),
       alignment: Alignment.center,
-      child: Column(
-        children: <Widget>[
-          Text(Translations.of(context).text('ingrese_codigo'), style: defaultCodeCapture),
-          InkWell(
-            child: Text(Translations.of(context).text('scan_qr'), style: qrCodeCapture,),
-            onTap: () async {
-              var result = await BarcodeScanner.scan();
-              if(result.rawContent.isNotEmpty){
-                _codigoController.text = result.rawContent;
-                _showReserva(context);
-              }
-            },
-          )
-        ],
-      )
+      child: Text(Translations.of(context).text('ingrese_codigo'), style: defaultCodeCapture)
     );
   }
 
@@ -90,6 +77,17 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
         textAlign: TextAlign.center,
         style: greyText,
         decoration: InputDecoration(
+          suffixIcon: IconButton(
+            icon:FaIcon(FontAwesomeIcons.qrcode, color: Colors.black,),
+            onPressed: () async {
+              FocusScope.of(context).requestFocus(new FocusNode());
+              var result = await BarcodeScanner.scan();
+              if(result.rawContent.isNotEmpty){
+                _codigoController.text = result.rawContent;
+                _showReserva(context);
+              }
+            },
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
           ),

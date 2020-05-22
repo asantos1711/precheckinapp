@@ -28,7 +28,7 @@ class EstadoProvider {
       listaEstados = estados.estado;
 
     } catch (e){
-      print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
+      print("No fue posible obtener la lista de estados!. Se genero la siguinte excepcion:\n$e");
     }
 
     return listaEstados;

@@ -15,13 +15,17 @@ class CardAcompanante extends StatefulWidget {
   bool adultos;
   bool menores;
   bool nuevo;
+  bool equivalenciaAdultos;
+  bool equivalenciaMenores;
   CardAcompanante({
     @required this.signature,
     this.primaryColor,
     @required this.acompaniante,
     this.adultos = true,
     this.menores = true,
-    this.nuevo = false
+    this.nuevo = false,
+    this.equivalenciaAdultos = false,
+    this.equivalenciaMenores = false
   });
 
   @override
@@ -38,7 +42,6 @@ class _CardAcompananteState extends State<CardAcompanante> {
   TextEditingController _controllerFechaEdad = new TextEditingController();
   @override
   void initState() {
-    // TODO: implement initState
     _signature = this.widget.signature;
     _acompaniante = this.widget.acompaniante;
     _fecaNac = DateTime.parse(_acompaniante.fechanac.replaceAll('-', ""));
@@ -70,11 +73,26 @@ class _CardAcompananteState extends State<CardAcompanante> {
         includeToDate : false
       ).years;
 
+      
+      if(widget.equivalenciaAdultos && (age < 18)){
+        //TODO: parametrizar la edad
+        tools.showAlert(context, Translations.of(context).text("invalid_date_adult_alert"));
+        return null;
+      }
+
+      if(widget.equivalenciaMenores && (age >= 18)){
+        //TODO: parametrizar la edad
+        tools.showAlert(context, Translations.of(context).text("invalid_date_minor_alert"));
+        return null;
+      }
+
+      //TODO: parametrizar la edad
       if(!widget.adultos && (age >= 18)) {
         tools.showAlert(context, Translations.of(context).text("not_more_adults"));
         return null;
       }
 
+      //TODO: parametrizar la edad
       if(!widget.menores && (age < 18)) {
         tools.showAlert(context, Translations.of(context).text("not_more_minors"));
         return null;

@@ -27,6 +27,7 @@ class Acompaniantes{
   bool istitular;
   String estado;
   String codigoPostal;
+  bool agregadoPorEquivalencia; //Variable que determina si se agrego por la equivalencia en la dencidad del cuerto
 
   Acompaniantes({
     this.club,
@@ -55,6 +56,7 @@ class Acompaniantes{
     this.istitular = false,
     this.estado = '',
     this.codigoPostal = '',
+    this.agregadoPorEquivalencia = false
   });
 
   factory Acompaniantes.fromJson(Map<String,dynamic> json){

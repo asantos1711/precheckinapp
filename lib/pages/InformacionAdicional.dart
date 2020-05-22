@@ -65,14 +65,23 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   @override
   void initState() {
     super.initState();
+
     _pref = new UserPreferences();
     _controller.addListener((){});
     _qr = _persistence.qr;
     _reserva = this.widget.reserva;
     _result = this.widget.result;
 
-    
-
+    //Promoción
+    _reserva.result.acuerdos.promociones = 1;
+    //Aviso de privacidad
+    _reserva.result.acuerdos.avisoPrivacidad = 1;
+    //Reglamento
+    _reserva.result.acuerdos.reglamento = 1;
+    //Ploiticas y procesos
+    _reserva.result.acuerdos.estsanamb = 1;
+    _reserva.result.acuerdos.estobjdes = 1;
+    _reserva.result.acuerdos.politicas = 1;
   }
 
   _botonDisable(){
@@ -85,14 +94,11 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   Widget build(BuildContext context) {
 
 
-    print("Adultos: ${_result.numeroAdultos}");
-    print("Menores: ${_result.getTotalMenores()}");
+    print("Adultos: ${_result.getTotalAdultos()}, Densidad: ${_result.tipoHabitacion.maxAdultos}");
+    print("Menores: ${_result.getTotalMenores()}, Densidad: ${_result.tipoHabitacion.maxMenores}");
     
-    print("Maximo Adultod: ${_result.tipoHabitacion.maxAdultos}");
-    print("Maximo Menores: ${_result.tipoHabitacion.maxMenores}");
 
-
-    if((_result.numeroAdultos < _result.tipoHabitacion.maxAdultos) || (_result.getTotalMenores() < _result.tipoHabitacion.maxMenores))
+    if((_result.getTotalAdultos() < _result.tipoHabitacion.maxAdultos) || (_result.getTotalMenores() < _result.tipoHabitacion.maxMenores))
       _agregarAcompaniantes = true;
 
       

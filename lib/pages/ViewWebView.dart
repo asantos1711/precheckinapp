@@ -34,7 +34,6 @@ class _ViewWebViewState extends State<ViewWebView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     politicas = this.widget.politicas;
     valor = this.widget.valor;
     title = this.widget.title;
@@ -95,28 +94,13 @@ class _ViewWebViewState extends State<ViewWebView> {
 
   Widget _contenido(){
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(20),
       alignment: Alignment.center,
-      child: HtmlTextView(
+      child:HtmlTextView(
         data: dataHtml,
       )
-
     );
   }
-  /* Html(
-        data: dataHtml,
-        style: {
-          "div": Style(
-            /* block: Block(
-              margin: EdgeInsets.all(16),
-              border: Border.all(width: 6),
-              backgroundColor: Colors.grey,
-            ), */
-            fontSize: FontSize(15),
-    //              color: Colors.white,
-          ),
-        }
-      ) */
 
   _appBar(){
     String _t = title[0].toUpperCase()+title.substring(1);

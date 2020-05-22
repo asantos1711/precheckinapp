@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/commons/acuerdos_model.dart';
 import 'package:precheckin/models/commons/tipo_habitacion_model.dart';
@@ -14,6 +12,8 @@ class Result {
   int numeroAdultos;
   int numeroAdolecentes;
   int numeroNinios;
+  int adultosPorEquivalencia; //Para Guardar el número le lugares ocupados al hacer la equivalencias
+  int menoresPorEquivalencia; //Para Guardar el número le lugares ocupados al hacer la equivalencias
   String planViaje;
   String requerimientos;
   String nombreTitular;
@@ -40,6 +40,8 @@ class Result {
     this.numeroAdultos = 0,
     this.numeroAdolecentes = 0,
     this.numeroNinios = 0,
+    this.adultosPorEquivalencia = 0,
+    this.menoresPorEquivalencia = 0,
     this.planViaje,
     this.requerimientos,
     this.nombreTitular,
@@ -102,5 +104,8 @@ class Result {
   }
 
   //Obtiene el numero total de menores
-  int getTotalMenores() => numeroAdolecentes + numeroNinios;
+  int getTotalMenores() => numeroAdolecentes + numeroNinios + menoresPorEquivalencia;
+
+  //Obtiene el total de los adultos
+  int getTotalAdultos() => numeroAdultos + adultosPorEquivalencia;
 }
