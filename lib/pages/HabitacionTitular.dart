@@ -150,7 +150,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
           Container(
             width: double.infinity,
             decoration: boxDecorationDefault,
-            child: Text(Translations.of(context).text('info_titular'), style:titulos),
+            child: Text(Translations.of(context).text('info_titular'), style:titulos.copyWith(fontSize: 20)),
           ),
           SizedBox(height: 5.0,),
           Container(
@@ -158,7 +158,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
             decoration: boxDecorationDefault,
             child: TextFormField(
               controller: _controllerNombre,
-              style: greyText.copyWith(fontWeight: FontWeight.bold),
+              style: greyText.copyWith(fontWeight: FontWeight.bold, fontSize: 15),
               decoration: InputDecoration(
                 labelText: Translations.of(context).text('nombre'),
                 labelStyle: greyText.copyWith(fontWeight: FontWeight.w200),

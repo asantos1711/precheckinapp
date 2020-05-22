@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 
 import 'package:precheckin/widgets/qr_widget.dart';
@@ -101,7 +102,7 @@ class _VerQRState extends State<VerQR> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 14.0),
       child: RaisedButton(
-          child: Text(Translations.of(context).text('nuevo_code'),textAlign: TextAlign.center,),
+          child: Text(Translations.of(context).text('nuevo_code'),textAlign: TextAlign.center,style: greyText.copyWith(color: Colors.black),),
           shape: StadiumBorder(),
           color: Color.fromRGBO(255, 255, 255, 0.5),
           elevation: 12.0,

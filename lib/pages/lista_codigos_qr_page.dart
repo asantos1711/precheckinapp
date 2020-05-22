@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:precheckin/styles/styles.dart';
 
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/utils/tools_util.dart';
@@ -44,7 +45,7 @@ class ListaCodigosQR extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical:14.0),
       child: RaisedButton(
-        child: Text( Translations.of(context).text('nuevo_code') ), 
+        child: Text( Translations.of(context).text('nuevo_code') ,style: greyText,), 
         shape: StadiumBorder(),
         color: Color.fromRGBO(255, 255, 255, 0.5),
         elevation: 12.0,

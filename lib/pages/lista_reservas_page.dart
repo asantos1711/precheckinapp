@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:precheckin/models/commons/result_model.dart';
 
@@ -38,7 +39,16 @@ class _ListaReservasState extends State<ListaReservas> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title:Text(Translations.of(context).text('reservation_list')),
+        title:Container(
+        width: MediaQuery.of(context).size.width/2,
+          child: AutoSizeText(
+            Translations.of(context).text('reservation_list'),
+            style: appbarTitle,
+            maxLines: 2,
+            maxFontSize: 25.0 ,
+            minFontSize: 5.0 ,
+          )
+        )
       ),
       body: Container(
         margin: EdgeInsets.all(10.0),
@@ -77,9 +87,9 @@ class _ListaReservasState extends State<ListaReservas> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(_model.nombreHotel),
-            Text(res.nombreTitular ?? ""),
-            Text("No. ${res?.idReserva}"),
+            Text(_model.nombreHotel,style: greyText.copyWith(color: Colors.black),),
+            Text(res.nombreTitular ?? "",style: greyText.copyWith(color: Colors.black)),
+            Text("No. ${res?.idReserva}",style: greyText.copyWith(color: Colors.black)),
           ],
         ),
         trailing: procesado ? iconChecked : null,
@@ -108,7 +118,9 @@ class _ListaReservasState extends State<ListaReservas> {
         },
         child: Text(
           Translations.of(context).text('finalizar'),
-          style: TextStyle(fontSize: 20.0),
+          style: greyText.copyWith(
+            color: _enableButton == false ? Colors.black : Colors.white,
+            fontSize: 20.0),
         ),
       ));
   }
