@@ -3,56 +3,22 @@ import 'package:http/http.dart' as http;
 
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/models/save_data_model.dart';
-import 'package:precheckin/models/commons/acompaniantes_model.dart';
+import 'package:precheckin/providers/configuracion_provider.dart';
 
 
 
-/// Clase para proveer los servicios de pms
 class PMSProvider {
-  final String _url = 'http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app';
-  //final String _url = 'http://10.194.18.59:8081/GroupSunsetPMSProxyServices/app';
-  final String _usr = 'apphotel';
-  final String _psw = 'hotel25012018';
+  ConfiguracionProvider _provider;
+  Configuracion _config;
+  String _usr;
+  String _psw;
   
-
-
-
-  ///Obtiene la información de la reservación.
-  ///
-  ///Consula al servicio dameReservacion del PMS para obtner la información
-  ///de la reservación. Requiere de los parámetros: String [hotel], es
-  ///el número de hotel que se consulata y String [idreserva], es
-  ///el identificador de la reservación a consultar.
-  Future<Reserva> dameReservacion({String hotel="0", String idreserva}) async {
-    Reserva reserva; 
-    String uri           = '$_url/dameReservacion';
-    String authorization = 'Basic '+base64Encode(utf8.encode('$_usr:$_psw'));
-
-    Map<String, String> headers = {
-      "Content-Type"  : "application/x-www-form-urlencoded; charset=utf-8",
-      "Accept"        : "application/json",
-      "Authorization" : authorization
-    };
-
-    Map<String, String> body = {
-      'pnohotel'  : hotel,
-      'idreserva' : "2114605"
-    };
-
-    try
-    {
-      final response    = await http.post(uri, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
-      final decodedData = json.decode( utf8.decode(response.bodyBytes) );
-      reserva           = Reserva.formJson(decodedData);
-    }
-    catch (e)
-    {
-      print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
-    }
-
-    return reserva;
+  PMSProvider(){
+    _provider = ConfiguracionProvider();
+    _config   = _provider?.configuracion;
+    _usr      = _config?.usrServices;
+    _psw      = _config?.pswServices;
   }
-
 
 
 
@@ -64,7 +30,7 @@ class PMSProvider {
   ///el identificador de la reservación a consultar.
   Future<Reserva> dameReservacionByQR(String qr) async {
     Reserva reserva;
-    String uri           = '$_url/dameReservacionByQrkey';
+    String uri           = _config?.getReservationServiceUrl;
     String authorization = 'Basic '+base64Encode(utf8.encode('$_usr:$_psw'));
 
     Map<String, String> headers = {
@@ -77,25 +43,18 @@ class PMSProvider {
       'qrkey': qr 
     };
 
-    try
-    {
+    try {
+      uri= "http://10.194.18.59:8081/GroupSunsetPMSProxyServices/app/dameReservacionByQrkey";
       final response    = await http.post(uri, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
       final decodedData = json.decode( utf8.decode(response.bodyBytes) );
       reserva           = Reserva.formJson(decodedData);
 
       if(reserva.result.titular == null)
-        reserva.result.titular = Acompaniantes.fromResult(reserva.result);
-
-
-      if(reserva.result.titular == null)
         reserva = null;
-
 
       if(reserva.result.status.toString().trim().toLowerCase() != "r")
         reserva = null;
-    } 
-    catch (e)
-    {
+    }  catch (e) {
       print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
     }
 
@@ -112,7 +71,7 @@ class PMSProvider {
   ///[result], que es del tipo [Result]
   Future<dynamic> actualizaHospedaje(Result result) async {
     bool status          = true;
-    String uri           = '$_url/actualizaHospedajeJson';
+    String uri           = _config?.updateReservationServiceUrl;
     String authorization = 'Basic '+base64Encode(utf8.encode('$_usr:$_psw'));
 
     Map<String, String> headers = {
@@ -121,8 +80,7 @@ class PMSProvider {
       "Authorization" : authorization
     };
 
-    try
-    {
+    try {
       SaveData saveModel = SaveData.fromResult(result);
       final body         = saveModel.toJson();
       String s = jsonEncode(body);
@@ -134,14 +92,11 @@ class PMSProvider {
       );
 
       status = json.decode(response.body);
-    } 
-    catch (e)
-    {
+    }  catch (e) {
       print("No fue posible Guardar la información de la reservación!. Se genero la siguinte excepcion:\n$e");
       status = false;
     }
     
     return status;
   }  
-
 }
