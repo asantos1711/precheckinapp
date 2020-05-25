@@ -44,7 +44,6 @@ class PMSProvider {
     };
 
     try {
-      uri= "http://10.194.18.59:8081/GroupSunsetPMSProxyServices/app/dameReservacionByQrkey";
       final response    = await http.post(uri, headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
       final decodedData = json.decode( utf8.decode(response.bodyBytes) );
       reserva           = Reserva.formJson(decodedData);

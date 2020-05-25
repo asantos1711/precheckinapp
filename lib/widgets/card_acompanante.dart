@@ -15,8 +15,6 @@ class CardAcompanante extends StatefulWidget {
   bool adultos;
   bool menores;
   bool nuevo;
-  bool equivalenciaAdultos;
-  bool equivalenciaMenores;
   CardAcompanante({
     @required this.signature,
     this.primaryColor,
@@ -24,8 +22,6 @@ class CardAcompanante extends StatefulWidget {
     this.adultos = true,
     this.menores = true,
     this.nuevo = false,
-    this.equivalenciaAdultos = false,
-    this.equivalenciaMenores = false
   });
 
   @override
@@ -72,31 +68,19 @@ class _CardAcompananteState extends State<CardAcompanante> {
         toDate        : DateTime.now(),
         includeToDate : false
       ).years;
-
       
-      if(widget.equivalenciaAdultos && (age < 18)){
-        //TODO: parametrizar la edad
-        tools.showAlert(context, Translations.of(context).text("invalid_date_adult_alert"));
-        return null;
-      }
-
-      if(widget.equivalenciaMenores && (age >= 18)){
-        //TODO: parametrizar la edad
-        tools.showAlert(context, Translations.of(context).text("invalid_date_minor_alert"));
-        return null;
-      }
-
       //TODO: parametrizar la edad
-      if(!widget.adultos && (age >= 18)) {
+      if(widget.adultos && age >= 18){
         tools.showAlert(context, Translations.of(context).text("not_more_adults"));
         return null;
       }
 
       //TODO: parametrizar la edad
-      if(!widget.menores && (age < 18)) {
+      if(widget.menores && age < 18){
         tools.showAlert(context, Translations.of(context).text("not_more_minors"));
         return null;
       }
+      
 
       setState(() {
         _fecaNac                  = picked;
