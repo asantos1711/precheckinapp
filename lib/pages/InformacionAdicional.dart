@@ -93,21 +93,11 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   @override
   Widget build(BuildContext context) {
 
-
-    print("Adultos: ${_result.getTotalAdultos()}, Densidad: ${_result.tipoHabitacion.maxAdultos}");
-    print("Menores: ${_result.getTotalMenores()}, Densidad: ${_result.tipoHabitacion.maxMenores}");
-    
+    /*print("Adultos: ${_result.getTotalAdultos()}, Densidad: ${_result.tipoHabitacion.maxAdultos}");
+    print("Menores: ${_result.getTotalMenores()}, Densidad: ${_result.tipoHabitacion.maxMenores}");*/
 
     if((_result.getTotalAdultos() < _result.tipoHabitacion.maxAdultos) || (_result.getTotalMenores() < _result.tipoHabitacion.maxMenores))
       _agregarAcompaniantes = true;
-
-      
-
-
-
-
-
-
 
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
@@ -148,11 +138,8 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
                 ],
               ),
               tools.bloqueaPantalla(_bloquear)
-
             ],
           )
-          
-          
         ));
   }
 
@@ -255,40 +242,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AcompaniantesPage(reserva: _reserva, result: _result,))),
       )
     );
-
-
-
-
-    /*return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Container(
-            color: Colors.white,
-            margin: EdgeInsets.only(top: 10, bottom: 10),
-            alignment: Alignment.center,
-            child: MaterialButton(
-              onPressed: () {
-                setState(() {
-                  //Para verificar la densidad
-                  //if(_condicionAgregarAcom('0')){
-                    _onAlertWithCustomContentPressed(context);
-                  //}
-                });
-              },
-              color: Color.fromRGBO(0, 165, 227, 1),
-              textColor: Colors.white,
-              child: Icon(
-                FontAwesomeIcons.plus,
-                size: 24,
-              ),
-              padding: EdgeInsets.all(16),
-              shape: CircleBorder(),
-            )
-          ),
-        ],
-      )
-    );*/
   }
 
   

@@ -2,9 +2,17 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:precheckin/models/estados_model.dart';
+import 'package:precheckin/providers/configuracion_provider.dart';
 
 
 class EstadoProvider {
+  ConfiguracionProvider _provider;
+  Configuracion _config;
+
+  EstadoProvider(){
+    _provider = new ConfiguracionProvider();
+    _config = _provider?.configuracion;
+  }
 
 
   ///Provee una lista de Estados
@@ -16,7 +24,7 @@ class EstadoProvider {
   Future<List<Estado>> getListaEstados( {String hotel, String pais = "COL"} ) async {
     List<Estado> listaEstados = [];
     Estados estados;
-    final uri      = 'http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/pms/getListaEstados';
+    final uri      = _config?.listaEstadosServiceUrl;
     final headers  = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8","Accept": "application/json"};
     final body     = { 'nohotel': hotel, "pais" : pais };
 

@@ -1,32 +1,23 @@
 import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' as http;
 import 'package:precheckin/persitence/qr_persistence.dart';
+import 'package:precheckin/providers/configuracion_provider.dart';
 
 class _QRProvider{
-  QRPersistence _persitence = new QRPersistence();
+  QRPersistence _persitence;
   List<dynamic> codigos = [];
-  final String _url = 'http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app';
-  final String _usr = 'apphotel';
-  final String _psw = 'hotel25012018';
+  ConfiguracionProvider _provider;
+  Configuracion _config;
+  String _usr;
+  String _psw;
 
-
-
-
-  ///Método para carga el contenido del archivo de de codigos_qr
-  ///
-  ///Regresa un [Future] con una lista de [dynamic].
-  Future<List<dynamic>> cargarCodigos() async {
-    final resp = await rootBundle.loadString("assets/json/codigos_qr.json"); //Carga el contenido del archivo como string
-
-    Map dataMap = json.decode(resp); //Trasforma cargado a un mapa
-    codigos = dataMap["codigos"];  //Toma el contenido de las rutas del mapa generado
-    _setPersistenceQR(dataMap["codigos"]);
-
-    return codigos;
+  _QRProvider(){
+    _persitence = new QRPersistence();
+    _provider = new ConfiguracionProvider();
+    _config   = _provider?.configuracion;
+    _usr      = _config?.usrServices;
+    _psw      = _config?.pswServices;
   }
-
-
 
 
   ///Validar Códigos almacenados
@@ -35,7 +26,7 @@ class _QRProvider{
   ///para validar los codigos que se encuentran almacenados
   ///en el dispositivo
   Future<List<dynamic>> validarCodigos() async {
-    String uri           = '$_url/validaQrkeyTransaccJson';
+    String uri           = _config?.validityCodesServiceUrl;
     String authorization = 'Basic '+base64Encode(utf8.encode('$_usr:$_psw'));
 
     Map<String, String> headers = {

@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -30,6 +29,8 @@ class AcompaniantesPage extends StatefulWidget {
 class _AcompaniantesPageState extends State<AcompaniantesPage> {
   Reserva _reserva;
   Result _result;
+  int _totalAdultos;
+  int _totalMenores;
   int _maxAdultos;
   int _maxMenores;
   Acompaniantes _acompaniante;
@@ -37,8 +38,6 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
   List<Acompaniantes> _listaAcompaniantes;
   Size _size;
   double _width;
-  bool _verIncrementarAdultosBtn = true;
-  bool _verIncrementarMenoresBtn = true;
 
   @override
   void initState() {
@@ -46,10 +45,15 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
 
     _reserva            = widget.reserva;
     _result             = widget.result;
-    _maxAdultos         = _result.tipoHabitacion.maxAdultos - _result.getTotalAdultos();
-    _maxMenores         = _result.tipoHabitacion.maxMenores - _result.getTotalMenores();
-    _maxAdultos         = (_maxAdultos < 0) ? 0 : _maxAdultos;
-    _maxMenores         = (_maxMenores < 0) ? 0 : _maxMenores;
+    _totalAdultos       = _result.tipoHabitacion.maxAdultos - _result.getTotalAdultos();
+    _totalMenores       = _result.tipoHabitacion.maxMenores - _result.getTotalMenores();
+    _totalAdultos       = (_totalAdultos < 0) ? 0 : _totalAdultos;
+    _totalMenores       = (_totalMenores < 0) ? 0 : _totalMenores;
+    _maxAdultos         = _totalAdultos + ((_totalMenores > 0) ? _totalMenores ~/ 2 : 0);
+    _maxMenores         = _totalMenores + _totalAdultos;
+
+
+
     _listaAcompaniantes = _result.acompaniantes;
 
     _acompaniante                 = new Acompaniantes();
@@ -97,8 +101,26 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
    */
   Widget _infoDensidad(){
     Text titulo = Text(Translations.of(context).text('room_capacity'), style: titulos,);
-    Widget adultos = _adultos();
-    Widget menores = _menores();
+
+    TextSpan totalAdultos    = new TextSpan(text: '');
+    TextSpan etiquetaAdulos  = new TextSpan(text: '');
+    TextSpan totalMenores    = new TextSpan(text: '');
+    TextSpan etiquetaMenores = new TextSpan(text: '');
+    TextSpan or              = TextSpan(text:'');
+
+    if(_maxAdultos > 0){
+      totalAdultos    = new TextSpan(text: _maxAdultos.toString(),style: titulos);
+      etiquetaAdulos  = new TextSpan(text: Translations.of(context).text("adult_more"), style: valor);
+    }
+
+    if(_maxMenores > 0){
+      totalMenores    = new TextSpan(text: _maxMenores.toString(),style: titulos);
+      etiquetaMenores = TextSpan(text: Translations.of(context).text("minor_more"), style: valor);
+    }
+
+    if(_maxAdultos > 0 && _maxMenores >0 )
+      or = TextSpan(text: " ${Translations.of(context).text('or')} ", style: valor);
+
 
     return Container(
       width: double.infinity,
@@ -110,142 +132,21 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
         children: <Widget>[
           titulo,
           SizedBox(height: 10.0,),
-          adultos,
-          menores,
+          RichText(
+            text: TextSpan(
+              children: [
+                totalAdultos,
+                etiquetaAdulos,
+                or,
+                totalMenores,
+                etiquetaMenores,
+              ]
+            ),
+          )
         ],
       ),
     );
   }
-
-
-  /** 
-   * Mostrar la etiqueda de los adutos
-   * y el boton para incrementar el número
-   * de adutos si la densidad de la
-   * habitación lo permita
-   */
-  Widget _adultos(){
-    Widget adultos = Container();
-    Widget incrementar = Container();
-
-    //Condición para mostrar el botón de incrementar adultos.
-    if(_maxAdultos <= 0 &&_maxMenores >= 2 && _verIncrementarAdultosBtn == true && _verIncrementarMenoresBtn == true)
-      incrementar = IconButton(
-        icon: Icon(Icons.add_circle_outline, color:Colors.green),
-        splashColor: Colors.white,
-        onPressed: () async {
-          if(await tools.confimarAccion(context, Translations.of(context).text('add_adult_alert'))){
-            setState(() {
-              _maxAdultos++;
-              _maxMenores = _maxMenores-2;
-              _verIncrementarAdultosBtn = false;
-            });
-          }
-        },
-      );
-
-    //Mostrar el botón de cancelar acción de incrementar adultos
-    if(_verIncrementarAdultosBtn == false)
-      incrementar = IconButton(
-        icon: Icon(Icons.replay, color: Colors.red,),
-        splashColor: Colors.white,
-        onPressed: (){
-          setState(() {
-            _maxAdultos--;
-            _maxMenores = _maxMenores + 2;
-            _verIncrementarAdultosBtn = true;
-          });
-        },
-      );
-
-    if(_maxAdultos > 0 || _maxMenores >= 2) {
-      adultos = Container(
-        height: 35.0,
-        width: _width*0.5,
-        child: Row(
-          children: <Widget>[
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(text: _maxAdultos.toString(), style: titulos,),
-                  TextSpan(text: Translations.of(context).text("adult_more"), style: valor,),
-                ]
-              ),
-            ),
-            Expanded(child: Container(),),
-            incrementar
-          ],
-        ),
-      );
-    }
-
-    return adultos;
-  }
-
-
-  /** 
-   * Mostrar la etiqueda de los adutos
-   * y el boton para incrementar el número
-   * de adutos si la densidad de la
-   * habitación lo permita
-  */
-  Widget _menores(){
-    Widget menores = Container();
-    Widget incrementar = Container();
-
-    if(_maxMenores <=0 && _maxAdultos > 0 && _verIncrementarMenoresBtn == true &&  _verIncrementarAdultosBtn == true)
-      incrementar = IconButton(
-        icon: Icon(Icons.add_circle_outline, color:Colors.blue),
-        splashColor: Colors.white,
-        onPressed: () async {
-          if(await tools.confimarAccion(context, Translations.of(context).text('add_minor_alert'))){
-            setState(() {
-              _maxMenores++;
-              _maxAdultos--;
-              _verIncrementarMenoresBtn = false;
-            });
-          }
-        },
-      );
-
-    //Mostrar el botón de cancelar acción de incrementar menores
-    if(_verIncrementarMenoresBtn == false)
-      incrementar = IconButton(
-        icon: Icon(Icons.replay, color: Colors.red,),
-        splashColor: Colors.white,
-        onPressed: (){
-          setState(() {
-            _maxMenores--;
-            _maxAdultos++;
-            _verIncrementarMenoresBtn = true;
-          });
-        },
-      );
-
-
-    if(_maxAdultos > 0 || _maxMenores > 0)
-      menores = Container(
-        height: 35.0,
-        width: _width * 0.5,
-        child: Row(
-          children: <Widget>[
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(text: _maxMenores.toString(), style: titulos,),
-                  TextSpan(text: Translations.of(context).text("minor_more"), style: valor,),
-                ]
-              ),
-            ),
-            Expanded(child: Container(),),
-            incrementar
-          ],
-        ),
-      );
-
-    return menores;
-  }
-
 
 
   /**
@@ -259,11 +160,9 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
       padding: EdgeInsets.all(5.0),
       child: CardAcompanante(
         acompaniante: _acompaniante,
-        adultos: (_maxAdultos > 0) ? true : false,
-        menores: ( _maxMenores > 0) ? true : false,
+        adultos: !(_maxAdultos > 0),
+        menores: !( _maxMenores > 0),
         nuevo: true,
-        equivalenciaAdultos: !_verIncrementarAdultosBtn,
-        equivalenciaMenores: !_verIncrementarMenoresBtn,
         signature: CustomSignature(
           controller: _sigController,
         ),
@@ -316,37 +215,23 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
   void _saveData(){
     int edad = int.parse(_acompaniante.edad);
 
-
-    print("Age: ${edad}");
-    print("Incrementar Adultos: ${!_verIncrementarAdultosBtn}");
-    print("Incrementar Menores: ${!_verIncrementarMenoresBtn}");
-
-    //return;
-
-    if(edad >= 18){
+    if(edad >= 18) {
       _result.numeroAdultos = _result.numeroAdultos + 1;
-      
-      if(!_verIncrementarAdultosBtn)
-        _result.menoresPorEquivalencia = _result.menoresPorEquivalencia + 2;
-    }
-    
-    if(edad >= 12 && edad < 18){
+
+      if(_totalAdultos <= 0)
+        _result.menoresPorEquivalencia = _result.menoresPorEquivalencia + 2 ;
+    } else if(edad >= 12 && edad < 18){
       _result.numeroAdolecentes = _result.numeroAdolecentes + 1;
 
-      if(!_verIncrementarMenoresBtn)
+      if(_totalMenores <= 0)
+        _result.adultosPorEquivalencia = _result.adultosPorEquivalencia + 1;
+    } else if(edad < 12){
+      _result.numeroNinios = _result.numeroNinios + 1;
+
+      if(_totalMenores <= 0)
         _result.adultosPorEquivalencia = _result.adultosPorEquivalencia + 1;
     }
-    
-    if(edad < 12){
-        _result.numeroNinios = _result.numeroNinios + 1;
-
-      if(!_verIncrementarMenoresBtn)
-        _result.adultosPorEquivalencia = _result.adultosPorEquivalencia + 1;
-
-    }
-
-    _acompaniante.agregadoPorEquivalencia = (!_verIncrementarAdultosBtn || !_verIncrementarMenoresBtn) ? true : false;
-
+     
     _listaAcompaniantes.add(_acompaniante);
     _result.acompaniantes = _listaAcompaniantes;
 

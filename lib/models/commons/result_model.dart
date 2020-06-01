@@ -70,7 +70,14 @@ class Result {
     if(json['vecaco'] != null){
       List<Acompaniantes> huespedes = List<Acompaniantes>.from( json['vecaco'].map( (v) => Acompaniantes.fromJson(v) ) );
       huespedes.forEach((huesped) {
-        if(huesped.istitular == false)
+        if(huesped.istitular) {
+          titular.idacompaniantes = huesped?.idacompaniantes;
+          titular.imagefront      = huesped?.imagefront;
+          titular.imageback       = huesped?.imageback;
+          titular.imagesign       = huesped?.imagesign;
+          titular.fechanac        = huesped?.fechanac;
+        }
+        else
           acompaniantes.add(huesped);
       });
     }
