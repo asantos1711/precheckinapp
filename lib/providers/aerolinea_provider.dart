@@ -36,7 +36,7 @@ class AerolineaProvider {
       final decodedData = json.decode( utf8.decode(response.bodyBytes) );
       aeroLineas        = AerolineasModel.fromJson(decodedData);
     } catch (e) {
-      print("No fue posible obtener la información de la reservación!. Se genero la siguinte excepcion:\n$e");
+      print("No fue posible obtener las Aerolineas!. Se genero la siguinte excepcion:\n$e");
     }
 
     return aeroLineas;

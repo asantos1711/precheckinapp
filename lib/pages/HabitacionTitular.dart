@@ -37,12 +37,15 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   double width;
   double space;
   DateTime _fechaVuelo;
+  DateTime _fechaNacimiento;
   TextEditingController _controllerNombre;
   TextEditingController _controllerCiudad;
   TextEditingController _controllerCP;
   TextEditingController _controllerAerolinea;
   TextEditingController _controllerFechaVuelo;
   TextEditingController _controllerVuelo;
+  TextEditingController _ctrlFecha;
+  TextEditingController _ctrlEdad;
 
 
 
@@ -62,6 +65,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     _controllerNombre = new TextEditingController(text:_result.titular.nombre ?? "");
     _controllerCiudad = new TextEditingController(text: _result.titular.ciudad ?? "");
     _controllerCP     = new TextEditingController(text: _result.codigoPostal ?? "");
+    _fechaNacimiento = futil.fechaByString(_result?.titular?.fechanac);
+    //_ctrlEdad        = new TextEditingController(text: _pmsBloc.edadTitular.toString());
 
     _controllerAerolinea  = new TextEditingController(text: (_result.vuelos.isNotEmpty) ? (_result.vuelos[0].aerolinea1 ?? "") : "");
     _fechaVuelo           = _result.vuelos[0].fechasalida.isNotEmpty ? DateTime.parse(_result.vuelos[0].fechasalida) : DateTime.now();

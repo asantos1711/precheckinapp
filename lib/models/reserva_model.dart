@@ -24,21 +24,14 @@ class Reserva {
     this.politicas,
   });
 
-  factory Reserva.formJson( Map<String,dynamic> json ){
-    List<Result> rl = [];
-
-    if(json['reservasligadas'] != null)
-      rl = List<Result>.from(json['reservasligadas'].map((r) => Result.fromJson(r)));
-
-    return Reserva(
-      idioma          : json['idioma'] ?? 'EN',
-      result          : json['result'] != null ? Result.fromJson( json['result'] ) : null,
-      nombreHotel     : json['nombrehotel'] ?? '',
-      codigo          : "",
-      especialRequest : json['especialrequest'] != null ? List<EspecialRequest>.from( json['especialrequest'].map( (l)=> EspecialRequest.fromJson(l)) ) : [],
-      plana           : Map.from(json["plana"]).map((k, v) => MapEntry<String, String>(k, v)),
-      ligadas         : rl ,
-      politicas       : json['politicasyreglamentos'] != null ? List<Politicas>.from( json['politicasyreglamentos'].map( (p)=>Politicas.fromJson(p) )) : []
-    );
-  }
+  factory Reserva.formJson( Map<String,dynamic> json ) => Reserva(
+    idioma          : json['idioma'] ?? 'EN',
+    result          : json['result'] != null ? Result.fromJson( json['result'] ) : null,
+    nombreHotel     : json['nombrehotel'] ?? '',
+    codigo          : "",
+    especialRequest : json['especialrequest'] != null ? List<EspecialRequest>.from( json['especialrequest'].map( (l)=> EspecialRequest.fromJson(l)) ) : [],
+    plana           : Map.from(json["plana"]).map((k, v) => MapEntry<String, String>(k, v)),
+    ligadas         : json['reservasligadas'] != null ? List<Result>.from(json['reservasligadas'].map((r) => Result.fromJson(r))) : [],
+    politicas       : json['politicasyreglamentos'] != null ? List<Politicas>.from( json['politicasyreglamentos'].map( (p)=>Politicas.fromJson(p) )) : []
+  );
 }
