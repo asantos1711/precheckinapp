@@ -1,5 +1,7 @@
 import 'package:age/age.dart';
+import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
+export 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/utils/fecha_util.dart';
 
@@ -7,9 +9,7 @@ class PMSBloc {
 
   static final PMSBloc _instance = new PMSBloc._();
 
-  factory PMSBloc(){
-    return _instance;
-  }
+  factory PMSBloc() => _instance;
 
   PMSBloc._();
 
@@ -43,19 +43,15 @@ class PMSBloc {
   ///Para establecer el origen de los datos en que se va a trabajar.
   set result(Result result) => (result == null ) ? _result = _reserva.result : _result = result;
 
-  //Obtiene el nombre del titular
+  //GET/SET nombre del titular
   String get nombreTitular => _result?.titular?.nombre;
-
-  //Establece el nombre del titular
   set nombreTitular(String nombre) {
     _result?.titular?.nombre = nombre;
     _result?.nombreTitular   = nombre;
   }
 
-  //Obtiene la fecha de nacimiento del titular
+  //GET/SET fecha de nacimiento del titular
   DateTime get fnTituar => fechaByString(_result?.titular?.fechanac);
-
-  //Establece la fecha de nacimiento del titular
   set fnTitular(String fecha) => _result?.titular?.fechanac = fecha;
 
   //Obtener la edad del titular.
@@ -74,81 +70,123 @@ class PMSBloc {
   //Obtener el id del hotel de la reserva
   String get idHotel => _result?.idClub.toString() ?? "0";
 
-  //Obtener el pais del titular.
+  //GET/SET pais del titular.
   String get pais => _result?.pais ?? "USD";
-
-  //Establecer el pais del tituar
   set pais(String pais){
     _result?.pais = pais;
     _result?.titular?.pais = pais;
   }
 
-  //Obtner el estado del tituar
+  //GET/SET el estado del tituar
   String get estado => _result.estado;
-
-  //Establecer el estado al titular
   set estado(String estado){
     _result?.estado = estado;
     _result?.titular?.estado = estado;
   }
 
-  //Obtiene la ciudad del titular
+  //GET/SET la ciudad del titular
   String get ciudad => _result?.ciudad;
-
-  //Establece la ciudad del titular
   set ciudad(String ciudad){
     _result?.ciudad = ciudad;
     _result?.titular?.ciudad = ciudad;
   }
 
-  //Obtiene el codigo postal del titular
+  //GET/SET el codigo postal del titular
   String get codigoPostal => _result.codigoPostal;
-
-  //Establece el codigo postal del titular
   set codigoPostal(String cp){
     _result?.codigoPostal = cp;
     _result?.titular?.codigoPostal = cp;
   }
 
-  //Obtner la aerolinea.
+  //GET/SET aerolinea.
   String get aerolinea => (_result.vuelos.isNotEmpty) ? (_result.vuelos[0].aerolinea1 ?? "") : "";
-
-  //Establecer la aerolinea.
   set aerolinea(String aerolinea) => _result?.vuelos[0]?.aerolinea1 = aerolinea;
 
-  //get/set fecha de vuelo
+  //GET/SET fecha de vuelo
   DateTime get fechaVuelo => _result.vuelos[0].fechasalida.isNotEmpty ? DateTime.parse(_result.vuelos[0].fechasalida) : DateTime.now();
   set fechaVuelo(DateTime fecha) => _result.vuelos[0].fechasalida = fechaISO8601FromDateTime(fecha);
 
-  //get/set número del vuelo.
+  //GET/SET número del vuelo.
   String get numeroVuelo => _result.vuelos[0].vuelollegada;
   set numeroVuelo(String numero) => _result.vuelos[0].vuelollegada = numero;
-
-  //get/set promoción.
-  int get promocion => _result?.acuerdos?.promociones;
-  set promocion(int val) => _result?.acuerdos?.promociones = val;
-
-  //get/set promoción.
-  int get avisoPrivacidad => _result?.acuerdos?.avisoPrivacidad;
-  set avisoPrivacidad(int val) => _result?.acuerdos?.avisoPrivacidad = val;
-
-  //get/set reglamento.
+  
+  //GET/SET reglamento.
   int get reglamento => _result?.acuerdos?.reglamento;
   set reglamento(int val) => _result?.acuerdos?.reglamento = val;
 
-  //get/set politicas y procesos.
+  //GET/SET promoción.
+  int get promocion => _result?.acuerdos?.promociones;
+  set promocion(int val) => _result?.acuerdos?.promociones = val;
+
+  //GET/SET avido privacidad.
+  int get avisoPrivacidad => _result?.acuerdos?.avisoPrivacidad;
+  set avisoPrivacidad(int val) => _result?.acuerdos?.avisoPrivacidad = val;
+
+  //GET/SET reglas COVID.
+  int get reglasCovid => _result?.acuerdos?.reglamentoCOVID;
+  set reglasCovid(int val) => _result?.acuerdos?.reglamentoCOVID = val;
+
+
+  //GET/SET politicas y procesos.
   int get politicasProcesos => _result?.acuerdos?.estsanamb;
   set politicasProcesos(int val){
     _result.acuerdos.estsanamb = val;
     _result.acuerdos.estobjdes = val;
     _result.acuerdos.politicas = val;
   }
+  set initCheckbox(int val){
+    promocion         = val;
+    avisoPrivacidad   = val;
+    reglamento        = val;
+    politicasProcesos = val;
+    reglasCovid       = val;
+  }
 
-  //Determinar si la habitación tiene capacidad para mas acompañantes.
-  bool get addAcompaniantes => ((_result.getTotalAdultos() < _result?.tipoHabitacion?.maxAdultos) || (_result.getTotalMenores() < _result?.tipoHabitacion?.maxMenores)) ? true : false;
-
+  //GET/SET Firma del titular
   String get signTitular => _result?.titular?.imagesign;
   set signTitular(String imagesign) => _result?.titular?.imagesign;
 
+  //GET/SET email del titular
+  String get emailTitular => _result?.email ?? ''; 
+  set emailTitular(String email) => _result?.email = email;
 
+  //GET/SET teléfono del titular
+  String get telefonoTitular => _result?.telefono ?? '';
+  set telefonoTitular(String telefono) => _result?.telefono = telefono;
+
+  //GET id del Cliente
+  int get idCliente => _result.idCliente;
+
+  //Determinar si la habitación tiene capacidad para mas acompañantes.
+  bool get habilitarAddAcompaniantes => ((_result.getTotalAdultos() < _result?.tipoHabitacion?.maxAdultos) || (_result.getTotalMenores() < _result?.tipoHabitacion?.maxMenores)) ? true : false;
+
+  //GET Lista de Acompañantes.
+  List<Acompaniantes> get acompaniantes => _result?.acompaniantes;
+
+  //ADD acompañante
+  set addAcompaniante(Acompaniantes acompaniante) => _result.acompaniantes.add(acompaniante);
+
+  //GET total Adultos
+  int get totalAdoultos{
+    int total = _result.tipoHabitacion.maxAdultos - _result.getTotalAdultos();
+    return (total <= 0) ? 0 : total;
+  }
+
+  //GET total Menores
+  int get totalMenores {
+    int total = _result.tipoHabitacion.maxMenores - _result.getTotalMenores();
+    return (total <= 0) ? 0 : total;
+  }
+
+  //Incrementar Adultos
+  set incrementarAdultos(int val) => _result.numeroAdultos = _result.numeroAdultos + val;
+  set incrementarAdolecentes(int val) => _result.numeroAdolecentes = _result.numeroAdolecentes + val;
+  set incrementarNinios(int val) => _result.numeroNinios = _result.numeroNinios + val;
+
+  //Incrementar Menores por Equivalencia
+  set incrementarMenoresEquivalencia(int val) => _result.menoresPorEquivalencia = _result.menoresPorEquivalencia + val ;
+  set incrementarAdultosEquivalencia(int val) => _result.adultosPorEquivalencia = _result.adultosPorEquivalencia + val;
+
+  //Actualizar la información de la reserva
+  Future<bool> actualizaHospedaje() async => await _provider.actualizaHospedaje(_result);
 }

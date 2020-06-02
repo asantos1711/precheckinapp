@@ -7,7 +7,6 @@ import 'package:precheckin/blocs/pms_bloc.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
-import 'package:precheckin/pages/acompaniantes_page.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/providers/pms_provider.dart';
@@ -20,14 +19,10 @@ import 'package:precheckin/widgets/docIdentificacion.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:signature/signature.dart';
 import 'package:precheckin/utils/tools_util.dart' as tools;
-
 import 'ViewWebView.dart';
-
-
 import 'package:precheckin/widgets/signature_widget.dart';
 
 class InformacionAdicional extends StatefulWidget {
-  
   @override
   _InformacionAdicionalState createState() => _InformacionAdicionalState();
 }
@@ -40,13 +35,13 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   bool _avisoPrivaBool = true;
   bool _recibirInfoBool = true;
   bool _poliProceBool = true;
+  bool _reglasCovid = true;
   bool _bloquear = false;
   bool _agregarAcompaniantes = false;
   PMSBloc _pmsBloc;
   QRPersistence _persistence = new QRPersistence();
   UserPreferences _pref;
   List<String> _qr;
-
   DateTime dateAco = new DateTime.now();
   TextEditingController textController = new TextEditingController(text: '');
   Reserva _reserva;  
@@ -68,25 +63,17 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     _reserva = _pmsBloc.reserva;
     _result  = _pmsBloc.result;
 
-    //Promoción
-    _pmsBloc.promocion = 1;
-    //Aviso de privacidad
-    _pmsBloc.avisoPrivacidad = 1;
-    //Reglamento
-    _pmsBloc.reglamento = 1;
-    //Ploiticas y procesos
-    _pmsBloc.politicasProcesos = 1;
-
-    _enableButton = _poliProceBool && _reglaHotelBool & _avisoPrivaBool;
+    _pmsBloc.initCheckbox = 1;
+    _enableButton = _poliProceBool && _reglaHotelBool & _avisoPrivaBool && _reglasCovid;
   }
 
-  _botonDisable()=> setState(() =>_enableButton = _poliProceBool && _reglaHotelBool & _avisoPrivaBool);
+  _botonDisable()=> setState(() =>_enableButton = _poliProceBool && _reglaHotelBool && _avisoPrivaBool && _reglasCovid);
 
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width  = MediaQuery.of(context).size.width;
-    _agregarAcompaniantes = _pmsBloc.addAcompaniantes;
+    _agregarAcompaniantes = _pmsBloc.habilitarAddAcompaniantes;
 
     return GestureDetector(
       onTap: () {
@@ -103,24 +90,18 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
               children: <Widget>[
                 _reglaHotel(),
                 _poliProce(),
+                _avisoPriva(),
+                _reglasCOVID(),
+                _recibirInfo(),
                 _signatureTitular(),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: DocIdentificacion(acompaniantes: _result.titular,)
                 ),
-                /*_tituloAcompa(),
+                _tituloAcompa(),
                 _acompanantes(),
                 _agregarAco(),
-                Divider(
-                  height: 2,
-                  color: Colors.grey,
-                ),*/
-                _avisoPriva(),
-                _recibirInfo(),
                 _buttonFinalizar(),
-                SizedBox(
-                  height: 50,
-                )
               ],
             ),
             tools.bloqueaPantalla(_bloquear)
@@ -188,6 +169,67 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     );
   }
 
+  Widget _avisoPriva() {
+    return CheckTextBold(
+      width: width,
+      onChange:(boo){
+        setState(() {
+          _avisoPrivaBool = !_avisoPrivaBool;
+          _pmsBloc.avisoPrivacidad = toInt(_avisoPrivaBool);
+        });
+        _botonDisable();
+      } ,
+      value: _avisoPrivaBool,
+      text: Translations.of(context).text('acepto_deacuerdo'),
+      textBold: Translations.of(context).text('aviso_privacidad'),
+      onTap: () {
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) => 
+              ViewWebView(
+                valor: 'aviso_privacidad',
+                politicas: _reserva.politicas,
+                title: Translations.of(context).text('aviso_privacidad'),
+              ),
+            ));
+      },
+    );
+  }
+
+  Widget _reglasCOVID() {
+    return CheckTextBold(
+      width: width,
+      onChange:(boo){
+        setState(() {
+          _reglasCovid = !_reglasCovid;
+          _pmsBloc.reglasCovid = toInt(_reglasCovid);
+        });
+        _botonDisable();
+      } ,
+      value: _reglasCovid,
+      text: "Reglamento COVID",
+      textBold: "",
+      onTap: () {},
+    );
+  }
+
+  Widget _recibirInfo() {
+    return CheckTextBold(
+        width: width,
+        onChange:(boo){
+          setState(() {
+            _recibirInfoBool = !_recibirInfoBool;
+            _pmsBloc.promocion = toInt(_recibirInfoBool);
+          });
+        },
+        textBold: '',
+        text: Translations.of(context).text('recibir_info'),
+        onTap: () {},
+        value: _recibirInfoBool
+    );
+  }
+
   Widget _signatureTitular() {
     _controller.addListener(() async {
         var data = await _controller.toPngBytes();
@@ -203,7 +245,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
       ),
     );
   }
-  
+
   Widget _tituloAcompa() {
     return Container(
       color: Colors.white,
@@ -218,15 +260,9 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   }
   
   Widget _acompanantes() {
-    return Column(
-      children: _listaAcompaniantes(),
-    );
-  }
-
-  List<Widget> _listaAcompaniantes() {
     List<Widget> widgets = [];
 
-    _result.acompaniantes.forEach( (acompaniante){
+    _pmsBloc.acompaniantes.forEach( (acompaniante){
       SignatureController _controllerSignature = new SignatureController();
 
       _controllerSignature.addListener(()async{
@@ -250,7 +286,9 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
     } );
     
-    return widgets;
+    return Column(
+      children: widgets,
+    );
   }
  
   Widget _agregarAco() {
@@ -266,60 +304,16 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         child: Icon(FontAwesomeIcons.plus,size: 24,),
         padding: EdgeInsets.all(16),
         shape: CircleBorder(),
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AcompaniantesPage(reserva: _reserva, result: _result,))),
+        onPressed: () => Navigator.pushNamed(context, "addHuesped")
       )
-    );
-  }
-
-  Widget _avisoPriva() {
-    return CheckTextBold(
-      width: width,
-      onChange:(boo){
-        setState(() {
-          _avisoPrivaBool = !_avisoPrivaBool;
-          _reserva.result.acuerdos.avisoPrivacidad = toInt(_avisoPrivaBool);
-        });
-        _botonDisable();
-      } ,
-      value: _avisoPrivaBool,
-      text: Translations.of(context).text('acepto_deacuerdo'),
-      textBold: Translations.of(context).text('aviso_privacidad'),
-      onTap: () {
-        Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => 
-              ViewWebView(
-                valor: 'aviso_privacidad',
-                politicas: _reserva.politicas,
-                title: Translations.of(context).text('aviso_privacidad'),
-              ),
-            ));
-      },
-    );
-  }
-
-  Widget _recibirInfo() {
-    return CheckTextBold(
-        width: width,
-        onChange:(boo){
-          setState(() {
-            _recibirInfoBool = !_recibirInfoBool;
-            _reserva.result.acuerdos.promociones = toInt(_recibirInfoBool);
-          });
-        } ,
-        textBold: '',
-        text:
-          Translations.of(context).text('recibir_info'),
-        onTap: () {},
-        value: _recibirInfoBool
     );
   }
 
   Widget _buttonFinalizar() {
     return Container(
       width: width - 20,
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+      padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+      margin: EdgeInsets.symmetric(vertical: 30),
       color: Colors.white,
       child: FlatButton(
         color: Theme.of(context).primaryColor,
@@ -329,8 +323,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         padding: EdgeInsets.all(8.0),
         splashColor: Colors.grey,
         onPressed: _enableButton == false ? null : () =>_saveData(),
-        child: Text(
-          Translations.of(context).text('finalizar'),
+        child: Text(Translations.of(context).text('finalizar'),
           style: TextStyle(fontSize: 20.0, fontFamily: 'Montserrat',fontWeight: FontWeight.bold),
         ),
       ));
@@ -339,18 +332,21 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   Future _saveData() async {
     _bloquearPantalla(true);
     
-    PMSProvider p = new PMSProvider();
-    bool status = await p.actualizaHospedaje(_result);
+    bool status = await _pmsBloc.actualizaHospedaje();
 
     _bloquearPantalla(false);
 
-    if(status){
+    if(!status)
+      tools.showAlert(context, "No se logro guardar los datos");
+    else {
       if(!_qr.contains(_reserva.codigo))
         _qr.add(_reserva.codigo);
 
       _persistence.qr = _qr;
 
-      if(_pref.tieneLigadas) {
+      if(!_pref.tieneLigadas) 
+        Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
+      else {
         List<String> procesados = _pref.reservasProcesadas;
         if(_pref.reservasProcesadas.indexOf(_result.idReserva.toString()) == -1)
             procesados.add(_result.idReserva.toString());
@@ -358,23 +354,11 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         _pref.reservasProcesadas = procesados;
 
         Navigator.pushNamed(context, 'litaReserva', arguments: _reserva);
-
-      } else {
-          Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
-
       }
     }
-    else {
-      tools.showAlert(context, "No se logro guardar los datos");
-    }
-
   }
 
-
-  void _bloquearPantalla(bool status){
-    _bloquear = status;
-      setState(() {});
-  }
+  void _bloquearPantalla(bool status) => setState(() => _bloquear = status);
 
   
 

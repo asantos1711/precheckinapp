@@ -1,12 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:precheckin/pages/mixins/hotel_mixin.dart';
-import 'package:precheckin/pages/mixins/info_contacto_mixin.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
-import 'package:precheckin/models/reserva_model.dart';
+import 'package:precheckin/widgets/info_hospedaje.dart';
 import 'package:precheckin/widgets/info_titular_widget.dart';
+import 'package:precheckin/widgets/info_contacto.dart';
 import 'package:precheckin/widgets/info_vuelo_widget.dart';
 import 'package:precheckin/blocs/pms_bloc.dart';
 
@@ -15,14 +14,11 @@ class HabitacionTitular extends StatefulWidget {
   _HabitacionTitularState createState() => _HabitacionTitularState();
 }
 
-class _HabitacionTitularState extends State<HabitacionTitular> with TickerProviderStateMixin, HotelMixin, InfoContactoMixin{
-  Reserva _reserva;  
-  Result _result;
+class _HabitacionTitularState extends State<HabitacionTitular> with TickerProviderStateMixin{
   PMSBloc _pmsBloc;
   AnimationController _controller;
   static const List<String> _funcionList = const [ "1","2" ];
   Map<String,String> _opcionesFloat = new  Map<String,String>();
-
 
   @override
   void initState() {
@@ -30,10 +26,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
    
     _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
     _pmsBloc    = new PMSBloc();
-    _reserva    = _pmsBloc.reserva;  
-    _result     = _pmsBloc.result;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +36,15 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _appBar(),
-      body: _body(),
+      body: ListView(
+        children: <Widget>[
+          _seccionReservacion(),
+          _seccionTitular(),
+          _seccionContacto(),
+          _seccionVuelo(),
+          _buttonContinuar(),
+        ],
+      ),
       floatingActionButton: _floatButton(),
     );
   }
@@ -65,19 +66,18 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     );
   }
 
-  Widget _body() {
-    return ListView(
-      children: <Widget>[
-        infoReserva(context, _reserva, _result),
-        _seccionTitular(),
-        seccionContacto(context, _result),
-        _seccionVuelo(),
-        _buttonContinuar(),
-      ],
+   Widget _seccionReservacion(){
+    return Container(
+      decoration: BoxDecoration(color: backgroundBloqueado),
+      padding: EdgeInsets.all(20.0),
+      child: InfoHospedaje(
+        reserva: _pmsBloc.reserva,
+        result: _pmsBloc.result
+      )
     );
   }
 
-   Widget _seccionTitular(){
+  Widget _seccionTitular(){
     return Container(
       color: Colors.white,
       width: double.infinity,
@@ -88,6 +88,17 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     );
   }
   
+  Widget _seccionContacto(){
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.all(20.0),
+      width: double.infinity,
+      child: InfoContacto(
+        block: _pmsBloc,
+      )
+    );
+  }
+
   Widget _seccionVuelo(){
     return Container(
       color: Colors.white,
@@ -119,7 +130,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
       )
     );
   }
-
 
   Widget _floatButton(){
     return new Column(
