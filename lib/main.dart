@@ -56,8 +56,10 @@ class _MyAppState extends State<MyApp> {
     return new MaterialApp(
       title: 'My Application',
       theme: new ThemeData(
-        primarySwatch: Colors.blue,
-        primaryColor: Color.fromRGBO(191, 52, 26, 1)
+        primarySwatch: Colors.red,
+        primaryColor: Color.fromRGBO(191, 52, 26, 1),
+        accentColor: Color.fromRGBO(191, 52, 26, 1),
+        splashColor: Color.fromRGBO(191, 52, 26, 1),
       ),
       localizationsDelegates: [
         _localeOverrideDelegate,

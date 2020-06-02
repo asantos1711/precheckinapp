@@ -18,7 +18,6 @@ class Politicas{
     this.seg_acu_reg,
   });
 
-
   factory Politicas.fromJson(Map<String,dynamic> json) => Politicas(
     seg_obj_dej  : json['seg_obj_dej'] ?? '',
     seg_acu_est  : json['seg_acu_est'] ?? '',

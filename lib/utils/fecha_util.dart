@@ -47,7 +47,6 @@ DateTime fechaByString(String fecha){
 }
 
 
-
 //Regresa la edad apartir de una fecha dada.
 int getEdad(DateTime date) => (date == null) ? 0 : Age.dateDifference(
   fromDate      : date,

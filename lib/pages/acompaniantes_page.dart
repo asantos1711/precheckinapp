@@ -235,7 +235,8 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
     _listaAcompaniantes.add(_acompaniante);
     _result.acompaniantes = _listaAcompaniantes;
 
-    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => InformacionAdicional(reserva: _reserva, result: _result,)));
+    //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => InformacionAdicional(reserva: _reserva, result: _result,)));
+    Navigator.pushNamed(context, 'infoAdicional');
   }
 
 }

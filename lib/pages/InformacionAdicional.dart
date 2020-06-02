@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:precheckin/blocs/pms_bloc.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
@@ -26,14 +27,7 @@ import 'ViewWebView.dart';
 import 'package:precheckin/widgets/signature_widget.dart';
 
 class InformacionAdicional extends StatefulWidget {
-  Reserva reserva;
-  Result result;
   
-  InformacionAdicional({
-    @required this.reserva,
-    @required this.result
-  });
-
   @override
   _InformacionAdicionalState createState() => _InformacionAdicionalState();
 }
@@ -48,6 +42,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   bool _poliProceBool = true;
   bool _bloquear = false;
   bool _agregarAcompaniantes = false;
+  PMSBloc _pmsBloc;
   QRPersistence _persistence = new QRPersistence();
   UserPreferences _pref;
   List<String> _qr;
@@ -65,103 +60,261 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   @override
   void initState() {
     super.initState();
-
-    _pref = new UserPreferences();
+    
     _controller.addListener((){});
-    _qr = _persistence.qr;
-    _reserva = this.widget.reserva;
-    _result = this.widget.result;
+    _pmsBloc = new PMSBloc();
+    _pref    = new UserPreferences();
+    _qr      = _persistence.qr;
+    _reserva = _pmsBloc.reserva;
+    _result  = _pmsBloc.result;
 
     //Promoción
-    _reserva.result.acuerdos.promociones = 1;
+    _pmsBloc.promocion = 1;
     //Aviso de privacidad
-    _reserva.result.acuerdos.avisoPrivacidad = 1;
+    _pmsBloc.avisoPrivacidad = 1;
     //Reglamento
-    _reserva.result.acuerdos.reglamento = 1;
+    _pmsBloc.reglamento = 1;
     //Ploiticas y procesos
-    _reserva.result.acuerdos.estsanamb = 1;
-    _reserva.result.acuerdos.estobjdes = 1;
-    _reserva.result.acuerdos.politicas = 1;
+    _pmsBloc.politicasProcesos = 1;
+
+    _enableButton = _poliProceBool && _reglaHotelBool & _avisoPrivaBool;
   }
 
-  _botonDisable(){
-    setState(() {
-      _enableButton = _poliProceBool && _reglaHotelBool & _avisoPrivaBool ;
-    });
-  }
+  _botonDisable()=> setState(() =>_enableButton = _poliProceBool && _reglaHotelBool & _avisoPrivaBool);
 
   @override
   Widget build(BuildContext context) {
-
-    /*print("Adultos: ${_result.getTotalAdultos()}, Densidad: ${_result.tipoHabitacion.maxAdultos}");
-    print("Menores: ${_result.getTotalMenores()}, Densidad: ${_result.tipoHabitacion.maxMenores}");*/
-
-    if((_result.getTotalAdultos() < _result.tipoHabitacion.maxAdultos) || (_result.getTotalMenores() < _result.tipoHabitacion.maxMenores))
-      _agregarAcompaniantes = true;
-
     height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
+    width  = MediaQuery.of(context).size.width;
+    _agregarAcompaniantes = _pmsBloc.addAcompaniantes;
+
     return GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: _appBar(),
-          body: Stack(
-            children: <Widget>[
-              ListView(
-                children: <Widget>[
-                  _reglaHotel(),
-                  _poliProce(),
-                  _signatureTitular(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: DocIdentificacion(acompaniantes: _result.titular,)
-                  ),
-                  _tituloAcompa(),
-                  _acompanantes(),
-                  _agregarAco(),
-                  Divider(
-                    height: 2,
-                    color: Colors.grey,
-                  ),
-                  _avisoPriva(),
-                  _recibirInfo(),
-                  _buttonFinalizar(),
-                  SizedBox(
-                    height: 50,
-                  )
-                ],
-              ),
-              tools.bloqueaPantalla(_bloquear)
-            ],
-          )
-        ));
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) 
+          currentFocus.unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: _appBar(),
+        body: Stack(
+          children: <Widget>[
+            ListView(
+              children: <Widget>[
+                _reglaHotel(),
+                _poliProce(),
+                _signatureTitular(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: DocIdentificacion(acompaniantes: _result.titular,)
+                ),
+                /*_tituloAcompa(),
+                _acompanantes(),
+                _agregarAco(),
+                Divider(
+                  height: 2,
+                  color: Colors.grey,
+                ),*/
+                _avisoPriva(),
+                _recibirInfo(),
+                _buttonFinalizar(),
+                SizedBox(
+                  height: 50,
+                )
+              ],
+            ),
+            tools.bloqueaPantalla(_bloquear)
+          ],
+        )
+      )
+    );
   }
 
+  Widget _reglaHotel() {
+    return CheckTextBold(
+      width: width,
+      onChange:(boo){
+        setState(() {
+          _reglaHotelBool = !_reglaHotelBool;
+          _pmsBloc.reglamento = toInt(_reglaHotelBool);
+        });
+        _botonDisable();
+      } ,
+      value: _reglaHotelBool,
+      text: Translations.of(context).text('acepto_deacuerdo'),
+      textBold: Translations.of(context).text('reglamento_hotel'),
+      onTap: () {
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: 
+              (context, animation1, animation2) => 
+              ViewWebView(
+                valor : 'reglamento_hotel',
+                politicas: _reserva.politicas,
+                title: Translations.of(context).text('reglamento_hotel'),
+              ),
+            ));
+      },
+    );
+  }
 
-  //Agrega la firma del titular
+  Widget _poliProce() {
+    return CheckTextBold(
+      width: width,
+      onChange:(boo){
+        setState(() {
+          _poliProceBool = !_poliProceBool;
+          _pmsBloc.politicasProcesos = toInt(_poliProceBool);
+        });
+        _botonDisable();
+      } ,
+      value: _poliProceBool,
+      text: Translations.of(context).text('acepto_deacuerdo'),
+      textBold: Translations.of(context).text('politicas_procedimientos'),
+      onTap: () {
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: 
+              (context, animation1, animation2) => 
+              ViewWebView(
+                valor: 'politicas_procedimientos',
+                politicas: _reserva.politicas,
+                title:Translations.of(context).text('politicas_procedimientos'),
+              ),
+            ));
+      },
+    );
+  }
+
   Widget _signatureTitular() {
     _controller.addListener(() async {
         var data = await _controller.toPngBytes();
-        _result.titular.imagesign = base64.encode(data);
+        _pmsBloc.signTitular = base64.encode(data);
     });
 
     return Container(
       margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
       child: SignatureWidget(
-        img:_result.titular.imagesign ?? "",
+        img: _pmsBloc.signTitular ?? "",
         title:Translations.of(context).text('ingresa_firma_titular'),
         controller: _controller,
       ),
     );
   }
+  
+  Widget _tituloAcompa() {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.only(left: 10, right: 10),
+      width: width - 20,
+      child: Text(
+        Translations.of(context).text('acompanantes'),
+        style: TextStyle(
+          fontSize: 25,
+        ),
+      ));
+  }
+  
+  Widget _acompanantes() {
+    return Column(
+      children: _listaAcompaniantes(),
+    );
+  }
 
+  List<Widget> _listaAcompaniantes() {
+    List<Widget> widgets = [];
+
+    _result.acompaniantes.forEach( (acompaniante){
+      SignatureController _controllerSignature = new SignatureController();
+
+      _controllerSignature.addListener(()async{
+        var data = await _controllerSignature.toPngBytes();
+        acompaniante.imagesign = base64.encode(data);
+      });
+      acompaniante.imagefront = null;
+      Widget widget = CardAcompanante(
+        acompaniante: acompaniante,
+        signature:  Container(
+          margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
+          child: SignatureWidget(
+            img: acompaniante.imagesign ?? "",
+            title:"",
+            controller: _controllerSignature,
+          )
+        )
+      );
+
+      widgets..add(widget);
+
+    } );
+    
+    return widgets;
+  }
  
+  Widget _agregarAco() {
+    if(!_agregarAcompaniantes)
+      return Container();
+
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      alignment: Alignment.center,
+      child: MaterialButton(
+        color: Color.fromRGBO(0, 165, 227, 1),
+        textColor: Colors.white,
+        child: Icon(FontAwesomeIcons.plus,size: 24,),
+        padding: EdgeInsets.all(16),
+        shape: CircleBorder(),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AcompaniantesPage(reserva: _reserva, result: _result,))),
+      )
+    );
+  }
+
+  Widget _avisoPriva() {
+    return CheckTextBold(
+      width: width,
+      onChange:(boo){
+        setState(() {
+          _avisoPrivaBool = !_avisoPrivaBool;
+          _reserva.result.acuerdos.avisoPrivacidad = toInt(_avisoPrivaBool);
+        });
+        _botonDisable();
+      } ,
+      value: _avisoPrivaBool,
+      text: Translations.of(context).text('acepto_deacuerdo'),
+      textBold: Translations.of(context).text('aviso_privacidad'),
+      onTap: () {
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) => 
+              ViewWebView(
+                valor: 'aviso_privacidad',
+                politicas: _reserva.politicas,
+                title: Translations.of(context).text('aviso_privacidad'),
+              ),
+            ));
+      },
+    );
+  }
+
+  Widget _recibirInfo() {
+    return CheckTextBold(
+        width: width,
+        onChange:(boo){
+          setState(() {
+            _recibirInfoBool = !_recibirInfoBool;
+            _reserva.result.acuerdos.promociones = toInt(_recibirInfoBool);
+          });
+        } ,
+        textBold: '',
+        text:
+          Translations.of(context).text('recibir_info'),
+        onTap: () {},
+        value: _recibirInfoBool
+    );
+  }
 
   Widget _buttonFinalizar() {
     return Container(
@@ -223,26 +376,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
       setState(() {});
   }
 
-  Widget _agregarAco() {
-
-
-    if(!_agregarAcompaniantes)
-      return Container();
-
-
-    return Container(
-      margin: EdgeInsets.all(10.0),
-      alignment: Alignment.center,
-      child: MaterialButton(
-        color: Color.fromRGBO(0, 165, 227, 1),
-        textColor: Colors.white,
-        child: Icon(FontAwesomeIcons.plus,size: 24,),
-        padding: EdgeInsets.all(16),
-        shape: CircleBorder(),
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AcompaniantesPage(reserva: _reserva, result: _result,))),
-      )
-    );
-  }
+  
 
   
   bool _condicionAgregarAcom(String nuevaEdad){
@@ -314,28 +448,9 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   }
 
 
-  Widget _recibirInfo() {
-    return CheckTextBold(
-        width: width,
-        onChange:(boo){
-          setState(() {
-            _recibirInfoBool = !_recibirInfoBool;
-            _reserva.result.acuerdos.promociones = toInt(_recibirInfoBool);
-          });
-        } ,
-        textBold: '',
-        text:
-          Translations.of(context).text('recibir_info'),
-        onTap: () {},
-        value: _recibirInfoBool
-    );
-  }
+  
 
-  Widget _acompanantes() {
-    return Column(
-      children: _listaAcompaniantes(),
-    );
-  }
+  
 
 _onAlertWithCustomContentPressed(context) {
     Acompaniantes _aco = new Acompaniantes();
@@ -407,55 +522,10 @@ _onAlertWithCustomContentPressed(context) {
         ]).show();
   }
 
-  /*
-  Forma un Widgtet CardAcompaniantes por
-  cada uno de los acompaniantes que bienen
-  del servicio.
-  */
-  List<Widget> _listaAcompaniantes() {
-    List<Widget> widgets = [];
-
-    _result.acompaniantes.forEach( (acompaniante){
-      SignatureController _controllerSignature = new SignatureController();
-
-      _controllerSignature.addListener(()async{
-        var data = await _controllerSignature.toPngBytes();
-        acompaniante.imagesign = base64.encode(data);
-      });
-      acompaniante.imagefront = null;
-      Widget widget = CardAcompanante(
-        acompaniante: acompaniante,
-        signature:  Container(
-          margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
-          child: SignatureWidget(
-            img: acompaniante.imagesign ?? "",
-            title:"",
-            controller: _controllerSignature,
-          )
-        )
-      );
-
-      widgets..add(widget);
-
-    } );
-    
-    return widgets;
-  }
 
   
 
-  Widget _tituloAcompa() {
-    return Container(
-        color: Colors.white,
-        padding: EdgeInsets.only(left: 10, right: 10),
-        width: width - 20,
-        child: Text(
-          Translations.of(context).text('acompanantes'),
-          style: TextStyle(
-            fontSize: 25,
-          ),
-        ));
-  }
+  
 
   Widget _docuTitular() {
     return Container(
@@ -496,93 +566,11 @@ _onAlertWithCustomContentPressed(context) {
         ));
   }
 
-  Widget _poliProce() {
-    return CheckTextBold(
-      width: width,
-      onChange:(boo){
-        setState(() {
-          _poliProceBool = !_poliProceBool;
-          _reserva.result.acuerdos.politicas = toInt(_poliProceBool);
-          _reserva.result.acuerdos.estobjdes = toInt(_poliProceBool);
-          _reserva.result.acuerdos.estsanamb = toInt(_poliProceBool);
-        });
-        _botonDisable();
-      } ,
-      value: _poliProceBool,
-      text: Translations.of(context).text('acepto_deacuerdo'),
-      textBold: Translations.of(context).text('politicas_procedimientos'),
-      onTap: () {
-        Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: 
-              (context, animation1, animation2) => 
-              ViewWebView(
-                valor: 'politicas_procedimientos',
-                politicas: _reserva.politicas,
-                title:Translations.of(context).text('politicas_procedimientos'),
-              ),
-            ));
-      },
-    );
-  }
+  
 
-  Widget _reglaHotel() {
-    return CheckTextBold(
-      width: width,
-      onChange:(boo){
-        setState(() {
-          _reglaHotelBool = !_reglaHotelBool;
-          _reserva.result.acuerdos.reglamento = toInt(_reglaHotelBool);
-        });
-        _botonDisable();
-      } ,
-      value: _reglaHotelBool,
-      text: Translations.of(context).text('acepto_deacuerdo'),
-      textBold: Translations.of(context).text('reglamento_hotel'),
-      onTap: () {
-        Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: 
-              (context, animation1, animation2) => 
-              ViewWebView(
-                valor : 'reglamento_hotel',
-                politicas: _reserva.politicas,
-                title: Translations.of(context).text('reglamento_hotel'),
-              ),
-            ));
-      },
-    );
-  }
+  
 
-  Widget _avisoPriva() {
-    return CheckTextBold(
-      width: width,
-      onChange:(boo){
-        setState(() {
-          _avisoPrivaBool = !_avisoPrivaBool;
-          _reserva.result.acuerdos.avisoPrivacidad = toInt(_avisoPrivaBool);
-        });
-        _botonDisable();
-      } ,
-      value: _avisoPrivaBool,
-      text: Translations.of(context).text('acepto_deacuerdo'),
-      textBold: Translations.of(context).text('aviso_privacidad'),
-      onTap: () {
-        Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => 
-              ViewWebView(
-                valor: 'aviso_privacidad',
-                politicas: _reserva.politicas,
-                title: Translations.of(context).text('aviso_privacidad'),
-              ),
-            ));
-      },
-    );
-  }
+  
 
  
 

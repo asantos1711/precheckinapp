@@ -127,7 +127,8 @@ class _VerQRState extends State<VerQR> {
 
       if(infoReserva.ligadas.isEmpty){
         _pref.tieneLigadas = false;
-        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HabitacionTitular(reserva: infoReserva, result: infoReserva.result,)));
+        //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HabitacionTitular(reserva: infoReserva, result: infoReserva.result,)));
+        Navigator.pushNamed(context, 'infoTitular');
       } else {
         _pref.tieneLigadas = true;
        Navigator.pushNamed(context, 'litaReserva', arguments: infoReserva);

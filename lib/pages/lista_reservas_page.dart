@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:precheckin/models/commons/result_model.dart';
 
 import 'package:precheckin/models/reserva_model.dart';
-import 'package:precheckin/pages/HabitacionTitular.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
+import 'package:precheckin/blocs/pms_bloc.dart';
 
 class ListaReservas extends StatefulWidget {
   @override
@@ -22,20 +22,19 @@ class _ListaReservasState extends State<ListaReservas> {
   Reserva _model;
   bool _enableButton = false;
   List<String> _qr;
+  PMSBloc _pmsBloc;
 
   @override
   void initState() {
     super.initState();
 
-    _qr = _persistence.qr;
+    _qr      = _persistence.qr;
+    _pmsBloc = new PMSBloc();
+    _model   = _pmsBloc.reserva;
   }
 
   @override
   Widget build(BuildContext context) {
-    _model = ModalRoute.of(context).settings.arguments;
-
-    print(_pref.reservasProcesadas);
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -93,7 +92,10 @@ class _ListaReservasState extends State<ListaReservas> {
           ],
         ),
         trailing: procesado ? iconChecked : null,
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HabitacionTitular(reserva: _model, result: res,))),
+        onTap: (){
+          _pmsBloc.result = res;
+          Navigator.pushNamed(context, 'infoTitular');
+        },
       ),
     );
   }

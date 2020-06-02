@@ -70,13 +70,13 @@ class _CardAcompananteState extends State<CardAcompanante> {
       ).years;
       
       //TODO: parametrizar la edad
-      if(widget.adultos && age >= 18){
+      if(widget.adultos && age >= 18 && widget.nuevo) {
         tools.showAlert(context, Translations.of(context).text("not_more_adults"));
         return null;
       }
 
       //TODO: parametrizar la edad
-      if(widget.menores && age < 18){
+      if(widget.menores && age < 18 && widget.nuevo) {
         tools.showAlert(context, Translations.of(context).text("not_more_minors"));
         return null;
       }
