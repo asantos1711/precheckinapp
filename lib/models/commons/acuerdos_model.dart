@@ -38,6 +38,6 @@ class Acuerdos {
     'estobjdes'  : estobjdes,
     'estsanamb'  : estsanamb,
     'idcliente'  : idcliente,
-    'covid'      : reglamentoCOVID,
+    //'covid'      : reglamentoCOVID,
   };
 }

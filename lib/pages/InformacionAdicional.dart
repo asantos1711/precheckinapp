@@ -233,7 +233,8 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   Widget _signatureTitular() {
     _controller.addListener(() async {
         var data = await _controller.toPngBytes();
-        _pmsBloc.signTitular = base64.encode(data);
+        if(data != null)
+          _pmsBloc.signTitular = base64.encode(data);
     });
 
     return Container(
@@ -267,7 +268,8 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
       _controllerSignature.addListener(()async{
         var data = await _controllerSignature.toPngBytes();
-        acompaniante.imagesign = base64.encode(data);
+        if(data != null)
+          acompaniante.imagesign = base64.encode(data);
       });
       acompaniante.imagefront = null;
       Widget widget = CardAcompanante(

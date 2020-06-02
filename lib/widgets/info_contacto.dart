@@ -50,6 +50,7 @@ class _InfoContactoState extends State<InfoContacto> {
             TextFormField(
               controller: _ctrlEmail,
               enabled: _enableEmail,
+              keyboardType: TextInputType.emailAddress,
               onChanged: (email) => _block.emailTitular = email,
             ),
             SizedBox(height: 5,),
@@ -57,6 +58,7 @@ class _InfoContactoState extends State<InfoContacto> {
             TextFormField(
               controller: _ctrlTelefono,
               enabled: _enableTel,
+              keyboardType: TextInputType.number,
               onChanged: (tel) => _block.telefonoTitular = tel,
             ),
           ],

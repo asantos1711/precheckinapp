@@ -48,7 +48,8 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
     _sigController = new SignatureController();
     _sigController.addListener(() async {
         var data = await _sigController.toPngBytes();
-        _acompaniante.imagesign = base64.encode(data);
+        if(data != null)
+          _acompaniante.imagesign = base64.encode(data);
     });
   }
 
@@ -212,6 +213,6 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
      
     _pmsBloc.addAcompaniante = _acompaniante;
 
-    Navigator.pushNamed(context, 'infoAdicional');
+    Navigator.pushReplacementNamed(context, 'infoAdicional');
   }
 }

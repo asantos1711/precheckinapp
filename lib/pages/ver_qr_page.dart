@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:precheckin/blocs/pms_bloc.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 
 import 'package:precheckin/widgets/qr_widget.dart';
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/providers/pms_provider.dart';
-import 'package:precheckin/pages/HabitacionTitular.dart';
 import 'package:precheckin/utils/tools_util.dart' as tools;
 import 'package:precheckin/preferences/user_preferences.dart';
 
@@ -24,13 +24,15 @@ class _VerQRState extends State<VerQR> {
   UserPreferences _pref;
   PMSProvider _provider;
   bool _bloquear = false;
+  PMSBloc _pmsBloc;
 
   
   @override
   void initState() {
     super.initState();
-    _provider         = new PMSProvider(); //Provide PMS Services
-    _pref             = new UserPreferences();
+    _provider = new PMSProvider(); //Provide PMS Services
+    _pref     = new UserPreferences();
+    _pmsBloc  = new PMSBloc();
   }
 
 
@@ -115,23 +117,19 @@ class _VerQRState extends State<VerQR> {
   //de la reservacion
   Future _showReserva(BuildContext contex) async {
     _bloquearPantalla(true);
-
-    Reserva infoReserva = await _provider.dameReservacionByQR( _qr );
-    
+    bool status = await _pmsBloc.setReserva(_qr);
     _bloquearPantalla(false);
 
-    if(infoReserva == null) 
+    if(!status)
       tools.showAlert(context, "No se encontro información");
     else {
-      infoReserva.codigo = _qr;
+      _pref.tieneLigadas = _pmsBloc.tieneLigadas;
 
-      if(infoReserva.ligadas.isEmpty){
-        _pref.tieneLigadas = false;
-        //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HabitacionTitular(reserva: infoReserva, result: infoReserva.result,)));
+      if(_pref.tieneLigadas)
+        Navigator.pushNamed(context, 'litaReserva', arguments: _pmsBloc.reserva);
+      else{
+        _pmsBloc.result = null;
         Navigator.pushNamed(context, 'infoTitular');
-      } else {
-        _pref.tieneLigadas = true;
-       Navigator.pushNamed(context, 'litaReserva', arguments: infoReserva);
       }
     }
   }

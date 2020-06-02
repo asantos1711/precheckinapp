@@ -144,7 +144,7 @@ class PMSBloc {
 
   //GET/SET Firma del titular
   String get signTitular => _result?.titular?.imagesign;
-  set signTitular(String imagesign) => _result?.titular?.imagesign;
+  set signTitular(String imagesign) => _result?.titular?.imagesign = imagesign;
 
   //GET/SET email del titular
   String get emailTitular => _result?.email ?? ''; 

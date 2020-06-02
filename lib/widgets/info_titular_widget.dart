@@ -135,7 +135,7 @@ class _InfoTitularState extends State<InfoTitular> {
 
         _ctrlEdad.text     = age.toString();
         _ctrlFecha.text    = "${picked.day}/${picked.month}/${picked.year}";
-        _pmsBloc.fnTitular = "${picked.year}/${picked.month}/${picked.day}";
+        _pmsBloc.fnTitular = "${picked.year}-${picked.month}-${picked.day}";
       });
     }
   }
