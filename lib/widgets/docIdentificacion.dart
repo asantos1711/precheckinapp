@@ -26,11 +26,7 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
   void initState() {
     super.initState();
     acompaniantes = this.widget.acompaniantes;
-    if (Platform.isAndroid) {
-      Mrzflutterplugin.registerWithLicenceKey("4407D781D3E68EB49AFB4D61D393FAB249AD7123F675E4DC4A27B174FD37B822B9EDC20531A066B0D2994E6A18EA23EC50A3B8CB60B34B62ABDC0B3234799299");
-    } else if (Platform.isIOS) {
-      Mrzflutterplugin.registerWithLicenceKey("C500C89F1E88DC48B05981B3CB55CEB287CB42CEC4886223D30555F0DE9B7C036E6C0BB2563CB6B933376B3590FA5FA52B5AAC55F8FA6F90777EAC1474E360655681C3AA91770BEBC3E2C524BBFB05E8");
-    }
+    
   }
 
   @override
