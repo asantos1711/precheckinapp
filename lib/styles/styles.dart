@@ -92,12 +92,22 @@ BoxDecoration boxReservationProcessed = BoxDecoration(
   )
 );
 
+BoxDecoration boxInfoDensidad = BoxDecoration(
+  borderRadius: BorderRadius.circular(10.0),
+  color: Colors.white,
+  border: Border(
+    left   : BorderSide(color:Colors.green),
+    top    : BorderSide(color:Colors.green),
+    right  : BorderSide(color:Colors.green),
+    bottom : BorderSide(color:Colors.green),
+  )
+);
+
 /*
  * ----------------
  * ICONOS
  * ----------------
  */
-
 Icon iconChecked = Icon(
   Icons.check_circle_outline, 
   color: Colors.green

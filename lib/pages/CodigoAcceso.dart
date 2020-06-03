@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 
-import 'package:precheckin/models/reserva_model.dart';
-import 'package:precheckin/pages/HabitacionTitular.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
-import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/utils/tools_util.dart' as tools;
-import 'package:barcode_scan/barcode_scan.dart';
+import 'package:precheckin/blocs/pms_bloc.dart';
 
 class CodigoAcceso extends StatefulWidget {
 
@@ -20,15 +19,15 @@ class CodigoAcceso extends StatefulWidget {
 class _CodigoAccesoState extends State<CodigoAcceso> {
   TextEditingController _codigoController;
   UserPreferences _pref;
-  PMSProvider _provider;
   bool _bloquear = false;
+  PMSBloc _pmsBloc;
 
   @override
   void initState() {
     super.initState();
     _codigoController = new TextEditingController();
-    _provider         = new PMSProvider(); //Provide PMS Services
     _pref             = new UserPreferences();
+    _pmsBloc          = new PMSBloc();
   }
 
   @override
@@ -59,21 +58,7 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
     return Container(
       margin: EdgeInsets.only(top: 100.0),
       alignment: Alignment.center,
-      child: Column(
-        children: <Widget>[
-          Text(Translations.of(context).text('ingrese_codigo'), style: defaultCodeCapture),
-          InkWell(
-            child: Text(Translations.of(context).text('scan_qr'), style: qrCodeCapture,),
-            onTap: () async {
-              var result = await BarcodeScanner.scan();
-              if(result.rawContent.isNotEmpty){
-                _codigoController.text = result.rawContent;
-                _showReserva(context);
-              }
-            },
-          )
-        ],
-      )
+      child: Text(Translations.of(context).text('ingrese_codigo'), style: defaultCodeCapture)
     );
   }
 
@@ -90,6 +75,17 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
         textAlign: TextAlign.center,
         style: greyText,
         decoration: InputDecoration(
+          suffixIcon: IconButton(
+            icon:FaIcon(FontAwesomeIcons.qrcode, color: Colors.black,),
+            onPressed: () async {
+              FocusScope.of(context).requestFocus(new FocusNode());
+              var result = await BarcodeScanner.scan();
+              if(result.rawContent.isNotEmpty){
+                _codigoController.text = result.rawContent;
+                _showReserva(context);
+              }
+            },
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -119,24 +115,22 @@ class _CodigoAccesoState extends State<CodigoAcceso> {
 
   Future _showReserva(BuildContext contex) async {
     _bloquearPantalla(true);
-
-    Reserva infoReserva = await _provider.dameReservacionByQR( _codigoController.text);
-    
+    bool status = await _pmsBloc.setReserva(_codigoController.text);
     _bloquearPantalla(false);
 
-    if(infoReserva == null) 
-      tools.showAlert(context, "No se encontro información");
-    else {
-      infoReserva.codigo = _codigoController.text;
 
-      if(infoReserva.ligadas.isEmpty) {
-        _pref.tieneLigadas = false;
-        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => HabitacionTitular(reserva: infoReserva, result: infoReserva.result,)));
-      } else {
-        _pref.tieneLigadas = true;
-       Navigator.pushNamed(context, 'litaReserva', arguments: infoReserva);
+    if(status) {
+      _pref.tieneLigadas = _pmsBloc.tieneLigadas;
+
+      if(_pref.tieneLigadas)
+        Navigator.pushNamed(context, 'litaReserva', arguments: _pmsBloc.reserva);
+      else{
+        _pmsBloc.result = null;
+        Navigator.pushNamed(context, 'infoTitular');
       }
-    }
+    } 
+    else
+      tools.showAlert(context, "No se encontro información");
   }
 
   

@@ -12,6 +12,8 @@ class Result {
   int numeroAdultos;
   int numeroAdolecentes;
   int numeroNinios;
+  int adultosPorEquivalencia; //Para Guardar el número le lugares ocupados al hacer la equivalencias
+  int menoresPorEquivalencia; //Para Guardar el número le lugares ocupados al hacer la equivalencias
   String planViaje;
   String requerimientos;
   String nombreTitular;
@@ -38,6 +40,8 @@ class Result {
     this.numeroAdultos = 0,
     this.numeroAdolecentes = 0,
     this.numeroNinios = 0,
+    this.adultosPorEquivalencia = 0,
+    this.menoresPorEquivalencia = 0,
     this.planViaje,
     this.requerimientos,
     this.nombreTitular,
@@ -66,7 +70,14 @@ class Result {
     if(json['vecaco'] != null){
       List<Acompaniantes> huespedes = List<Acompaniantes>.from( json['vecaco'].map( (v) => Acompaniantes.fromJson(v) ) );
       huespedes.forEach((huesped) {
-        if(huesped.istitular == false)
+        if(huesped.istitular) {
+          titular.idacompaniantes = huesped?.idacompaniantes;
+          titular.imagefront      = huesped?.imagefront;
+          titular.imageback       = huesped?.imageback;
+          titular.imagesign       = huesped?.imagesign;
+          titular.fechanac        = huesped?.fechanac;
+        }
+        else
           acompaniantes.add(huesped);
       });
     }
@@ -100,5 +111,8 @@ class Result {
   }
 
   //Obtiene el numero total de menores
-  int getTotalMenores() => numeroAdolecentes + numeroNinios;
+  int getTotalMenores() => numeroAdolecentes + numeroNinios + menoresPorEquivalencia;
+
+  //Obtiene el total de los adultos
+  int getTotalAdultos() => numeroAdultos + adultosPorEquivalencia;
 }

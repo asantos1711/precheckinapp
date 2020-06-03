@@ -18,7 +18,6 @@ class _CustomSignatureState extends State<CustomSignature> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _controller = this.widget.controller;
     super.initState();
   }

@@ -31,7 +31,7 @@ class Acompaniantes{
   Acompaniantes({
     this.club,
     this.idcliente,
-    this.idacompaniantes = null,
+    this.idacompaniantes = 1,
     this.nombre = '',
     this.direccion = '',
     this.ciudad = '',

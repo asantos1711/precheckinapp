@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:precheckin/pages/HabitacionTitular.dart';
+import 'package:precheckin/pages/InformacionAdicional.dart';
+import 'package:precheckin/pages/acompaniantes_page.dart';
 import 'package:precheckin/pages/lista_reservas_page.dart';
 
 import '../main.dart';
@@ -17,6 +20,9 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     "codigosQR"     : (BuildContext context) => ListaCodigosQR(),
     "nuevoCodigo"   : (BuildContext context) => CodigoAcceso(),
     "verQR"         : (BuildContext context) => VerQR(),
+    "infoTitular"   : (BuildContext context) => HabitacionTitular(),
+    "infoAdicional" : (BuildContext context) => InformacionAdicional(),
+    "addHuesped"    : (BuildContext context) => AcompaniantesPage(),
   };
 
 }

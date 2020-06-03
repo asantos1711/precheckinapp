@@ -1,5 +1,7 @@
 //Convierte un String con formato(yyy-MM-dd ????)
 //en formato ISO-8601
+import 'package:age/age.dart';
+
 String fechaISO8601fromString(String fecha){
   if(fecha == null || fecha.isEmpty)
     return "";
@@ -37,3 +39,17 @@ String splitFecha(String fecha){
 
   return (fechaAR.isNotEmpty) ? fechaAR[0] : "";
 }
+
+//COnvierte un String en un DateTime
+DateTime fechaByString(String fecha){
+  List<String> fechaAR = splitFecha(fecha).split("-");
+  return (fechaAR.isEmpty || (fechaAR.length < 3)) ? null : DateTime(int.parse(fechaAR[0]), int.parse(fechaAR[1]),int.parse(fechaAR[2]));
+}
+
+
+//Regresa la edad apartir de una fecha dada.
+int getEdad(DateTime date) => (date == null) ? 0 : Age.dateDifference(
+  fromDate      : date,
+  toDate        : DateTime.now(),
+  includeToDate : false
+).years;

@@ -7,17 +7,22 @@ import 'package:precheckin/routes/routes.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'pages/Splash.dart';
 import 'tools/application.dart';
+import 'package:precheckin/providers/configuracion_provider.dart';
 
 
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
-  final qrPersistence = new QRPersistence();
+
+  
+  final qrPersistence = new QRPersistence();//Inicializar la clase que almacenará los códigos qr proceasdos.
   await qrPersistence.initPref();
 
-  final usrPref = UserPreferences();
+  final usrPref = UserPreferences();//Inicializar la clase para almacenar parémetros que se usan durante el procesp de precheckin.
   await usrPref.initPref();
 
+  final config = ConfiguracionProvider(); //Inicializar los parámetros de conficguración de la aplicación.
+  await config.initData();
 
   runApp(new MyApp());
 } 
@@ -51,8 +56,10 @@ class _MyAppState extends State<MyApp> {
     return new MaterialApp(
       title: 'My Application',
       theme: new ThemeData(
-        primarySwatch: Colors.blue,
-        primaryColor: Color.fromRGBO(191, 52, 26, 1)
+        primarySwatch: Colors.red,
+        primaryColor: Color.fromRGBO(191, 52, 26, 1),
+        accentColor: Color.fromRGBO(191, 52, 26, 1),
+        splashColor: Color.fromRGBO(191, 52, 26, 1),
       ),
       localizationsDelegates: [
         _localeOverrideDelegate,

@@ -23,20 +23,16 @@ class EspecialRequest {
     this.solucion,
   });
 
-  factory EspecialRequest.fromJson(Map<String, dynamic> json){
-
-    return new EspecialRequest(
-      numReporte: json['numReporte'] ?? 0,
-      categoria: json['categoria'] != null ? json['categoria'].trim() : '',
-      subcategoria: json['subcategoria'] != null ? json['subcategoria'].trim() : '',
-      area: json['area'] != null ? json['area'].trim() : '',
-      seccion: json['seccion'] != null ? json['seccion'].trim() : '',
-      departamento: json['departamento'] != null ? json['departamento'].trim() : '',
-      fechaReporte: json['fechaReporte'] != null ? json['fechaReporte'].trim() : '',
-      fechaSolucion: json['fechaSolucion'] != null ? json['fechaSolucion'] : '',
-      reporte: json['reporte'] != null ? json['reporte'].trim() : '',
-      solucion: json['solucion'] != null ? json['solucion'] : '',
+  factory EspecialRequest.fromJson(Map<String, dynamic> json) => EspecialRequest(
+      numReporte    : json['numReporte'] ?? 0,
+      categoria     : json['categoria'] != null ? json['categoria'].trim() : '',
+      subcategoria  : json['subcategoria'] != null ? json['subcategoria'].trim() : '',
+      area          : json['area'] != null ? json['area'].trim() : '',
+      seccion       : json['seccion'] != null ? json['seccion'].trim() : '',
+      departamento  : json['departamento'] != null ? json['departamento'].trim() : '',
+      fechaReporte  : json['fechaReporte'] != null ? json['fechaReporte'].trim() : '',
+      fechaSolucion : json['fechaSolucion'] != null ? json['fechaSolucion'] : '',
+      reporte       : json['reporte'] != null ? json['reporte'].trim() : '',
+      solucion      : json['solucion'] != null ? json['solucion'] : '',
     );
-
-  }
 }

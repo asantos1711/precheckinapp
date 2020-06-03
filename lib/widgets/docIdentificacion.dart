@@ -48,26 +48,19 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
               maxLines: 2,
               ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                child: InkWell(
-                  splashColor: Colors.grey,
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) => ElegirIdentificacion(acompaniantes: acompaniantes,),
-                        )
-                      ); 
-                    },
-                    child:_condicionIcono()?
-                      Icon(Icons.check_circle_outline, color:Colors.green, size: 30,):
-                      Icon(Icons.camera_alt, color: Color.fromRGBO(0, 165, 227, 1), size: 30,)
-                  )
-              )
-            ],
+         InkWell(
+          splashColor: Colors.grey,
+            onTap: (){
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) => ElegirIdentificacion(acompaniantes: acompaniantes,),
+                )
+              ); 
+            },
+            child:_condicionIcono()?
+              Icon(Icons.check_circle_outline, color:Colors.green, size: 30,):
+              Icon(Icons.camera_alt, color: Color.fromRGBO(0, 165, 227, 1), size: 30,)
           )
         ],
       )

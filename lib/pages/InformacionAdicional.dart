@@ -3,13 +3,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:precheckin/blocs/pms_bloc.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
-import 'package:precheckin/pages/acompaniantes_page.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
-import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/card_acompanante.dart';
@@ -19,21 +18,10 @@ import 'package:precheckin/widgets/docIdentificacion.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:signature/signature.dart';
 import 'package:precheckin/utils/tools_util.dart' as tools;
-
 import 'ViewWebView.dart';
-
-
 import 'package:precheckin/widgets/signature_widget.dart';
 
 class InformacionAdicional extends StatefulWidget {
-  Reserva reserva;
-  Result result;
-  
-  InformacionAdicional({
-    @required this.reserva,
-    @required this.result
-  });
-
   @override
   _InformacionAdicionalState createState() => _InformacionAdicionalState();
 }
@@ -46,12 +34,13 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   bool _avisoPrivaBool = true;
   bool _recibirInfoBool = true;
   bool _poliProceBool = true;
+  bool _reglasCovid = true;
   bool _bloquear = false;
   bool _agregarAcompaniantes = false;
+  PMSBloc _pmsBloc;
   QRPersistence _persistence = new QRPersistence();
   UserPreferences _pref;
   List<String> _qr;
-
   DateTime dateAco = new DateTime.now();
   TextEditingController textController = new TextEditingController(text: '');
   Reserva _reserva;  
@@ -65,186 +54,264 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   @override
   void initState() {
     super.initState();
-
-    _pref = new UserPreferences();
+    
     _controller.addListener((){});
-    _qr = _persistence.qr;
-    _reserva = this.widget.reserva;
-    _result = this.widget.result;
+    _pmsBloc = new PMSBloc();
+    _pref    = new UserPreferences();
+    _qr      = _persistence.qr;
+    _reserva = _pmsBloc.reserva;
+    _result  = _pmsBloc.result;
 
-    //Promoción
-    _reserva.result.acuerdos.promociones = 1;
-    //Aviso de privacidad
-    _reserva.result.acuerdos.avisoPrivacidad = 1;
-    //Reglamento
-    _reserva.result.acuerdos.reglamento = 1;
-    //Ploiticas y procesos
-    _reserva.result.acuerdos.estsanamb = 1;
-    _reserva.result.acuerdos.estobjdes = 1;
-    _reserva.result.acuerdos.politicas = 1;
+    _pmsBloc.initCheckbox = 1;
+    _enableButton = _poliProceBool && _reglaHotelBool & _avisoPrivaBool && _reglasCovid;
   }
 
-  _botonDisable(){
-    setState(() {
-      _enableButton = _poliProceBool && _reglaHotelBool & _avisoPrivaBool ;
-    });
-  }
+  _botonDisable()=> setState(() =>_enableButton = _poliProceBool && _reglaHotelBool && _avisoPrivaBool && _reglasCovid);
 
   @override
   Widget build(BuildContext context) {
-
-
-   /* print("Adultos: ${_result.numeroAdultos}");
-    print("Menores: ${_result.getTotalMenores()}");
-    
-    print("Maximo Adultod: ${_result.tipoHabitacion.maxAdultos}");
-    print("Maximo Menores: ${_result.tipoHabitacion.maxMenores}");
-*/
-
-    if((_result.numeroAdultos < _result.tipoHabitacion.maxAdultos) || (_result.getTotalMenores() < _result.tipoHabitacion.maxMenores))
-      _agregarAcompaniantes = true;
-
-      
-
-
-
-
-
-
-
     height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
-    return GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: _appBar(),
-          body: Stack(
-            children: <Widget>[
-              ListView(
-                children: <Widget>[
-                  _reglaHotel(),
-                  _poliProce(),
-                  _signatureTitular(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: DocIdentificacion(acompaniantes: _result.titular,)
-                  ),
-                  _tituloAcompa(),
-                  _acompanantes(),
-                  _agregarAco(),
-                  Divider(
-                    height: 2,
-                    color: Colors.grey,
-                  ),
-                  _avisoPriva(),
-                  _recibirInfo(),
-                  _buttonFinalizar(),
-                  SizedBox(
-                    height: 50,
-                  )
-                ],
-              ),
-              tools.bloqueaPantalla(_bloquear)
+    width  = MediaQuery.of(context).size.width;
+    _agregarAcompaniantes = _pmsBloc.habilitarAddAcompaniantes;
 
-            ],
-          )
-          
-          
-        ));
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) 
+          currentFocus.unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: _appBar(),
+        body: Stack(
+          children: <Widget>[
+            ListView(
+              children: <Widget>[
+                _reglaHotel(),
+                _poliProce(),
+                _avisoPriva(),
+                _reglasCOVID(),
+                _recibirInfo(),
+                _signatureTitular(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: DocIdentificacion(acompaniantes: _result.titular,)
+                ),
+                _tituloAcompa(),
+                _acompanantes(),
+                _agregarAco(),
+                _buttonFinalizar(),
+              ],
+            ),
+            tools.bloqueaPantalla(_bloquear)
+          ],
+        )
+      )
+    );
   }
 
+  Widget _appBar() {
+    return AppBar(
+      leading: Container(),
+      title:Container(
+        width: MediaQuery.of(context).size.width/0.7,
+          child: AutoSizeText(
+            Translations.of(context).text('info_acompanantes'),
+            style: appbarTitle,
+            maxLines: 2,
+            maxFontSize: 25.0 ,
+            minFontSize: 5.0 ,
+          )
+        ),
+      centerTitle: true,
+    );
+  }
 
-  //Agrega la firma del titular
+  Widget _reglaHotel() {
+    return CheckTextBold(
+      width: width,
+      onChange:(boo){
+        setState(() {
+          _reglaHotelBool = !_reglaHotelBool;
+          _pmsBloc.reglamento = toInt(_reglaHotelBool);
+        });
+        _botonDisable();
+      } ,
+      value: _reglaHotelBool,
+      text: Translations.of(context).text('acepto_deacuerdo'),
+      textBold: Translations.of(context).text('reglamento_hotel'),
+      onTap: () {
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: 
+              (context, animation1, animation2) => 
+              ViewWebView(
+                valor : 'reglamento_hotel',
+                politicas: _reserva.politicas,
+                title: Translations.of(context).text('reglamento_hotel'),
+              ),
+            ));
+      },
+    );
+  }
+
+  Widget _poliProce() {
+    return CheckTextBold(
+      width: width,
+      onChange:(boo){
+        setState(() {
+          _poliProceBool = !_poliProceBool;
+          _pmsBloc.politicasProcesos = toInt(_poliProceBool);
+        });
+        _botonDisable();
+      } ,
+      value: _poliProceBool,
+      text: Translations.of(context).text('acepto_deacuerdo'),
+      textBold: Translations.of(context).text('politicas_procedimientos'),
+      onTap: () {
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: 
+              (context, animation1, animation2) => 
+              ViewWebView(
+                valor: 'politicas_procedimientos',
+                politicas: _reserva.politicas,
+                title:Translations.of(context).text('politicas_procedimientos'),
+              ),
+            ));
+      },
+    );
+  }
+
+  Widget _avisoPriva() {
+    return CheckTextBold(
+      width: width,
+      onChange:(boo){
+        setState(() {
+          _avisoPrivaBool = !_avisoPrivaBool;
+          _pmsBloc.avisoPrivacidad = toInt(_avisoPrivaBool);
+        });
+        _botonDisable();
+      } ,
+      value: _avisoPrivaBool,
+      text: Translations.of(context).text('acepto_deacuerdo'),
+      textBold: Translations.of(context).text('aviso_privacidad'),
+      onTap: () {
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) => 
+              ViewWebView(
+                valor: 'aviso_privacidad',
+                politicas: _reserva.politicas,
+                title: Translations.of(context).text('aviso_privacidad'),
+              ),
+            ));
+      },
+    );
+  }
+
+  Widget _reglasCOVID() {
+    return CheckTextBold(
+      width: width,
+      onChange:(boo){
+        setState(() {
+          _reglasCovid = !_reglasCovid;
+          _pmsBloc.reglasCovid = toInt(_reglasCovid);
+        });
+        _botonDisable();
+      } ,
+      value: _reglasCovid,
+      text: "Reglamento COVID",
+      textBold: "",
+      onTap: () {},
+    );
+  }
+
+  Widget _recibirInfo() {
+    return CheckTextBold(
+        width: width,
+        onChange:(boo){
+          setState(() {
+            _recibirInfoBool = !_recibirInfoBool;
+            _pmsBloc.promocion = toInt(_recibirInfoBool);
+          });
+        },
+        textBold: '',
+        text: Translations.of(context).text('recibir_info'),
+        onTap: () {},
+        value: _recibirInfoBool
+    );
+  }
+
   Widget _signatureTitular() {
     _controller.addListener(() async {
         var data = await _controller.toPngBytes();
-        _result.titular.imagesign = base64.encode(data);
+        if(data != null)
+          _pmsBloc.signTitular = base64.encode(data);
     });
 
     return Container(
       margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
       child: SignatureWidget(
-        img:_result.titular.imagesign ?? "",
+        img: _pmsBloc.signTitular ?? "",
         title:Translations.of(context).text('ingresa_firma_titular'),
         controller: _controller,
       ),
     );
   }
 
- 
-
-  Widget _buttonFinalizar() {
+  Widget _tituloAcompa() {
     return Container(
-      width: width - 20,
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
       color: Colors.white,
-      child: FlatButton(
-        color: Theme.of(context).primaryColor,
-        textColor: Colors.white,
-        disabledColor: Colors.grey,
-        disabledTextColor: Colors.black,
-        padding: EdgeInsets.all(8.0),
-        splashColor: Colors.grey,
-        onPressed: _enableButton == false ? null : () =>_saveData(),
-        child: Text(
-          Translations.of(context).text('finalizar'),
-          style: TextStyle(fontSize: 20.0, fontFamily: 'Montserrat',fontWeight: FontWeight.bold),
+      padding: EdgeInsets.only(left: 10, right: 10),
+      width: width - 20,
+      child: Text(
+        Translations.of(context).text('acompanantes'),
+        style: TextStyle(
+          fontSize: 25,
         ),
       ));
   }
+  
+  Widget _acompanantes() {
+    List<Widget> widgets = [];
 
-  Future _saveData() async {
-    _bloquearPantalla(true);
+    _pmsBloc.acompaniantes.forEach( (acompaniante){
+      SignatureController _controllerSignature = new SignatureController();
+
+      _controllerSignature.addListener(()async{
+        var data = await _controllerSignature.toPngBytes();
+        if(data != null)
+          acompaniante.imagesign = base64.encode(data);
+      });
+      acompaniante.imagefront = null;
+      Widget widget = CardAcompanante(
+        acompaniante: acompaniante,
+        signature:  Container(
+          margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
+          child: SignatureWidget(
+            img: acompaniante.imagesign ?? "",
+            title:"",
+            controller: _controllerSignature,
+          )
+        )
+      );
+
+      widgets..add(widget);
+
+    } );
     
-    PMSProvider p = new PMSProvider();
-    bool status = await p.actualizaHospedaje(_result);
-
-    _bloquearPantalla(false);
-
-    if(status){
-      if(!_qr.contains(_reserva.codigo))
-        _qr.add(_reserva.codigo);
-
-      _persistence.qr = _qr;
-
-      if(_pref.tieneLigadas) {
-        List<String> procesados = _pref.reservasProcesadas;
-        if(_pref.reservasProcesadas.indexOf(_result.idReserva.toString()) == -1)
-            procesados.add(_result.idReserva.toString());
-
-        _pref.reservasProcesadas = procesados;
-
-        Navigator.pushNamed(context, 'litaReserva', arguments: _reserva);
-
-      } else {
-          Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
-
-      }
-    }
-    else {
-      tools.showAlert(context, "No se logro guardar los datos");
-    }
-
+    return Column(
+      children: widgets,
+    );
   }
-
-
-  void _bloquearPantalla(bool status){
-    _bloquear = status;
-      setState(() {});
-  }
-
+ 
   Widget _agregarAco() {
-
-
     if(!_agregarAcompaniantes)
       return Container();
-
 
     return Container(
       margin: EdgeInsets.all(10.0),
@@ -255,44 +322,68 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         child: Icon(FontAwesomeIcons.plus,size: 24,),
         padding: EdgeInsets.all(16),
         shape: CircleBorder(),
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AcompaniantesPage(reserva: _reserva, result: _result,))),
+        onPressed: () => Navigator.pushNamed(context, "addHuesped")
       )
     );
-
-
-
-
-    /*return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Container(
-            color: Colors.white,
-            margin: EdgeInsets.only(top: 10, bottom: 10),
-            alignment: Alignment.center,
-            child: MaterialButton(
-              onPressed: () {
-                setState(() {
-                  //Para verificar la densidad
-                  //if(_condicionAgregarAcom('0')){
-                    _onAlertWithCustomContentPressed(context);
-                  //}
-                });
-              },
-              color: Color.fromRGBO(0, 165, 227, 1),
-              textColor: Colors.white,
-              child: Icon(
-                FontAwesomeIcons.plus,
-                size: 24,
-              ),
-              padding: EdgeInsets.all(16),
-              shape: CircleBorder(),
-            )
-          ),
-        ],
-      )
-    );*/
   }
+
+  Widget _buttonFinalizar() {
+    return Container(
+      width: width - 20,
+      padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+      margin: EdgeInsets.symmetric(vertical: 30),
+      color: Colors.white,
+      child: FlatButton(
+        color: Theme.of(context).primaryColor,
+        textColor: Colors.white,
+        disabledColor: Colors.grey,
+        disabledTextColor: Colors.black,
+        padding: EdgeInsets.all(8.0),
+        splashColor: Colors.grey,
+        onPressed: _enableButton == false ? null : () =>_saveData(),
+        child: Text(Translations.of(context).text('finalizar'),
+          style: TextStyle(fontSize: 20.0, fontFamily: 'Montserrat',fontWeight: FontWeight.bold),
+        ),
+      ));
+  }
+
+  Future _saveData() async {
+    _bloquearPantalla(true);
+    
+    bool status = await _pmsBloc.actualizaHospedaje();
+
+    _bloquearPantalla(false);
+
+    if(!status)
+      tools.showAlert(context, "No se logro guardar los datos");
+    else {
+      if(!_qr.contains(_reserva.codigo))
+        _qr.add(_reserva.codigo);
+
+      _persistence.qr = _qr;
+
+      if(!_pref.tieneLigadas) 
+        Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
+      else {
+        List<String> procesados = _pref.reservasProcesadas;
+        if(_pref.reservasProcesadas.indexOf(_result.idReserva.toString()) == -1)
+            procesados.add(_result.idReserva.toString());
+
+        _pref.reservasProcesadas = procesados;
+
+        Navigator.pushNamed(context, 'litaReserva', arguments: _reserva);
+      }
+    }
+  }
+
+  void _bloquearPantalla(bool status) => setState(() => _bloquear = status);
+
+  int toInt(bool val) => val ? 1 : 0;
+
+
+
+
+
 
   
   bool _condicionAgregarAcom(String nuevaEdad){
@@ -363,31 +454,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     );
   }
 
-
-  Widget _recibirInfo() {
-    return CheckTextBold(
-        width: width,
-        onChange:(boo){
-          setState(() {
-            _recibirInfoBool = !_recibirInfoBool;
-            _reserva.result.acuerdos.promociones = toInt(_recibirInfoBool);
-          });
-        } ,
-        textBold: '',
-        text:
-          Translations.of(context).text('recibir_info'),
-        onTap: () {},
-        value: _recibirInfoBool
-    );
-  }
-
-  Widget _acompanantes() {
-    return Column(
-      children: _listaAcompaniantes(),
-    );
-  }
-
-_onAlertWithCustomContentPressed(context) {
+  void _onAlertWithCustomContentPressed(context) {
     Acompaniantes _aco = new Acompaniantes();
     _aco.fechanac = new DateTime.now().toString();
     _aco.club = _result.idClub;
@@ -457,56 +524,6 @@ _onAlertWithCustomContentPressed(context) {
         ]).show();
   }
 
-  /*
-  Forma un Widgtet CardAcompaniantes por
-  cada uno de los acompaniantes que bienen
-  del servicio.
-  */
-  List<Widget> _listaAcompaniantes() {
-    List<Widget> widgets = [];
-
-    _result.acompaniantes.forEach( (acompaniante){
-      SignatureController _controllerSignature = new SignatureController();
-
-      _controllerSignature.addListener(()async{
-        var data = await _controllerSignature.toPngBytes();
-        acompaniante.imagesign = base64.encode(data);
-      });
-      acompaniante.imagefront = null;
-      Widget widget = CardAcompanante(
-        acompaniante: acompaniante,
-        signature:  Container(
-          margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
-          child: SignatureWidget(
-            img: acompaniante.imagesign ?? "",
-            title:"",
-            controller: _controllerSignature,
-          )
-        )
-      );
-
-      widgets..add(widget);
-
-    } );
-    
-    return widgets;
-  }
-
-  
-
-  Widget _tituloAcompa() {
-    return Container(
-        color: Colors.white,
-        padding: EdgeInsets.only(left: 10, right: 10),
-        width: width - 20,
-        child: Text(
-          Translations.of(context).text('acompanantes'),
-          style: TextStyle(
-            fontSize: 25,
-          ),
-        ));
-  }
-
   Widget _docuTitular() {
     return Container(
         color: Colors.white,
@@ -545,112 +562,4 @@ _onAlertWithCustomContentPressed(context) {
           ],
         ));
   }
-
-  Widget _poliProce() {
-    return CheckTextBold(
-      width: width,
-      onChange:(boo){
-        setState(() {
-          _poliProceBool = !_poliProceBool;
-          _reserva.result.acuerdos.politicas = toInt(_poliProceBool);
-          _reserva.result.acuerdos.estobjdes = toInt(_poliProceBool);
-          _reserva.result.acuerdos.estsanamb = toInt(_poliProceBool);
-        });
-        _botonDisable();
-      } ,
-      value: _poliProceBool,
-      text: Translations.of(context).text('acepto_deacuerdo'),
-      textBold: Translations.of(context).text('politicas_procedimientos'),
-      onTap: () {
-        Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: 
-              (context, animation1, animation2) => 
-              ViewWebView(
-                valor: 'politicas_procedimientos',
-                politicas: _reserva.politicas,
-                title:Translations.of(context).text('politicas_procedimientos'),
-              ),
-            ));
-      },
-    );
-  }
-
-  Widget _reglaHotel() {
-    return CheckTextBold(
-      width: width,
-      onChange:(boo){
-        setState(() {
-          _reglaHotelBool = !_reglaHotelBool;
-          _reserva.result.acuerdos.reglamento = toInt(_reglaHotelBool);
-        });
-        _botonDisable();
-      } ,
-      value: _reglaHotelBool,
-      text: Translations.of(context).text('acepto_deacuerdo'),
-      textBold: Translations.of(context).text('reglamento_hotel'),
-      onTap: () {
-        Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: 
-              (context, animation1, animation2) => 
-              ViewWebView(
-                valor : 'reglamento_hotel',
-                politicas: _reserva.politicas,
-                title: Translations.of(context).text('reglamento_hotel'),
-              ),
-            ));
-      },
-    );
-  }
-
-  Widget _avisoPriva() {
-    return CheckTextBold(
-      width: width,
-      onChange:(boo){
-        setState(() {
-          _avisoPrivaBool = !_avisoPrivaBool;
-          _reserva.result.acuerdos.avisoPrivacidad = toInt(_avisoPrivaBool);
-        });
-        _botonDisable();
-      } ,
-      value: _avisoPrivaBool,
-      text: Translations.of(context).text('acepto_deacuerdo'),
-      textBold: Translations.of(context).text('aviso_privacidad'),
-      onTap: () {
-        Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => 
-              ViewWebView(
-                valor: 'aviso_privacidad',
-                politicas: _reserva.politicas,
-                title: Translations.of(context).text('aviso_privacidad'),
-              ),
-            ));
-      },
-    );
-  }
-
- 
-
-  Widget _appBar() {
-    return AppBar(
-      leading: Container(),
-      title:Container(
-        width: MediaQuery.of(context).size.width/0.7,
-          child: AutoSizeText(
-            Translations.of(context).text('info_acompanantes'),
-            style: appbarTitle,
-            maxLines: 2,
-            maxFontSize: 25.0 ,
-            minFontSize: 5.0 ,
-          )
-        ),
-      centerTitle: true,
-    );
-  }
-  int toInt(bool val) => val ? 1 : 0;
 }

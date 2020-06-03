@@ -21,7 +21,7 @@ class CardAcompanante extends StatefulWidget {
     @required this.acompaniante,
     this.adultos = true,
     this.menores = true,
-    this.nuevo = false
+    this.nuevo = false,
   });
 
   @override
@@ -38,7 +38,6 @@ class _CardAcompananteState extends State<CardAcompanante> {
   TextEditingController _controllerFechaEdad = new TextEditingController();
   @override
   void initState() {
-    // TODO: implement initState
     _signature = this.widget.signature;
     _acompaniante = this.widget.acompaniante;
     _fecaNac = DateTime.parse(_acompaniante.fechanac.replaceAll('-', ""));
@@ -69,16 +68,19 @@ class _CardAcompananteState extends State<CardAcompanante> {
         toDate        : DateTime.now(),
         includeToDate : false
       ).years;
-
-      if(!widget.adultos && (age >= 18)) {
+      
+      //TODO: parametrizar la edad
+      if(widget.adultos && age >= 18 && widget.nuevo) {
         tools.showAlert(context, Translations.of(context).text("not_more_adults"));
         return null;
       }
 
-      if(!widget.menores && (age < 18)) {
+      //TODO: parametrizar la edad
+      if(widget.menores && age < 18 && widget.nuevo) {
         tools.showAlert(context, Translations.of(context).text("not_more_minors"));
         return null;
       }
+      
 
       setState(() {
         _fecaNac                  = picked;

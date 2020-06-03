@@ -61,7 +61,6 @@ class _SignatureWidgetState extends State<SignatureWidget> {
             height: 100.0,
             child: Image.memory(base64.decode(widget.img)),
           ),
-          //SizedBox(height: 10.0,),
           FlatButton(
             child: Text(
               Translations.of(context).text('change'),style: greyText,
@@ -97,14 +96,6 @@ class _SignatureWidgetState extends State<SignatureWidget> {
                   color: Colors.white,
                   onPressed: () => setState(() => _controller.clear()),
                 ),
-                /*FlatButton(
-                  child: Text(Translations.of(context).text('cancel')),
-                  color: Colors.white,
-                  onPressed:(){
-                     _capturar = !_capturar;
-                     setState(() => _controller.clear());
-                  },
-                ),*/
             ],
           ),
         ],

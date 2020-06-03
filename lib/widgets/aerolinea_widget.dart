@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:precheckin/pages/mixins/hotel_mixin.dart';
 
 import 'package:precheckin/providers/aerolinea_provider.dart';
 import 'package:precheckin/search/aerolineas_search.dart';

@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:precheckin/tools/translation.dart';
-
+import 'package:precheckin/blocs/pms_bloc.dart';
 import 'package:precheckin/styles/styles.dart';
-import 'package:precheckin/models/reserva_model.dart';
-import 'package:precheckin/utils/hotel_utils.dart' as util_hotel;
+import 'package:precheckin/tools/translation.dart';
+import 'package:precheckin/utils/hotel_utils.dart';
 
-class HotelMixin{
+class InfoHospedaje extends StatelessWidget {
+  Reserva reserva;
+  Result result;
+  
+  InfoHospedaje({
+    this.reserva,
+    this.result
+  });
 
-  Widget infoReserva(BuildContext context, Reserva reserva, Result result){
-    return Container(
-      padding: EdgeInsets.all(20.0),
-      decoration: BoxDecoration(color: backgroundBloqueado),
-      child: Column(
+  @override
+  Widget build(BuildContext context) {
+    return Column(
         children: <Widget>[
           _infoHotel(reserva),
           _infoReservacion(context, result),
@@ -21,8 +25,7 @@ class HotelMixin{
           _planViaje(context, reserva, result),
           _requeEspeciales(context, reserva),
         ]
-      ),
-    );
+      );
   }
 
   Widget _infoHotel(Reserva reserva){
@@ -32,7 +35,7 @@ class HotelMixin{
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Hotel',style: etiqueta),
+          Text('Hotel',style: greyText.copyWith(fontWeight: FontWeight.w200)),
           SizedBox(height: 5,),
           Text( reserva.nombreHotel, style: valor ),
           SizedBox(height: 5,)
@@ -49,7 +52,7 @@ class HotelMixin{
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(Translations.of(context).text('no_reserva'), style: etiqueta),
+          Text(Translations.of(context).text('no_reserva'),style: greyText.copyWith(fontWeight: FontWeight.w200)),
           SizedBox(height: 5.0),
           Text(result.idReserva.toString(),style: valor),
           SizedBox(height: 5.0)
@@ -69,7 +72,7 @@ class HotelMixin{
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(Translations.of(context).text('llegada'), style: etiqueta,),
+              Text(Translations.of(context).text('llegada'),style: greyText.copyWith(fontWeight: FontWeight.w200)),
               SizedBox(height: 5.0),
               Text(result.fechaCheckin, style: valor,),
               SizedBox(height: 5.0)
@@ -78,7 +81,7 @@ class HotelMixin{
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              Text(Translations.of(context).text('salida'),style: etiqueta,),
+              Text(Translations.of(context).text('salida'),style: greyText.copyWith(fontWeight: FontWeight.w200)),
               SizedBox(height: 5.0),
               Text(result.fechaCheckout, style: valor,),
               SizedBox(height: 5.0)
@@ -97,7 +100,7 @@ class HotelMixin{
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(Translations.of(context).text('huespedes'),style: etiqueta,),
+          Text(Translations.of(context).text('huespedes'),style: greyText.copyWith(fontWeight: FontWeight.w200)),
           SizedBox(height: 5.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -141,7 +144,7 @@ class HotelMixin{
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(Translations.of(context).text('tipo_habitacion'),style: etiqueta,),
+          Text(Translations.of(context).text('tipo_habitacion'),style: greyText.copyWith(fontWeight: FontWeight.w200)),
           SizedBox(height: 5,),
           Text(result.tipoHabitacion?.descripcion ?? '', style: valor),
           SizedBox(height: 5,)
@@ -158,9 +161,9 @@ class HotelMixin{
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(Translations.of(context).text('plan_viaje'), style: etiqueta),
+          Text(Translations.of(context).text('plan_viaje'),style: greyText.copyWith(fontWeight: FontWeight.w200)),
           SizedBox(height: 5.0),
-          Text(util_hotel.getClavePlan(result.idClub.toString(), reserva.plana),style: valor),
+          Text(getClavePlan(result.idClub.toString(), reserva.plana),style: valor),
           SizedBox(height: 5.0)
         ],
       )

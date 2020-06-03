@@ -3,10 +3,21 @@ import 'package:http/http.dart' as http;
 
 import 'package:precheckin/models/aerolineas_model.dart';
 import 'package:precheckin/models/vuelos_model.dart';
+import 'package:precheckin/providers/configuracion_provider.dart';
 
 class AerolineaProvider {
-  final String _usr = 'apphotel';
-  final String _psw = 'hotel25012018';
+  ConfiguracionProvider _provider;
+  Configuracion _config;
+  String _usr;
+  String _psw;
+
+  AerolineaProvider(){
+    _provider = new ConfiguracionProvider();
+    _config   = _provider?.configuracion;
+    _usr      = _config?.usrServices;
+    _psw      = _config?.pswServices;
+  }
+
 
 
 
@@ -14,7 +25,7 @@ class AerolineaProvider {
   ///para obtener la lista de las aerolineas  disponibles.
   Future<AerolineasModel> getAerolineas() async {
     AerolineasModel aeroLineas;
-    String url = 'http://acuarius.it.sunset.com.mx:8085/GroupSunsetPMSProxyServices/pms/getListaAerolineas';
+    String url = _config?.getAirlinesServiceUrl;
     
     Map<String, String> headers = {
       "Content-Type"  : "application/json",
@@ -41,7 +52,7 @@ class AerolineaProvider {
   ///vuelos de la fecha proporcionada. Requiere
   ///del parametros [fecha] de tipo DateTime.
   Future<Vuelos> getVuelos(DateTime date) async {
-    String url   = "http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app/getListArrivalCun";
+    String url   = _config?.getFlightsServiceUrl;
     String fecha = "${date.day}/${date.month}/${date.year}";
     String authorization = 'Basic '+base64Encode(utf8.encode('$_usr:$_psw'));
     Vuelos vuelos;
