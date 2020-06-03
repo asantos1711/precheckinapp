@@ -9,7 +9,6 @@ import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
-import 'package:precheckin/providers/pms_provider.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/card_acompanante.dart';
@@ -108,6 +107,23 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
           ],
         )
       )
+    );
+  }
+
+  Widget _appBar() {
+    return AppBar(
+      leading: Container(),
+      title:Container(
+        width: MediaQuery.of(context).size.width/0.7,
+          child: AutoSizeText(
+            Translations.of(context).text('info_acompanantes'),
+            style: appbarTitle,
+            maxLines: 2,
+            maxFontSize: 25.0 ,
+            minFontSize: 5.0 ,
+          )
+        ),
+      centerTitle: true,
     );
   }
 
@@ -362,7 +378,12 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   void _bloquearPantalla(bool status) => setState(() => _bloquear = status);
 
-  
+  int toInt(bool val) => val ? 1 : 0;
+
+
+
+
+
 
   
   bool _condicionAgregarAcom(String nuevaEdad){
@@ -433,12 +454,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     );
   }
 
-
-  
-
-  
-
-_onAlertWithCustomContentPressed(context) {
+  void _onAlertWithCustomContentPressed(context) {
     Acompaniantes _aco = new Acompaniantes();
     _aco.fechanac = new DateTime.now().toString();
     _aco.club = _result.idClub;
@@ -508,11 +524,6 @@ _onAlertWithCustomContentPressed(context) {
         ]).show();
   }
 
-
-  
-
-  
-
   Widget _docuTitular() {
     return Container(
         color: Colors.white,
@@ -551,30 +562,4 @@ _onAlertWithCustomContentPressed(context) {
           ],
         ));
   }
-
-  
-
-  
-
-  
-
- 
-
-  Widget _appBar() {
-    return AppBar(
-      leading: Container(),
-      title:Container(
-        width: MediaQuery.of(context).size.width/0.7,
-          child: AutoSizeText(
-            Translations.of(context).text('info_acompanantes'),
-            style: appbarTitle,
-            maxLines: 2,
-            maxFontSize: 25.0 ,
-            minFontSize: 5.0 ,
-          )
-        ),
-      centerTitle: true,
-    );
-  }
-  int toInt(bool val) => val ? 1 : 0;
 }
