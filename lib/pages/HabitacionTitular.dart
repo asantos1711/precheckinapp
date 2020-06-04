@@ -40,6 +40,13 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         children: <Widget>[
           _seccionReservacion(),
           _seccionTitular(),
+
+          /*IconButton(icon: Icon(Icons.title),
+          onPressed: (){
+            _pmsBloc.position = -1;
+            Navigator.pushNamed(context, "questionsCovid");
+          },),*/
+
           _seccionContacto(),
           _seccionVuelo(),
           _buttonContinuar(),

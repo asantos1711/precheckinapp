@@ -1,5 +1,6 @@
 import 'package:age/age.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
+import 'package:precheckin/models/covid_questions_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
 export 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/providers/pms_provider.dart';
@@ -16,6 +17,7 @@ class PMSBloc {
   Reserva _reserva;
   Result  _result;
   PMSProvider _provider;
+  int _position;
 
 
   ///Inicializa la instancia de Reserva
@@ -126,7 +128,6 @@ class PMSBloc {
   int get reglasCovid => _result?.acuerdos?.reglamentoCOVID;
   set reglasCovid(int val) => _result?.acuerdos?.reglamentoCOVID = val;
 
-
   //GET/SET politicas y procesos.
   int get politicasProcesos => _result?.acuerdos?.estsanamb;
   set politicasProcesos(int val){
@@ -186,6 +187,23 @@ class PMSBloc {
   //Incrementar Menores por Equivalencia
   set incrementarMenoresEquivalencia(int val) => _result.menoresPorEquivalencia = _result.menoresPorEquivalencia + val ;
   set incrementarAdultosEquivalencia(int val) => _result.adultosPorEquivalencia = _result.adultosPorEquivalencia + val;
+
+  //Establecer la posición del acompañante
+  set position(int p) => _position = p;
+
+  //Obtener el acompañante o el titular.
+  Acompaniantes getAcompaniante() => (_position == -1) ? _result?.titular : _result?.acompaniantes[_position];
+
+  //Asignar las respuestas al acompañante.
+  void setCuestionarioCovid(CovidQuestionsModel q){
+    if(_position == -1) {
+      _result?.titular?.responseCovid = true;
+      _result?.titular?.covidQuestions = q;
+    } else {
+       _result?.acompaniantes[_position]?.responseCovid = true;
+       _result?.acompaniantes[_position]?.covidQuestions = q;
+    }
+  }
 
   //Actualizar la información de la reserva
   Future<bool> actualizaHospedaje() async => await _provider.actualizaHospedaje(_result);
