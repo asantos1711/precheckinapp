@@ -163,6 +163,7 @@ class PMSBloc {
 
   //GET Lista de Acompañantes.
   List<Acompaniantes> get acompaniantes => _result?.acompaniantes;
+  set acompaniantes(List<Acompaniantes> acompaniantes) => _result.acompaniantes = acompaniantes;
 
   //ADD acompañante
   set addAcompaniante(Acompaniantes acompaniante) => _result.acompaniantes.add(acompaniante);

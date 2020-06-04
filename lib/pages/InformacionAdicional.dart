@@ -11,6 +11,7 @@ import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
+import 'package:precheckin/widgets/ColumnBuilder.dart';
 import 'package:precheckin/widgets/card_acompanante.dart';
 import 'package:precheckin/widgets/check_text_bold.dart';
 import 'package:precheckin/widgets/custom_signature.dart';
@@ -95,7 +96,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
                 _signatureTitular(),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: DocIdentificacion(acompaniantes: _result.titular,)
+                  child: DocIdentificacion(acompaniantes: _result.titular)
                 ),
                 _tituloAcompa(),
                 _acompanantes(),
@@ -277,7 +278,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   }
   
   Widget _acompanantes() {
-    List<Widget> widgets = [];
+    /* List<Widget> widgets = [];
 
     _pmsBloc.acompaniantes.forEach( (acompaniante){
       SignatureController _controllerSignature = new SignatureController();
@@ -302,10 +303,33 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
       widgets..add(widget);
 
-    } );
-    
-    return Column(
-      children: widgets,
+    } ); */
+    this.setState(() {
+      _pmsBloc.acompaniantes = _pmsBloc.acompaniantes;
+    }); 
+    return ColumnBuilder(
+      itemCount: _pmsBloc.acompaniantes.length,
+      itemBuilder: (context,index){
+        SignatureController _controllerSignature = new SignatureController();
+
+        _controllerSignature.addListener(()async{
+          var data = await _controllerSignature.toPngBytes();
+          if(data != null)
+            _pmsBloc.acompaniantes[index].imagesign = base64.encode(data);
+        });
+        //_pmsBloc.acompaniantes[index].imagefront = null;
+        return CardAcompanante(
+          acompaniante: _pmsBloc.acompaniantes[index],
+          signature:  Container(
+            margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
+            child: SignatureWidget(
+              img: _pmsBloc.acompaniantes[index].imagesign ?? "",
+              title:"",
+              controller: _controllerSignature,
+            )
+          )
+        ); 
+      }
     );
   }
  

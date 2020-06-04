@@ -91,9 +91,7 @@
   "invalid_date_adult_alert": "The selected date must be equal to or greater than 18 years",
   "invalid_date_minor_alert": "The selected date must be under to 18 years",
   "or":"or",
-<<<<<<< HEAD
-  "editar_imagen":"Edit Image"
-=======
+  "editar_imagen":"Edit Image",
   "covid_cuestionary_title" : "GUEST RISK FACTOR IDENTIFICATION QUESTIONNAIRE",
   "covid_cuestionary_subtitle" : "Dear guest, due to the situation caused by the current health emergency, please complete the following questionnaire:",
   "covid_cuestionary" : "Health Survey",
@@ -114,5 +112,4 @@
   "dificultadRespirar":"Difficulty breathing?",
   "otrosSintomas": "Other symptoms?",
   "save": "Save"
->>>>>>> block
 }

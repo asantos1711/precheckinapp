@@ -395,7 +395,6 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         image64F =base64;
         imageF = cropImage;
         acompaniantes.imagefront =image64F;
-        
         _inProcess =false;
       });
       
@@ -435,8 +434,8 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         image64B =base64;
         imageB = cropImage;
         acompaniantes.imageback =image64B;
-        
         _inProcess =false;
+       
       });
       
       _alertaFinId();
@@ -451,8 +450,8 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     Alert(
       closeFunction:(){
         print('Se cerró la alerta');
-        acompaniantes.imagefront = '';
-        acompaniantes.imageback = '';
+        //acompaniantes.imagefront = '';
+        //acompaniantes.imageback = '';
       } ,
       context: context,
       image: Image.asset('assets/images/id_back.png'),
@@ -617,6 +616,10 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           onPressed: ()async {
             Navigator.pop(context);
             Navigator.pop(context);
+            setState(() {
+              _pmsBloc.acompaniantes = _pmsBloc.acompaniantes;
+            });
+            
           } ,
           child: Text(
             Translations.of(context).text('finalizar'),
@@ -733,8 +736,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
       acompaniantes.documenttype = _scanerModel.documentTypeReadable??'';
       acompaniantes.imagefront = _scanerModel?.full_image ??'';
       acompaniantes.imageback = _scanerModel?.portrait ??'';
-      acompaniantes.nombre = _scanerModel.givenNamesReadable;
-
+      //acompaniantes.nombre = _scanerModel.givenNamesReadable;
       log('imagefront: ${acompaniantes.imagefront}');
     });
     (_scanerModel.documentTypeReadable!='' && acompaniantes.imagefront!='') 

@@ -93,9 +93,7 @@
   "invalid_date_adult_alert": "La fecha seleccionada debe ser igual o mayor a 18 años.",
   "invalid_date_minor_alert": "La fecha seleccionada debe ser menor de 18 años.",
   "or":"o",
-<<<<<<< HEAD
-  "editar_imagen":"Editar Imagen"
-=======
+  "editar_imagen":"Editar Imagen",
   "covid_cuestionary_title" : "CUESTIONARIO DE IDENTIFICACIÓN DE FACTORES DE RIESGO EN HUÉSPEDES",
   "covid_cuestionary_subtitle" : "Estimado huésped: Debido a la situación provocada por la emergencia sanitaria, le solicitamos que complete el siguiente cuestionario:",
   "covid_cuestionary" : "Encuesta de Sanidad",
@@ -116,5 +114,4 @@
   "dificultadRespirar":"¿Dificultad respiratoria?",
   "otrosSintomas": "¿Otros síntomas?",
   "save": "Guardar"
->>>>>>> block
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mrzflutterplugin/mrzflutterplugin.dart';
+import 'package:precheckin/blocs/pms_bloc.dart';
 import 'package:precheckin/models/ScanerModel.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/pages/ElegirIdentificacion.dart';
@@ -17,6 +18,8 @@ class DocIdentificacion extends StatefulWidget {
 
 class _DocIdentificacionState extends State<DocIdentificacion> {
   double _width;
+  PMSBloc _pmsBloc ;//= new PMSBloc();
+  bool condicion = false;
   Acompaniantes acompaniantes;
   String _result = 'No result yet';
   ScanerModel _scanerModel = new ScanerModel();
@@ -24,14 +27,20 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
 
   @override
   void initState() {
-    super.initState();
-    acompaniantes = this.widget.acompaniantes;
+    _pmsBloc = new PMSBloc();
+    acompaniantes = this.widget.acompaniantes; //.acompaniantes[index];
+    condicion = _condicionIcono();
     
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     _width = MediaQuery.of(context).size.width;
+    setState(() {
+      acompaniantes=acompaniantes;
+        condicion = _condicionIcono();
+    });
     return Container(
       color: Colors.white,
       width: _width-20,
@@ -50,11 +59,14 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
               Navigator.push(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) => ElegirIdentificacion(acompaniantes: acompaniantes,),
+                  pageBuilder: (context, animation1, animation2) =>
+                    ElegirIdentificacion(
+                      acompaniantes: acompaniantes,
+                    ),
                 )
               ); 
             },
-            child:_condicionIcono()?
+            child:condicion?
               Icon(Icons.check_circle_outline, color:Colors.green, size: 30,):
               Icon(Icons.camera_alt, color: Color.fromRGBO(0, 165, 227, 1), size: 30,)
           )
@@ -64,6 +76,7 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
   }
 
   bool _condicionIcono(){
+    
     bool condicion =  (acompaniantes.imageback!=null
       &&acompaniantes.imagefront !=null
       &&acompaniantes.imagefront !=''
