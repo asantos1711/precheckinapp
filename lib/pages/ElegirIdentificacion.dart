@@ -26,8 +26,10 @@ import '../models/commons/acompaniantes_model.dart';
 
 class ElegirIdentificacion extends StatefulWidget {
   Acompaniantes acompaniantes;
+  Function(Acompaniantes) func;
   ElegirIdentificacion({
-    @required this.acompaniantes
+    @required this.acompaniantes,
+    @required this.func
   });
   @override
   _ElegirIdentificacionState createState() => _ElegirIdentificacionState();
@@ -50,6 +52,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
   Acompaniantes acompaniantes;
   PMSBloc _pmsBloc;
   File imageB,imageF;
+  Function(Acompaniantes) func;
   // Obtén una lista de las cámaras disponibles en el dispositivo.
   CameraController controller;
   Future<void> initializeControllerFuture;
@@ -60,6 +63,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
   void initState() {
     _pmsBloc = new PMSBloc();
     acompaniantes = this.widget.acompaniantes;
+    func = this.widget.func;
     if (Platform.isAndroid) {
       Mrzflutterplugin.registerWithLicenceKey(config.configuracion.licenciaScaner);
     } else if (Platform.isIOS) {
@@ -435,7 +439,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         imageB = cropImage;
         acompaniantes.imageback =image64B;
         _inProcess =false;
-       
+        func(acompaniantes);
       });
       
       _alertaFinId();
@@ -736,6 +740,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
       acompaniantes.documenttype = _scanerModel.documentTypeReadable??'';
       acompaniantes.imagefront = _scanerModel?.full_image ??'';
       acompaniantes.imageback = _scanerModel?.portrait ??'';
+      func(acompaniantes);
       //acompaniantes.nombre = _scanerModel.givenNamesReadable;
       log('imagefront: ${acompaniantes.imagefront}');
     });

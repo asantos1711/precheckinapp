@@ -62,6 +62,12 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
                   pageBuilder: (context, animation1, animation2) =>
                     ElegirIdentificacion(
                       acompaniantes: acompaniantes,
+                      func:(aco){
+                        setState(() {
+                          acompaniantes=aco;
+                          condicion = _condicionIcono();
+                        });
+                      }
                     ),
                 )
               ); 
