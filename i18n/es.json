@@ -92,5 +92,6 @@
   "add_minor_alert":"Esta acción necesita 1 espacios de adultos.",
   "invalid_date_adult_alert": "La fecha seleccionada debe ser igual o mayor a 18 años.",
   "invalid_date_minor_alert": "La fecha seleccionada debe ser menor de 18 años.",
-  "or":"o"
+  "or":"o",
+  "editar_imagen":"Editar Imagen"
 }

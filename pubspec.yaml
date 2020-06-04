@@ -35,9 +35,9 @@ dependencies:
   qr_flutter: ^3.1.0
   rflutter_alert: ^1.0.3
   fluttertoast: any
-  image_picker_saver: ^0.3.0
+  ##image_picker_saver: ^0.3.0
   webview_flutter: ^0.3.21
-  camera: any
+  camera: ^0.5.8+2
   path_provider:
   path:
   camera_camera: ^1.0.31
@@ -45,6 +45,8 @@ dependencies:
   flutter_html_textview_render: ^0.1.3
   barcode_scan: ^3.0.1
   flutter_launcher_icons: "^0.7.3"
+  image_cropper: ^1.2.2
+  image_picker: ^0.6.5+2
 
 flutter_icons:
   android: true

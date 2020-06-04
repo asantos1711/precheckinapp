@@ -9,12 +9,15 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' show join;
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:mrzflutterplugin/mrzflutterplugin.dart';
 import 'package:precheckin/blocs/pms_bloc.dart';
+import 'package:precheckin/providers/configuracion_provider.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -37,15 +40,16 @@ class TipoDoc {
   TipoDoc({this.name, this.index, this.icon,this.short});
 }
 class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
-  String name;
-  int index;
-  String nameItem ;
-  int idItem ;
+  String name,image64B,image64F,nameItem ,fullImage;
+  int index,idItem;
+  var config = ConfiguracionProvider();
+  double width;
+  bool _inProcess = false;
   TipoDoc _isSelect = null;
   ScanerModel _scanerModel = new ScanerModel();
-  String fullImage;
   Acompaniantes acompaniantes;
   PMSBloc _pmsBloc;
+  File imageB,imageF;
   // Obtén una lista de las cámaras disponibles en el dispositivo.
   CameraController controller;
   Future<void> initializeControllerFuture;
@@ -57,7 +61,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     _pmsBloc = new PMSBloc();
     acompaniantes = this.widget.acompaniantes;
     if (Platform.isAndroid) {
-      Mrzflutterplugin.registerWithLicenceKey('');
+      Mrzflutterplugin.registerWithLicenceKey(config.configuracion.licenciaScaner);
     } else if (Platform.isIOS) {
       Mrzflutterplugin.registerWithLicenceKey("C500C89F1E88DC48B05981B3CB55CEB287CB42CEC4886223D30555F0DE9B7C036E6C0BB2563CB6B933376B3590FA5FA52B5AAC55F8FA6F90777EAC1474E360655681C3AA91770BEBC3E2C524BBFB05E8");
     }
@@ -112,17 +116,29 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: _appbar(),
-      body: Column(
+    width = MediaQuery.of(context).size.width;
+    return Stack(
       children: <Widget>[
-          _headerText(),
-          _lista(),
-          _aviso(),
-          _buttonContinuar()
-        ],
-      )
+        Scaffold(
+          backgroundColor: Colors.white,
+          appBar: _appbar(),
+          body: Column(
+          children: <Widget>[
+              _headerText(),
+              _lista(),
+              _aviso(),
+              _buttonContinuar()
+            ],
+          )
+        ),
+        (_inProcess)?
+          Container(
+            height: MediaQuery.of(context).size.height,
+            color: Colors.white.withOpacity(0.5),
+            child: Center(child: CircularProgressIndicator(),),
+          )
+        :Center()
+      ],
     );
   }
 
@@ -272,6 +288,12 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         disabledTextColor: Colors.black,
         padding: EdgeInsets.all(8.0),
         onPressed: () async {
+          print('isTutular: '+acompaniantes.istitular.toString());
+          print('idacompaniantes: '+acompaniantes.idacompaniantes.toString());
+          print('IDACO: '+acompaniantes.idcliente.toString());
+          print('Contains: '+_pmsBloc.acompaniantes.contains(acompaniantes).toString());
+          
+          
           if(_isSelect == null){
             Fluttertoast.showToast(
               msg: Translations.of(context).text('selec_tipo_doc'),
@@ -333,7 +355,9 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           color: Colors.white,
           onPressed: () {
             Navigator.pop(context);
-            _idDocument();
+            _pickImageF(ImageSource.camera);
+            //_alertBackimage();
+            //_idDocument();
           } ,
           child: Text(
             Translations.of(context).text('continuar'),
@@ -344,22 +368,152 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     ).show();
   }
 
-_idDocument () async {
-  double width = MediaQuery.of(context).size.width;
-  File file1 = await  Navigator.push(
-      context, 
-      MaterialPageRoute(
-        builder: (context) => Camera(
-          imageMask: Container(
-            width:width,
-            height: width*0.55,
-              decoration: BoxDecoration(
-              border: Border.all(width: 5, color: Colors.grey.withAlpha(500) ),
-            ), 
-          ) 
+  _pickImageF(ImageSource source)async{
+    this.setState(() {
+      _inProcess =true;
+    });
+    File cropImage ;
+    String base64;
+    //LostDataResponse response = await ImagePicker.retrieveLostData();
+    File ima = await ImagePicker.pickImage(source: source, imageQuality: 100,);
+    if(ima != null){
+        cropImage = await ImageCropper.cropImage(
+        sourcePath: ima.path,
+        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 0.6),
+        compressQuality: 100,
+        androidUiSettings: AndroidUiSettings(
+          toolbarTitle: Translations.of(context).text('editar_imagen')
+        ),
+        iosUiSettings: IOSUiSettings(
+          title: Translations.of(context).text('editar_imagen')
         )
-      )
-    );
+      );
+      List<int> imageBytes = await cropImage.readAsBytes();
+      base64 = base64Encode(imageBytes);
+
+      setState(() {
+        image64F =base64;
+        imageF = cropImage;
+        acompaniantes.imagefront =image64F;
+        
+        _inProcess =false;
+      });
+      
+      _alertBackimage();
+    }else{
+      this.setState(() {
+        _inProcess =false;
+      });
+    }
+    
+  }
+
+  _pickImageB(ImageSource source)async{
+    this.setState(() {
+      _inProcess =true;
+    });
+    File cropImage ;
+    String base64;
+    //LostDataResponse response = await ImagePicker.retrieveLostData();
+    File ima = await ImagePicker.pickImage(source: source, imageQuality: 100,);
+    if(ima != null){
+        cropImage = await ImageCropper.cropImage(
+        sourcePath: ima.path,
+        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 0.6),
+        compressQuality: 100,
+        androidUiSettings: AndroidUiSettings(
+          toolbarTitle: Translations.of(context).text('editar_imagen')
+        ),
+        iosUiSettings: IOSUiSettings(
+          title: Translations.of(context).text('editar_imagen')
+        )
+      );
+      List<int> imageBytes = await cropImage.readAsBytes();
+      base64 = base64Encode(imageBytes);
+
+      setState(() {
+        image64B =base64;
+        imageB = cropImage;
+        acompaniantes.imageback =image64B;
+        
+        _inProcess =false;
+      });
+      
+      _alertaFinId();
+    }else{
+      this.setState(() {
+        _inProcess =false;
+      });
+    }
+  }
+
+  _alertBackimage(){
+    Alert(
+      closeFunction:(){
+        print('Se cerró la alerta');
+        acompaniantes.imagefront = '';
+        acompaniantes.imageback = '';
+      } ,
+      context: context,
+      image: Image.asset('assets/images/id_back.png'),
+      title: '',
+      content: Column(
+        children: <Widget>[
+        Container(
+          height: 70,
+          child: AutoSizeText(
+            Translations.of(context).text('foto_titulo_dos'),
+            style: greyText.copyWith(fontWeight: FontWeight.bold),
+            //maxLines: 2,
+            maxFontSize: 25.0 ,
+            minFontSize: 10.0 ,
+          )
+        ),
+        Container(
+          height: 90,
+          child: AutoSizeText(
+            Translations.of(context).text('foto_body_dos'),
+            style: greyText,
+            //maxLines: 4,
+            maxFontSize: 17.0 ,
+            minFontSize: 10.0 ,
+          )
+        ),
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          color: Colors.white,
+          onPressed: ()async {
+            Navigator.pop(context);
+            _pickImageB(ImageSource.camera);
+          } ,
+          child: Text(
+            Translations.of(context).text('continuar'),
+            style: lightBlueText.copyWith( fontSize: 20),
+          ),
+        )
+      ]
+    ).show();
+  }
+
+
+  /* _idDocument () async {
+    double width = MediaQuery.of(context).size.width;
+    File file1 = await  Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => Camera(
+            imageMask: Container(
+              width:width,
+              height: width*0.55,
+                decoration: BoxDecoration(
+                border: Border.all(width: 5, color: Colors.grey.withAlpha(500) ),
+              ), 
+            ) 
+          )
+        )
+      );
 
    List<int> imageBytes= await file1.readAsBytes();
     String base64Image = base64Encode(imageBytes);
@@ -425,7 +579,7 @@ _idDocument () async {
               
               log('file ${acompaniantes.imageback}');
               debugPrint('file ${acompaniantes.imageback}');
-            _alertaFinId(file1,file2);
+            //_alertaFinId(file1,file2);
           } ,
           child: Text(
             Translations.of(context).text('continuar'),
@@ -434,9 +588,9 @@ _idDocument () async {
         )
       ]
     ).show();
-  }
+  } */
 
-  _alertaFinId(File file1,file2){
+  _alertaFinId(){
     Alert(
       closeFunction:(){
         print('Se cerró la alerta');
@@ -449,11 +603,11 @@ _idDocument () async {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-            child: Image.file(file1,height: 100,)
+            child: Image.file(imageF,height: 100,)
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-            child: Image.file(file2,height: 100,)
+            child: Image.file(imageB,height: 100,)
           )
         ],
       ),
@@ -508,7 +662,7 @@ _idDocument () async {
     
   }
 
-  _takePhoto(int vuelta){
+ /*  _takePhoto(int vuelta){
     return FloatingActionButton(
         child: Icon(Icons.camera_alt),
         onPressed: () async {
@@ -542,7 +696,7 @@ _idDocument () async {
         }
       }
     );
-  }
+  } */
 
   Future<void> startScanning() async {
     String scannerResult;

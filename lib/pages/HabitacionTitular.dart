@@ -45,7 +45,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
           _buttonContinuar(),
         ],
       ),
-      floatingActionButton: _floatButton(),
+      //floatingActionButton: _floatButton(),
     );
   }
 

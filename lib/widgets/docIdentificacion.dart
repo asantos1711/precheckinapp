@@ -67,10 +67,10 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
     bool condicion =  (acompaniantes.imageback!=null
       &&acompaniantes.imagefront !=null
       &&acompaniantes.imagefront !=''
-      &&acompaniantes.imagefront !=''
+      &&acompaniantes.imageback !=''
       )
-      &&acompaniantes.imageback.length>10
-      &&acompaniantes.imagefront.length>10 ;
+      /* &&acompaniantes.imageback.length>10
+      &&acompaniantes.imagefront.length>10  */;
     return condicion;
   }
 }
