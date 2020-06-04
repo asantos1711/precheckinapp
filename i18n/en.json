@@ -91,5 +91,28 @@
   "invalid_date_adult_alert": "The selected date must be equal to or greater than 18 years",
   "invalid_date_minor_alert": "The selected date must be under to 18 years",
   "or":"or",
+<<<<<<< HEAD
   "editar_imagen":"Edit Image"
+=======
+  "covid_cuestionary_title" : "GUEST RISK FACTOR IDENTIFICATION QUESTIONNAIRE",
+  "covid_cuestionary_subtitle" : "Dear guest, due to the situation caused by the current health emergency, please complete the following questionnaire:",
+  "covid_cuestionary" : "Health Survey",
+  "procedencia": "Country of Residence",
+  "date": "Date",
+  "email_tel": "E-mail and phone number with area code:",
+  "e_mail": "E-mail",
+  "code_area": "Code Area",
+  "pais_visitado":"What countries or cities have you visited the last 15 days?",
+  "paises":"Countries",
+  "ciudades":"Cities",
+  "enContacto":"Do you know if you have been in contact with a confirmed COVID-19 case?",
+  "control_salud":"Please fill the following health questions",
+  "control_salud_instruccion":"Do you have any of the following symptoms?",
+  "temperatura":"100.4ºF temperature or more?",
+  "tos":"Frequent cough and/or sneezing?",
+  "malestar":"General discomfort, headache or any other acute health problem?",
+  "dificultadRespirar":"Difficulty breathing?",
+  "otrosSintomas": "Other symptoms?",
+  "save": "Save"
+>>>>>>> block
 }

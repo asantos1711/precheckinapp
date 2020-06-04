@@ -1,0 +1,29 @@
+{
+	"questions":[
+		{
+			"id":"nombre",
+			"type":"text",
+			"value":null
+		},
+		{
+			"id":"apellido",
+			"type":"text",
+			"value":null
+		},
+		{
+			"id":"edad",
+			"type":"number",
+			"value":null
+		},
+		{
+			"id":"procedencia",
+			"type":"text",
+			"value":null
+		},
+		{
+			"id":"mail",
+			"type":"email",
+			"value":null
+		}
+	]
+}
