@@ -54,4 +54,18 @@ class TipoHabitacion{
       maxMenores   : maxMn,  
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'club'         : club,
+    'activo'       : activo,
+    'agrupacion'   : agrupacion,
+    'idtipohabit'  : idtipohabit,
+    'descripcion'  : descripcion,
+    'idtipotc'     : idtipotc,
+    'tipo'         : tipo,
+    'densidad'     : densidad,
+    'maxOcupantes' : maxOcupantes,
+    'maxAdultos'   : maxAdultos,
+    'maxMenores'   : maxMenores,
+  };
 }

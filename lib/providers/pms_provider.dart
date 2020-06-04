@@ -5,8 +5,6 @@ import 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/models/save_data_model.dart';
 import 'package:precheckin/providers/configuracion_provider.dart';
 
-
-
 class PMSProvider {
   ConfiguracionProvider _provider;
   Configuracion _config;
@@ -19,8 +17,6 @@ class PMSProvider {
     _usr      = _config?.usrServices;
     _psw      = _config?.pswServices;
   }
-
-
 
   ///Obtiene la información de la reservación.
   ///
@@ -60,9 +56,6 @@ class PMSProvider {
     return reserva;
   }
 
-
-
-
   ///Actualiza la infromacion de la reservacion
   ///
   ///realiza la consulta al servicio actualizaHospedajeJson para 
@@ -82,14 +75,13 @@ class PMSProvider {
     try {
       SaveData saveModel = SaveData.fromResult(result);
       final body         = saveModel.toJson();
-      String s = jsonEncode(body);
+      String data        = jsonEncode(body);
       final response     = await http.post(
         uri, 
         headers: headers, 
-        body: jsonEncode(body),
+        body: data,
         encoding: Encoding.getByName("utf-8")
       );
-
       status = json.decode(response.body);
     }  catch (e) {
       print("No fue posible Guardar la información de la reservación!. Se genero la siguinte excepcion:\n$e");

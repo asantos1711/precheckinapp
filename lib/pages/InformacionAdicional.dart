@@ -278,6 +278,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   
   Widget _acompanantes() {
     List<Widget> widgets = [];
+    int i =0;
 
     _pmsBloc.acompaniantes.forEach( (acompaniante){
       SignatureController _controllerSignature = new SignatureController();
@@ -300,12 +301,31 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         )
       );
 
-      widgets..add(widget);
-
+      widgets..add(widget)
+              ..add(_buttonEncuentaCovid(i));
     } );
     
     return Column(
       children: widgets,
+    );
+  }
+
+  Widget  _buttonEncuentaCovid(int position){
+    return Center(
+      child: FlatButton(
+        textColor: Colors.white,
+        disabledColor: Colors.grey,
+        disabledTextColor: Colors.black,
+        color: Color(0xff3F5AA6),
+        padding: EdgeInsets.all(8.0),
+        splashColor: Colors.orange,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: Text(Translations.of(context).text('covid_cuestionary')),
+        onPressed: (){
+          _pmsBloc.position = position;
+          Navigator.pushNamed(context, "questionsCovid");
+        },
+      ),
     );
   }
  

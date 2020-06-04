@@ -106,7 +106,7 @@ class Result {
       acompaniantes     : acompaniantes,
       vuelos            : json['vuelos'].length > 0 ? List<Vuelos>.from( json['vuelos'].map( (v) => Vuelos.fromJson(v) ) ) : [new Vuelos()],
       acuerdos          : json['tarreg'] != null ? Acuerdos.fromJson(json['tarreg']) : null,
-      tipoHabitacion  : json['tipohabitacion']  != null ? TipoHabitacion.fromJson(json['tipohabitacion']) : null,
+      tipoHabitacion    : json['tipohabitacion']  != null ? TipoHabitacion.fromJson(json['tipohabitacion']) : null,
     );
   }
 

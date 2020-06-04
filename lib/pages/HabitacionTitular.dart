@@ -40,14 +40,8 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         children: <Widget>[
           _seccionReservacion(),
           _seccionTitular(),
-
-          /*IconButton(icon: Icon(Icons.title),
-          onPressed: (){
-            _pmsBloc.position = -1;
-            Navigator.pushNamed(context, "questionsCovid");
-          },),*/
-
           _seccionContacto(),
+          _buttonEncuentaCovid(),
           _seccionVuelo(),
           _buttonContinuar(),
         ],
@@ -103,6 +97,25 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
       child: InfoContacto(
         block: _pmsBloc,
       )
+    );
+  }
+
+  Widget  _buttonEncuentaCovid(){
+    return Center(
+      child: FlatButton(
+        textColor: Colors.white,
+        disabledColor: Colors.grey,
+        disabledTextColor: Colors.black,
+        color: Color(0xff3F5AA6),
+        padding: EdgeInsets.all(8.0),
+        splashColor: Colors.orange,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: Text(Translations.of(context).text('covid_cuestionary')),
+        onPressed: (){
+          _pmsBloc.position = -1;
+          Navigator.pushNamed(context, "questionsCovid");
+        },
+      ),
     );
   }
 

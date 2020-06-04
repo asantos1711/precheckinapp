@@ -1,10 +1,10 @@
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/commons/result_model.dart';
+import 'package:precheckin/models/commons/tipo_habitacion_model.dart';
 import 'package:precheckin/models/commons/vuelos_model.dart';
 import 'package:precheckin/models/commons/acuerdos_model.dart';
+import 'package:precheckin/models/covid_questions_model.dart';
 import 'package:precheckin/utils/fecha_util.dart' as futil;
-
-
 
 class SaveData {
     Dbdatostmp dbdatostmp;
@@ -60,6 +60,7 @@ class Rh {
   Acuerdos acuerdos;
   List<Vecaco> vecaco;
   List<Vuelos> vuelos;
+  TipoHabitacion tipoHabitacion;
 
   Rh({
       this.idreserva,
@@ -78,6 +79,7 @@ class Rh {
       this.acuerdos,
       this.vecaco,
       this.vuelos,
+      this.tipoHabitacion
   });
 
   factory Rh.fromResult(Result result){
@@ -104,26 +106,28 @@ class Rh {
       acuerdos        : result.acuerdos,
       vecaco          : vecacos,
       vuelos          : result.vuelos,
+      tipoHabitacion  : result.tipoHabitacion
     );
   }
 
   Map<String, dynamic> toJson() => {
-    "idreserva": idreserva,
-    "idcliente": idcliente,
-    "uclub": uclub,
-    "idstatus": idstatus,
-    "nombre": nombre,
-    "direccion": direccion,
-    "ciudad": ciudad,
-    "telefono": telefono,
-    "emailhogar": emailhogar,
-    "pais": pais,
-    "estado": estado,
-    "cpsocio": cpsocio,
-    "usuarioregistro": usuarioregistro,
-    "tarreg": acuerdos.toJson(),
-    "vecaco": List<dynamic>.from(vecaco.map((x) => x.toJson())),
-    "vuelos": List<dynamic>.from(vuelos.map((v) => v.toJson())),
+    "idreserva"       : idreserva,
+    "idcliente"       : idcliente,
+    "uclub"           : uclub,
+    "idstatus"        : idstatus,
+    "nombre"          : nombre,
+    "direccion"       : direccion,
+    "ciudad"          : ciudad,
+    "telefono"        : telefono,
+    "emailhogar"      : emailhogar,
+    "pais"            : pais,
+    "estado"          : estado,
+    "cpsocio"         : cpsocio,
+    "usuarioregistro" : usuarioregistro,
+    "tarreg"          : acuerdos.toJson(),
+    "vecaco"          : List<dynamic>.from(vecaco.map((x) => x.toJson())),
+    "vuelos"          : List<dynamic>.from(vuelos.map((v) => v.toJson())),
+    "tipoHabitacion"  : tipoHabitacion.toJson(),
   };
 }
 
@@ -142,6 +146,8 @@ class Vecaco {
     String documenttype;
     String documentexpdate;
     int istitular;
+    bool responseCovid;
+    CovidQuestionsModel covidQuestions;
 
     Vecaco({
       this.club,
@@ -158,6 +164,8 @@ class Vecaco {
       this.documenttype,
       this.documentexpdate,
       this.istitular,
+      this.responseCovid,
+      this.covidQuestions
     });
 
     factory Vecaco.fromAcompaniante(Acompaniantes acompaniante) {
@@ -175,7 +183,9 @@ class Vecaco {
         idcard          : acompaniante.idcard,
         documenttype    : acompaniante.documenttype,
         documentexpdate : futil.splitFecha(acompaniante.documentexpdate),
-        istitular       : acompaniante.istitular ? 1 : 0
+        istitular       : acompaniante.istitular ? 1 : 0,
+        responseCovid   : acompaniante.responseCovid,
+        covidQuestions  : acompaniante.covidQuestions
       );
     }
 
@@ -194,5 +204,7 @@ class Vecaco {
       "documenttype"    : documenttype,
       "documentexpdate" : documentexpdate,
       "istitular"       : istitular,
+      "responseCovid"   : responseCovid,
+      "covidQuestions"  : covidQuestions.toJson()
   };
 }

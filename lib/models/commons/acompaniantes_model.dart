@@ -1,4 +1,3 @@
-import 'package:precheckin/models/commons/result_model.dart';
 import 'package:precheckin/models/covid_questions_model.dart';
 
 class Acompaniantes{
@@ -28,8 +27,8 @@ class Acompaniantes{
   bool istitular;
   String estado;
   String codigoPostal;
-  CovidQuestionsModel covidQuestions;
   bool responseCovid;
+  CovidQuestionsModel covidQuestions;
 
   Acompaniantes({
     this.club,
@@ -62,77 +61,35 @@ class Acompaniantes{
     this.responseCovid = false
   });
 
-  factory Acompaniantes.fromJson(Map<String,dynamic> json){
-
-    return new Acompaniantes(
-      club            : json['club'],
-      idcliente       : json['idcliente'],
-      idacompaniantes : json['idacompaniantes'],
-      nombre          : json['nombre'],
-      direccion       : json['direccion'],
-      ciudad          : json['ciudad'],
-      telefono        : json['telefono'],
-      nomcia          : json['nomcia'],
-      dircia          : json['dircia'],
-      ciucia          : json['ciucia'],
-      telcia          : json['telcia'],
-      edad            : json['edad'],
-      parentesco      : json['parentesco'],
-      ocupacion       : json['ocupacion'],
-      fechanac        : json['fechanac'],
-      imagefront      : json['imagefront'],
-      imageback       : json['imageback'],
-      imagesign       : json['imagesign'],
-      pais            : json['pais'],
-      sexo            : json['sexo'],
-      idcard          : json['idcard'],
-      documenttype    : json['documenttype'],
-      documentexpdate : json['documentexpdate'],
-      istitular       : json['istitular'] ?? false,
-      estado          : json['estado'] ?? '',
-      codigoPostal    : json['cpsocio'] ?? '',
-      covidQuestions  : json['cuestionario'] ?? new CovidQuestionsModel()
-    );
-  }
-
-
-  
-
-  factory Acompaniantes.fromResult(Result result){
-
-    return Acompaniantes(
-      club            : result.idClub,
-      idcliente       : result.idCliente,
-      idacompaniantes : result.idCliente,
-      nombre          : result.nombreTitular,
-      direccion       : result.direccion,
-      ciudad          : result.ciudad,
-      telefono        : result.telefono,
-      nomcia          : "",
-      dircia          : "",
-      ciucia          : "",
-      telcia          : "",
-      edad            : "",
-      parentesco      : "",
-      ocupacion       : "",
-      fechanac        : "",
-      imagefront      : "",
-      imageback       : "",
-      imagesign       : "",
-      pais            : result.pais,
-      sexo            : "",
-      idcard          : "",
-      documenttype    : "",
-      documentexpdate : "",
-      istitular       : true,
-      estado          : result.estado,
-      codigoPostal    : result.codigoPostal
-    );
-
-  }
-
-
-  
+  factory Acompaniantes.fromJson(Map<String,dynamic> json) => Acompaniantes(
+    club            : json['club'],
+    idcliente       : json['idcliente'],
+    idacompaniantes : json['idacompaniantes'],
+    nombre          : json['nombre'],
+    direccion       : json['direccion'],
+    ciudad          : json['ciudad'],
+    telefono        : json['telefono'],
+    nomcia          : json['nomcia'],
+    dircia          : json['dircia'],
+    ciucia          : json['ciucia'],
+    telcia          : json['telcia'],
+    edad            : json['edad'],
+    parentesco      : json['parentesco'],
+    ocupacion       : json['ocupacion'],
+    fechanac        : json['fechanac'],
+    imagefront      : json['imagefront'],
+    imageback       : json['imageback'],
+    imagesign       : json['imagesign'],
+    pais            : json['pais'],
+    sexo            : json['sexo'],
+    idcard          : json['idcard'],
+    documenttype    : json['documenttype'],
+    documentexpdate : json['documentexpdate'],
+    istitular       : json['istitular'] ?? false,
+    estado          : json['estado'] ?? '',
+    codigoPostal    : json['cpsocio'] ?? '',
+    covidQuestions  : json['cuestionario'] ?? new CovidQuestionsModel()
+  );
 
   factory Acompaniantes.fromResultJSON(Map<String,dynamic> json){
     String estado = json['estado'] ?? "";
@@ -146,26 +103,12 @@ class Acompaniantes{
       direccion       : json['direccion'] ?? "",
       ciudad          : json['ciudad'] ?? "",
       telefono        : json['telefono'] ?? "",
-      nomcia          : "",
-      dircia          : "",
-      ciucia          : "",
-      telcia          : "",
-      edad            : "",
-      parentesco      : "",
-      ocupacion       : "",
-      fechanac        : "",
-      imagefront      : "",
-      imageback       : "",
-      imagesign       : "",
       pais            : json['pais'] ?? "-",
-      sexo            : "",
-      idcard          : "",
-      documenttype    : "",
-      documentexpdate : "",
       istitular       : true,
       estado          : estado,
-      codigoPostal    : json['cpsocio'] ?? ""
+      codigoPostal    : json['cpsocio'] ?? "",
+      responseCovid   : json['responseCovid'],
+      covidQuestions  : json['covidQuestions']!= null ? CovidQuestionsModel.fromJson(json['covidQuestions']) : new CovidQuestionsModel(),
     );
-
   }
 }

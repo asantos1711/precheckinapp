@@ -25,6 +25,7 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
   String _pais;
   String _email;
   String _tel;
+  List<String> _fContacto;
   double _screenWidth;
   bool _enContacto;
   bool _temp;
@@ -53,8 +54,9 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
     _questions    = _acompaniante.covidQuestions ?? new CovidQuestionsModel();
     _nacimiento   = fechaByString(_acompaniante?.fechanac);
     _edad         = getEdad(_nacimiento);
-    _email        = _acompaniante.istitular ? _pmsBloc.emailTitular : '';
-    _tel          = _acompaniante.istitular ? _pmsBloc.telefonoTitular : '';
+    _email        = _acompaniante.istitular ? _pmsBloc.emailTitular : (_questions?.email ?? '');
+    _tel          = _acompaniante.istitular ? _pmsBloc.telefonoTitular : (_questions?.telefono ?? '');
+    _fContacto    = splitFecha(_questions?.fechaContacto).split("-");
 
     _fechaAhora   = "${_ahora.day}/${_ahora.month}/${_ahora.year}";
     _ctrlName     = new TextEditingController(text: _acompaniante?.nombre);
@@ -62,17 +64,17 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
     _ctrlEmail    = new TextEditingController(text: _email);
     _ctrlTel      = new TextEditingController(text: _tel);
 
-    _ctrlCode      = new TextEditingController(text: _questions?.codigoArea ?? '');
-    _ctrlPaisVisitado = new TextEditingController(text: _questions?.paisesVisitados ?? '');
+    _ctrlCode           = new TextEditingController(text: _questions?.codigoArea ?? '');
+    _ctrlPaisVisitado   = new TextEditingController(text: _questions?.paisesVisitados ?? '');
     _ctrlCiudadVisitado = new TextEditingController(text: _questions?.ciudadesVisitadas ?? '');
-    _enContacto = _questions?.enContacto ?? false;
-    _ctrlFechaContacto = new TextEditingController(text: _questions?.fechaContacto ?? '');
-    _temp = _questions?.temperatura ?? false;
-    _ts = _questions?.tos ?? false;
-    _mal = _questions?.malestarGeneral ?? false;
-    _dificultad = _questions?.dificultadRespirar ?? false;
-    _otrosSintomas = _questions?.otrosSintomas.isNotEmpty ? true : false;
-    _ctrlSintomas = new TextEditingController(text: _questions?.otrosSintomas ?? '');
+    _enContacto         = _questions?.enContacto ?? false;
+    _ctrlFechaContacto  = new TextEditingController(text: (_fContacto.isEmpty || _fContacto.length<2) ? '' : '${_fContacto[2]}-${_fContacto[1]}-${_fContacto[0]}');
+    _temp               = _questions?.temperatura ?? false;
+    _ts                 = _questions?.tos ?? false;
+    _mal                = _questions?.malestarGeneral ?? false;
+    _dificultad         = _questions?.dificultadRespirar ?? false;
+    _otrosSintomas      = _questions?.otrosSintomas.isNotEmpty ? true : false;
+    _ctrlSintomas       = new TextEditingController(text: _questions?.otrosSintomas ?? '');
     
     _questions.fecha = "${_ahora.day}-${_ahora.month}-${_ahora.year}";
     _questions.edad  = _edad;
@@ -421,6 +423,9 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
     if(_otrosSintomas)
       sintomas = TextFormField(
         controller: _ctrlSintomas,
+        decoration: InputDecoration(
+          icon: Text(Translations.of(context).text('cuales')+":", style: greyText.copyWith(fontWeight: FontWeight.w200), textAlign: TextAlign.justify,)
+        ),
         onChanged: (val)=> _questions.otrosSintomas = val,
       );
 
