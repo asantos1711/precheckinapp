@@ -4,6 +4,8 @@ import 'package:precheckin/tools/translation.dart';
 
 import 'package:precheckin/blocs/pms_bloc.dart';
 import 'package:precheckin/utils/fecha_util.dart';
+import 'package:precheckin/utils/tools_util.dart';
+import 'package:precheckin/utils/validaciones_util.dart';
 import 'package:precheckin/widgets/estados_widget.dart';
 import 'package:precheckin/widgets/paises_widget.dart';
 
@@ -77,6 +79,7 @@ class _InfoTitularState extends State<InfoTitular> {
         labelStyle: greyText.copyWith(fontWeight: FontWeight.w200),
       ),
       onChanged: (nombre) => _pmsBloc.nombreTitular = nombre,
+      validator: (nombre) => isRequired(context, nombre),
     );
   }
 
@@ -93,10 +96,9 @@ class _InfoTitularState extends State<InfoTitular> {
               TextFormField(
                 controller: _ctrlFecha,
                 style: greyText.copyWith(fontWeight: FontWeight.bold, fontSize: 15),
-                onTap: (){
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  _selectDate(context);
-                },
+                readOnly: true,
+                onTap: () => _selectDate(context),
+                validator: (fecha) => isAdult(context, true, val: fecha, splitBy: '/')
               )
             ],
           ),
@@ -132,10 +134,13 @@ class _InfoTitularState extends State<InfoTitular> {
     if (picked != null) {
       setState(() {
         int age = getEdad(picked);
-
-        _ctrlEdad.text     = age.toString();
-        _ctrlFecha.text    = "${picked.day}/${picked.month}/${picked.year}";
-        _pmsBloc.fnTitular = "${picked.year}-${picked.month}-${picked.day}";
+        if(age < 18)
+          showAlert(context, Translations.of(context).text("adult_required"));
+        else {
+          _ctrlEdad.text     = age.toString();
+          _ctrlFecha.text    = "${picked.day}/${picked.month}/${picked.year}";
+          _pmsBloc.fnTitular = "${picked.year}-${picked.month}-${picked.day}";
+        }
       });
     }
   }

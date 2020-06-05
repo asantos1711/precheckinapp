@@ -111,5 +111,12 @@
   "malestar":"General discomfort, headache or any other acute health problem?",
   "dificultadRespirar":"Difficulty breathing?",
   "otrosSintomas": "Other symptoms?",
-  "save": "Save"
+  "save": "Save",
+  "cuales": "Which",
+  "field_required": "This field is required",
+  "invalid_mail":"Invalid e-mail",
+  "adult_required":"You must be of legal age",
+  "cuestionary_required":"It is necessary to answer the health survey",
+  "all_cuestionary_required":"It is necessary to answer all the health surveys",
+  "values_invalid" :"Some fields are required or invalid"
 }

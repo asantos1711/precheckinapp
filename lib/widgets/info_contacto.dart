@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/blocs/pms_bloc.dart';
 import 'package:precheckin/styles/styles.dart';
+import 'package:precheckin/utils/validaciones_util.dart';
 
 class InfoContacto extends StatefulWidget {
   PMSBloc block;
@@ -52,6 +53,7 @@ class _InfoContactoState extends State<InfoContacto> {
               enabled: _enableEmail,
               keyboardType: TextInputType.emailAddress,
               onChanged: (email) => _block.emailTitular = email,
+              validator: _enableEmail ? (email)=>isEmail(context, email, true) : null,
             ),
             SizedBox(height: 5,),
             Text(Translations.of(context).text('telefono'),style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16),),
@@ -60,6 +62,7 @@ class _InfoContactoState extends State<InfoContacto> {
               enabled: _enableTel,
               keyboardType: TextInputType.number,
               onChanged: (tel) => _block.telefonoTitular = tel,
+              validator: _enableTel ? (tel)=> isRequired(context, tel) : null,
             ),
           ],
         )

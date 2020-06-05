@@ -12,6 +12,7 @@ import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/ColumnBuilder.dart';
+import 'package:precheckin/widgets/btn_encuesta_salud_widget.dart';
 import 'package:precheckin/widgets/card_acompanante.dart';
 import 'package:precheckin/widgets/check_text_bold.dart';
 import 'package:precheckin/widgets/custom_signature.dart';
@@ -304,6 +305,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
       widgets..add(widget);
 
     } ); */
+    
     this.setState(() {
       _pmsBloc.acompaniantes = _pmsBloc.acompaniantes;
     }); 
@@ -318,18 +320,32 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
             _pmsBloc.acompaniantes[index].imagesign = base64.encode(data);
         });
         //_pmsBloc.acompaniantes[index].imagefront = null;
-        return CardAcompanante(
-          acompaniante: _pmsBloc.acompaniantes[index],
-          signature:  Container(
-            margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
-            child: SignatureWidget(
-              img: _pmsBloc.acompaniantes[index].imagesign ?? "",
-              title:"",
-              controller: _controllerSignature,
-            )
-          )
+        return Column(
+          children: <Widget>[
+            CardAcompanante(
+              acompaniante: _pmsBloc.acompaniantes[index],
+              signature:  Container(
+                margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
+                child: SignatureWidget(
+                  img: _pmsBloc.acompaniantes[index].imagesign ?? "",
+                  title:"",
+                  controller: _controllerSignature,
+                )
+              )
+            ),
+            _buttonEncuentaCovid(index)
+          ],
         ); 
       }
+    );
+  }
+
+  Widget  _buttonEncuentaCovid(int position){
+    return Center(
+      child:  BtnEncuestaSalud(
+        pmsBloc: _pmsBloc,
+        posicion: position,
+      ),
     );
   }
  
@@ -372,32 +388,38 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   }
 
   Future _saveData() async {
-    _bloquearPantalla(true);
-    
-    bool status = await _pmsBloc.actualizaHospedaje();
+    if(!_pmsBloc.verificarEncuestas())
+      tools.showAlert(context, Translations.of(context).text("all_cuestionary_required"));
+    else{
 
-    _bloquearPantalla(false);
+      _bloquearPantalla(true);
+      
+      bool status = await _pmsBloc.actualizaHospedaje();
 
-    if(!status)
-      tools.showAlert(context, "No se logro guardar los datos");
-    else {
-      if(!_qr.contains(_reserva.codigo))
-        _qr.add(_reserva.codigo);
+      _bloquearPantalla(false);
 
-      _persistence.qr = _qr;
-
-      if(!_pref.tieneLigadas) 
-        Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
+      if(!status)
+        tools.showAlert(context, "No se logro guardar los datos");
       else {
-        List<String> procesados = _pref.reservasProcesadas;
-        if(_pref.reservasProcesadas.indexOf(_result.idReserva.toString()) == -1)
-            procesados.add(_result.idReserva.toString());
+        if(!_qr.contains(_reserva.codigo))
+          _qr.add(_reserva.codigo);
 
-        _pref.reservasProcesadas = procesados;
+        _persistence.qr = _qr;
 
-        Navigator.pushNamed(context, 'litaReserva', arguments: _reserva);
+        if(!_pref.tieneLigadas) 
+          Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
+        else {
+          List<String> procesados = _pref.reservasProcesadas;
+          if(_pref.reservasProcesadas.indexOf(_result.idReserva.toString()) == -1)
+              procesados.add(_result.idReserva.toString());
+
+          _pref.reservasProcesadas = procesados;
+
+          Navigator.pushNamed(context, 'litaReserva', arguments: _reserva);
+        }
       }
     }
+
   }
 
   void _bloquearPantalla(bool status) => setState(() => _bloquear = status);
