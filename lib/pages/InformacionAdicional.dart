@@ -226,7 +226,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         _botonDisable();
       } ,
       value: _reglasCovid,
-      text: "Reglamento COVID",
+      text: Translations.of(context).text('reglameto_covid'),
       textBold: "",
       onTap: () {},
     );
