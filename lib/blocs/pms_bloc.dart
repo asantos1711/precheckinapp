@@ -205,6 +205,24 @@ class PMSBloc {
     }
   }
 
+  //Verificar si se contestó la encuesta de salud
+  bool verificarEncuenta(int posicion) => (posicion == -1) ? _result?.titular?.responseCovid ?? false : _result?.acompaniantes[posicion]?.responseCovid ?? false;
+  bool verificarEncuestas(){
+    if(_result?.acompaniantes == null || _result.acompaniantes.isEmpty)
+      return true;
+
+    bool status = true;
+
+    for (var i = 0; i < _result.acompaniantes.length; i++) {
+      if(!(_result.acompaniantes[i].responseCovid)){
+        status = false;
+        break;
+      }
+    }
+
+    return status;
+  }
+
   //Actualizar la información de la reserva
   Future<bool> actualizaHospedaje() async => await _provider.actualizaHospedaje(_result);
 }

@@ -11,6 +11,7 @@ import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
+import 'package:precheckin/widgets/btn_encuesta_salud_widget.dart';
 import 'package:precheckin/widgets/card_acompanante.dart';
 import 'package:precheckin/widgets/check_text_bold.dart';
 import 'package:precheckin/widgets/custom_signature.dart';
@@ -303,6 +304,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
       widgets..add(widget)
               ..add(_buttonEncuentaCovid(i));
+      i++;
     } );
     
     return Column(
@@ -312,19 +314,9 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   Widget  _buttonEncuentaCovid(int position){
     return Center(
-      child: FlatButton(
-        textColor: Colors.white,
-        disabledColor: Colors.grey,
-        disabledTextColor: Colors.black,
-        color: Color(0xff3F5AA6),
-        padding: EdgeInsets.all(8.0),
-        splashColor: Colors.orange,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: Text(Translations.of(context).text('covid_cuestionary')),
-        onPressed: (){
-          _pmsBloc.position = position;
-          Navigator.pushNamed(context, "questionsCovid");
-        },
+      child:  BtnEncuestaSalud(
+        pmsBloc: _pmsBloc,
+        posicion: position,
       ),
     );
   }
@@ -368,32 +360,38 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   }
 
   Future _saveData() async {
-    _bloquearPantalla(true);
-    
-    bool status = await _pmsBloc.actualizaHospedaje();
+    if(!_pmsBloc.verificarEncuestas())
+      tools.showAlert(context, Translations.of(context).text("all_cuestionary_required"));
+    else{
 
-    _bloquearPantalla(false);
+      _bloquearPantalla(true);
+      
+      bool status = await _pmsBloc.actualizaHospedaje();
 
-    if(!status)
-      tools.showAlert(context, "No se logro guardar los datos");
-    else {
-      if(!_qr.contains(_reserva.codigo))
-        _qr.add(_reserva.codigo);
+      _bloquearPantalla(false);
 
-      _persistence.qr = _qr;
-
-      if(!_pref.tieneLigadas) 
-        Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
+      if(!status)
+        tools.showAlert(context, "No se logro guardar los datos");
       else {
-        List<String> procesados = _pref.reservasProcesadas;
-        if(_pref.reservasProcesadas.indexOf(_result.idReserva.toString()) == -1)
-            procesados.add(_result.idReserva.toString());
+        if(!_qr.contains(_reserva.codigo))
+          _qr.add(_reserva.codigo);
 
-        _pref.reservasProcesadas = procesados;
+        _persistence.qr = _qr;
 
-        Navigator.pushNamed(context, 'litaReserva', arguments: _reserva);
+        if(!_pref.tieneLigadas) 
+          Navigator.pushNamed(context, "verQR", arguments: _reserva.codigo);
+        else {
+          List<String> procesados = _pref.reservasProcesadas;
+          if(_pref.reservasProcesadas.indexOf(_result.idReserva.toString()) == -1)
+              procesados.add(_result.idReserva.toString());
+
+          _pref.reservasProcesadas = procesados;
+
+          Navigator.pushNamed(context, 'litaReserva', arguments: _reserva);
+        }
       }
     }
+
   }
 
   void _bloquearPantalla(bool status) => setState(() => _bloquear = status);

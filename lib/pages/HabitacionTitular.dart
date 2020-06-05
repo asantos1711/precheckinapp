@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
+import 'package:precheckin/utils/tools_util.dart';
+import 'package:precheckin/widgets/btn_encuesta_salud_widget.dart';
 import 'package:precheckin/widgets/info_hospedaje.dart';
 import 'package:precheckin/widgets/info_titular_widget.dart';
 import 'package:precheckin/widgets/info_contacto.dart';
@@ -19,6 +21,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   AnimationController _controller;
   static const List<String> _funcionList = const [ "1","2" ];
   Map<String,String> _opcionesFloat = new  Map<String,String>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -39,8 +42,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
       body: ListView(
         children: <Widget>[
           _seccionReservacion(),
-          _seccionTitular(),
-          _seccionContacto(),
+          _infoTitular(),
           _buttonEncuentaCovid(),
           _seccionVuelo(),
           _buttonContinuar(),
@@ -78,6 +80,19 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     );
   }
 
+  Widget _infoTitular(){
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _seccionTitular(),
+          _seccionContacto(),
+        ],
+      ),
+    );
+  }
+
   Widget _seccionTitular(){
     return Container(
       color: Colors.white,
@@ -100,24 +115,12 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     );
   }
 
-  Widget  _buttonEncuentaCovid(){
-    return Center(
-      child: FlatButton(
-        textColor: Colors.white,
-        disabledColor: Colors.grey,
-        disabledTextColor: Colors.black,
-        color: Color(0xff3F5AA6),
-        padding: EdgeInsets.all(8.0),
-        splashColor: Colors.orange,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: Text(Translations.of(context).text('covid_cuestionary')),
-        onPressed: (){
-          _pmsBloc.position = -1;
-          Navigator.pushNamed(context, "questionsCovid");
-        },
-      ),
-    );
-  }
+  Widget  _buttonEncuentaCovid() => Center(
+    child: BtnEncuestaSalud(
+      pmsBloc: _pmsBloc,
+      posicion: -1,
+    ),
+  );
 
   Widget _seccionVuelo(){
     return Container(
@@ -142,7 +145,16 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         color: Theme.of(context).primaryColor,
         padding: EdgeInsets.all(8.0),
         splashColor: Colors.orange,
-        onPressed: () => Navigator.pushNamed(context, 'infoAdicional'),
+        onPressed: () {
+          if(!_formKey.currentState.validate())
+            showAlert(context, Translations.of(context).text("values_invalid"));
+          else {
+            if(_pmsBloc.verificarEncuenta(-1))
+              Navigator.pushNamed(context, 'infoAdicional');
+            else
+              showAlert(context, Translations.of(context).text("cuestionary_required"));
+          }
+        },
         child: Text(
           Translations.of(context).text('continuar'),
           style: TextStyle(fontSize: 20.0, fontFamily: "Montserrat"),

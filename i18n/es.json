@@ -114,5 +114,11 @@
   "dificultadRespirar":"¿Dificultad respiratoria?",
   "otrosSintomas": "¿Otros síntomas?",
   "save": "Guardar",
-  "cuales": "Cuales"
+  "cuales": "Cuales",
+  "field_required": "Este campo es requerido",
+  "invalid_mail":"Correo no valido",
+  "adult_required":"Debe ser mayor de edad",
+  "cuestionary_required":"Es necesario contestar la encuesta de sanidad",
+  "all_cuestionary_required":"Es necesario contestar todas las encuesta de sanidad",
+  "values_invalid" :"Algunos campos son obligatorios o inválidos"
 }
