@@ -76,9 +76,13 @@ class Result {
           titular.imageback       = huesped?.imageback;
           titular.imagesign       = huesped?.imagesign;
           titular.fechanac        = huesped?.fechanac;
-        }
-        else
+          titular.covidQuestions.idcliente = titular?.idcliente;
+          titular.covidQuestions.item = titular?.idacompaniantes;
+        } else {
+          huesped.covidQuestions.idcliente = huesped?.idcliente;
+          huesped.covidQuestions.item = huesped?.idacompaniantes;
           acompaniantes.add(huesped);
+        }
       });
     }
 

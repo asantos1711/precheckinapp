@@ -1,21 +1,26 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:precheckin/models/commons/politicas_model.dart';
+import 'package:precheckin/pages/ViewWebView.dart';
 import 'package:precheckin/styles/styles.dart';
 class CheckTextBold extends StatelessWidget {
-  final String text; 
-  final String textBold; 
-  final Function onTap;
-  final Function onChange;
+ 
   final bool value;
   final double width;
+  final Function onChange;
+  final String text;
+  final String textBold;
+  final String viewWebVal;
+  final List<Politicas> politicas;
 
   CheckTextBold({
-    @required this.text,
-    @required this.textBold,
-    @required this.onTap,
     @required this.value,
     @required this.onChange,
-    @required this.width
+    @required this.width,
+    @required this.text,
+    @required this.textBold,
+    @required this.viewWebVal,
+    @required this.politicas,
   });
  
   @override
@@ -48,7 +53,20 @@ class CheckTextBold extends StatelessWidget {
                     decoration: TextDecoration.underline,
                   ),
                   recognizer: TapGestureRecognizer()
-                  ..onTap = onTap
+                  ..onTap = () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: 
+                        (context, animation1, animation2) => 
+                        ViewWebView(
+                          valor : viewWebVal,
+                          politicas: politicas,
+                          title: textBold,
+                        ),
+                      )
+                    );
+                  }
                 )
               ]
             ),),

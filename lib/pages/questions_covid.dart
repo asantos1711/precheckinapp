@@ -76,7 +76,7 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
     _otrosSintomas      = _questions?.otrosSintomas.isNotEmpty ? true : false;
     _ctrlSintomas       = new TextEditingController(text: _questions?.otrosSintomas ?? '');
     
-    _questions.fecha = "${_ahora.day}-${_ahora.month}-${_ahora.year}";
+    _questions.fecha = "${_ahora.year}-${_ahora.month}-${_ahora.day}";
     _questions.edad  = _edad;
     _questions.email = _email;
 

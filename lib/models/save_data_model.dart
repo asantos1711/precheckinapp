@@ -127,7 +127,7 @@ class Rh {
     "tarreg"          : acuerdos.toJson(),
     "vecaco"          : List<dynamic>.from(vecaco.map((x) => x.toJson())),
     "vuelos"          : List<dynamic>.from(vuelos.map((v) => v.toJson())),
-    "tipoHabitacion"  : tipoHabitacion.toJson(),
+    "tipohabitacion"  : tipoHabitacion.toJson(),
   };
 }
 
@@ -204,7 +204,7 @@ class Vecaco {
       "documenttype"    : documenttype,
       "documentexpdate" : documentexpdate,
       "istitular"       : istitular,
-      "responseCovid"   : responseCovid,
-      "covidQuestions"  : covidQuestions.toJson()
+      //"responseCovid"   : responseCovid,
+      "cuestionariocovid"  : covidQuestions.toJson()
   };
 }
