@@ -143,7 +143,7 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
     return Container(
       margin: EdgeInsetsDirectional.only(top:20.0, bottom: 30.0),
       child: Text(Translations.of(context).text('covid_cuestionary_subtitle'),
-        style: greyText.copyWith(fontWeight: FontWeight.w200),
+        style: greyText.copyWith(fontWeight: FontWeight.w200, color: Colors.black,fontSize: 15),
         textAlign: TextAlign.justify,
       ),
     );
@@ -152,10 +152,10 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
   Widget _fecha(){
     return RichText(
       text: TextSpan(
-        text: Translations.of(context).text("date")+": ",
+        text: Translations.of(context).text("date")+":  ",
         style: greyText.copyWith(fontWeight: FontWeight.w200),
         children: [
-          TextSpan(text: _fechaAhora, style: greyText.copyWith(fontWeight: FontWeight.bold))
+          TextSpan(text: _fechaAhora, style: greyText.copyWith(fontWeight: FontWeight.w500, color: Colors.black))
         ]
       )
     );
@@ -212,7 +212,7 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
       child:  Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(Translations.of(context).text('email_tel'), style: greyText.copyWith(fontWeight: FontWeight.w200),),
+          Text(Translations.of(context).text('email_tel'), style: greyText.copyWith(fontWeight: FontWeight.w700,  color: Colors.black,fontSize: 18),),
           SizedBox(height: 10.0,),
           Text(Translations.of(context).text('e_mail'), style: greyText.copyWith(fontWeight: FontWeight.w200),),
           TextFormField(
@@ -225,7 +225,8 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
-                width: _screenWidth * 0.25,
+                padding: EdgeInsets.only(right: 1),
+                width: _screenWidth * 0.50,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -239,7 +240,8 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
                 ),
               ),
               Container(
-                width: _screenWidth - (_screenWidth * 0.30),
+                padding: EdgeInsets.only(left: 1),
+                width: _screenWidth - (_screenWidth * 0.50),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -267,7 +269,7 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(Translations.of(context).text('pais_visitado'), style: greyText.copyWith(fontWeight: FontWeight.w200),),
+          Text(Translations.of(context).text('pais_visitado'), style: greyText.copyWith(fontWeight: FontWeight.w600,  color: Colors.black,fontSize: 18),),
           SizedBox(height: 10.0,),
           Text(Translations.of(context).text('paises'), style: greyText.copyWith(fontWeight: FontWeight.w200),),
           TextFormField(
@@ -349,15 +351,18 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
 
   Widget _controlSaludLabel(){
     return Text(Translations.of(context).text('control_salud'),
-      style: greyText.copyWith(fontWeight: FontWeight.w200),
-      textAlign: TextAlign.center,
+      style: greyText.copyWith(fontWeight: FontWeight.w900, color: Colors.black,fontSize: 18 ),
+      textAlign: TextAlign.start,
     );
   }
 
   Widget _controlSaludInstruction(){
-    return Text(Translations.of(context).text('control_salud_instruccion'),
-      style: greyText.copyWith(fontWeight: FontWeight.w200),
-      textAlign: TextAlign.justify,
+    return Padding(
+      padding: EdgeInsets.only(top: 5,left: 10),
+      child: Text(Translations.of(context).text('control_salud_instruccion'),
+        style: greyText.copyWith(fontWeight: FontWeight.bold, fontSize: 18,color: Colors.black),
+        textAlign: TextAlign.start,
+      )
     );
   }
 
