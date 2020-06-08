@@ -55,7 +55,7 @@ class CovidQuestionsModel {
     codigoArea         : json['codigoarea'],
     paisesVisitados    : json['paisesvisitados'],
     ciudadesVisitadas  : json['ciudadesvisitadas'],
-    enContacto         : json['encontacto'],
+    enContacto         : (json['encontacto'] == 'false')? false : true,
     fechaContacto      : json['fechacontacto'],
     temperatura        : json['temperatura'],
     tos                : json['tos'],

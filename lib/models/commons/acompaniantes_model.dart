@@ -61,7 +61,11 @@ class Acompaniantes{
     this.responseCovid = false
   });
 
-  factory Acompaniantes.fromJson(Map<String,dynamic> json) => Acompaniantes(
+  factory Acompaniantes.fromJson(Map<String,dynamic> json){
+    //print(json['istitular']);
+    //print(json['cuestionariocovid']);
+
+    return Acompaniantes(
     club            : json['club'],
     idcliente       : json['idcliente'],
     idacompaniantes : json['idacompaniantes'],
@@ -88,8 +92,9 @@ class Acompaniantes{
     istitular       : json['istitular'] ?? false,
     estado          : json['estado'] ?? '',
     codigoPostal    : json['cpsocio'] ?? '',
-    covidQuestions  : json['cuestionario'] ?? new CovidQuestionsModel()
+    covidQuestions  : json['cuestionariocovid']!=null ? CovidQuestionsModel.fromJson(json['cuestionariocovid']): new CovidQuestionsModel()
   );
+  }
 
   factory Acompaniantes.fromResultJSON(Map<String,dynamic> json){
     String estado = json['estado'] ?? "";
@@ -108,7 +113,7 @@ class Acompaniantes{
       estado          : estado,
       codigoPostal    : json['cpsocio'] ?? "",
       responseCovid   : json['responseCovid'],
-      covidQuestions  : json['covidQuestions']!= null ? CovidQuestionsModel.fromJson(json['covidQuestions']) : new CovidQuestionsModel(),
+      covidQuestions  : json['cuestionariocovid']!= null ? CovidQuestionsModel.fromJson(json['cuestionariocovid']) : new CovidQuestionsModel(),
     );
   }
 }

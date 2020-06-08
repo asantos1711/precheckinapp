@@ -174,7 +174,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   }
 
   Widget _reglamentoHotel(){
-    return CheckTextBold(
+    return CheckTextBold( context,
       width: _screenWidth,
       value: (_pmsBloc.reglamento==1) ? true : false,
       onChange: (val)=> setState(()=> _pmsBloc.reglamento=val ? 1 : 0),
@@ -186,7 +186,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   }
 
   Widget _politicasProcedimientos(){
-    return CheckTextBold(
+    return CheckTextBold( context,
       width: _screenWidth,
       value: (_pmsBloc.politicasProcesos==1) ? true : false,
       onChange: (val)=> setState(()=> _pmsBloc.politicasProcesos=val ? 1 : 0),
@@ -198,7 +198,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   }
 
   Widget _avisoProvacidad(){
-    return CheckTextBold(
+    return CheckTextBold( context,
       width: _screenWidth,
       value: (_pmsBloc.avisoPrivacidad==1) ? true : false,
       onChange: (val)=> setState(()=> _pmsBloc.avisoPrivacidad=val ? 1 : 0),
@@ -210,7 +210,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   }
 
   Widget _reglamentoCovid(){
-    return CheckTextBold(
+    return CheckTextBold( context,
       width: _screenWidth,
       value: (_pmsBloc.reglasCovid==1) ? true : false,
       onChange: (val)=> setState(()=> _pmsBloc.reglasCovid=val ? 1 : 0),
@@ -222,7 +222,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   }
 
   Widget _recibirInformacion(){
-    return CheckTextBold(
+    return CheckTextBold( context,
       width: _screenWidth,
       value: (_pmsBloc.promocion==1) ? true : false,
       onChange: (val)=> setState(()=> _pmsBloc.promocion=val ? 1 : 0),
@@ -265,14 +265,18 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         padding: EdgeInsets.all(8.0),
         splashColor: Colors.orange,
         onPressed: (_pmsBloc.bloquearBoton()) ? null : () {
-          if(!_formKey.currentState.validate())
+          if(_pmsBloc.verificarEncuenta(-1))
+            Navigator.pushNamed(context, 'infoAdicional');
+          else
+            showAlert(context, Translations.of(context).text("cuestionary_required"));
+          /*if(!_formKey.currentState.validate())
             showAlert(context, Translations.of(context).text("values_invalid"));
           else {
             if(_pmsBloc.verificarEncuenta(-1))
               Navigator.pushNamed(context, 'infoAdicional');
             else
               showAlert(context, Translations.of(context).text("cuestionary_required"));
-          }
+          }*/
         },
         child: Text(
           Translations.of(context).text('continuar'),
