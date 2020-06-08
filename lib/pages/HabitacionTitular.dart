@@ -1,15 +1,22 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'package:precheckin/models/commons/politicas_model.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/utils/tools_util.dart';
 import 'package:precheckin/widgets/btn_encuesta_salud_widget.dart';
+import 'package:precheckin/widgets/check_text_bold.dart';
+import 'package:precheckin/widgets/docIdentificacion.dart';
 import 'package:precheckin/widgets/info_hospedaje.dart';
 import 'package:precheckin/widgets/info_titular_widget.dart';
 import 'package:precheckin/widgets/info_contacto.dart';
 import 'package:precheckin/widgets/info_vuelo_widget.dart';
 import 'package:precheckin/blocs/pms_bloc.dart';
+import 'package:precheckin/widgets/signature_widget.dart';
+import 'package:signature/signature.dart';
 
 class HabitacionTitular extends StatefulWidget {
   @override
@@ -18,10 +25,14 @@ class HabitacionTitular extends StatefulWidget {
 
 class _HabitacionTitularState extends State<HabitacionTitular> with TickerProviderStateMixin{
   PMSBloc _pmsBloc;
+  final _formKey = GlobalKey<FormState>();
+  double _screenWidth;
+  List<Politicas> _politicas;
+  SignatureController _ctrlFirma = SignatureController();
+  
   AnimationController _controller;
   static const List<String> _funcionList = const [ "1","2" ];
   Map<String,String> _opcionesFloat = new  Map<String,String>();
-  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -29,12 +40,18 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
    
     _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
     _pmsBloc    = new PMSBloc();
+    _pmsBloc.initCheckbox = 1;
+    _politicas = _pmsBloc.politicas;
+
+    _ctrlFirma.addListener((){});
   }
 
   @override
   Widget build(BuildContext context) {
     _opcionesFloat["1"] = Translations.of(context).text('opcion_duda').toString();
     _opcionesFloat["2"] = Translations.of(context).text('opcion_error').toString();
+
+    _screenWidth = (MediaQuery.of(context).size.width) - 40;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -43,8 +60,11 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         children: <Widget>[
           _seccionReservacion(),
           _infoTitular(),
-          _buttonEncuentaCovid(),
+          _documentos(),
           _seccionVuelo(),
+          _buttonEncuentaCovid(),
+          _terminosCondiciones(),
+          _firma(),
           _buttonContinuar(),
         ],
       ),
@@ -95,8 +115,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
   Widget _seccionTitular(){
     return Container(
-      color: Colors.white,
-      width: double.infinity,
       padding: EdgeInsets.all(20.0),
       child: InfoTitular(
         pmsBloc: _pmsBloc
@@ -106,12 +124,28 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   
   Widget _seccionContacto(){
     return Container(
-      color: Colors.white,
       padding: EdgeInsets.all(20.0),
-      width: double.infinity,
       child: InfoContacto(
         block: _pmsBloc,
       )
+    );
+  }
+
+  Widget _documentos(){
+    return Container(
+      padding: EdgeInsets.all(20.0),
+      child: DocIdentificacion(acompaniantes: _pmsBloc.titular)
+    );
+  }
+  
+  Widget _seccionVuelo(){
+    return Container(
+      color: Colors.white,
+      width: double.infinity,
+      padding: EdgeInsets.all(20.0),
+      child: InfoVuelo(
+        pmsBloc: _pmsBloc,
+      ),
     );
   }
 
@@ -122,13 +156,98 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     ),
   );
 
-  Widget _seccionVuelo(){
+
+  Widget _terminosCondiciones(){
     return Container(
-      color: Colors.white,
-      width: double.infinity,
+      padding:EdgeInsets.all(20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _reglamentoHotel(),
+          _politicasProcedimientos(),
+          _avisoProvacidad(),
+          _reglamentoCovid(),
+          _recibirInformacion(),
+        ],
+      ),
+    );
+  }
+
+  Widget _reglamentoHotel(){
+    return CheckTextBold(
+      width: _screenWidth,
+      value: (_pmsBloc.reglamento==1) ? true : false,
+      onChange: (val)=> setState(()=> _pmsBloc.reglamento=val ? 1 : 0),
+      text: Translations.of(context).text('acepto_deacuerdo'),
+      textBold: Translations.of(context).text('reglamento_hotel'),
+      viewWebVal: 'reglamento_hotel',
+      politicas: _politicas,
+    );
+  }
+
+  Widget _politicasProcedimientos(){
+    return CheckTextBold(
+      width: _screenWidth,
+      value: (_pmsBloc.politicasProcesos==1) ? true : false,
+      onChange: (val)=> setState(()=> _pmsBloc.politicasProcesos=val ? 1 : 0),
+      text: Translations.of(context).text('acepto_deacuerdo'),
+      textBold: Translations.of(context).text('politicas_procedimientos'),
+      viewWebVal: 'politicas_procedimientos',
+      politicas: _politicas,
+    );
+  }
+
+  Widget _avisoProvacidad(){
+    return CheckTextBold(
+      width: _screenWidth,
+      value: (_pmsBloc.avisoPrivacidad==1) ? true : false,
+      onChange: (val)=> setState(()=> _pmsBloc.avisoPrivacidad=val ? 1 : 0),
+      text: Translations.of(context).text('acepto_deacuerdo'),
+      textBold: Translations.of(context).text('aviso_privacidad'),
+      viewWebVal: 'aviso_privacidad',
+      politicas: _politicas,
+    );
+  }
+
+  Widget _reglamentoCovid(){
+    return CheckTextBold(
+      width: _screenWidth,
+      value: (_pmsBloc.reglasCovid==1) ? true : false,
+      onChange: (val)=> setState(()=> _pmsBloc.reglasCovid=val ? 1 : 0),
+      text: Translations.of(context).text('reglameto_covid'),
+      textBold: '',
+      viewWebVal: '',
+      politicas: _politicas,
+    );
+  }
+
+  Widget _recibirInformacion(){
+    return CheckTextBold(
+      width: _screenWidth,
+      value: (_pmsBloc.promocion==1) ? true : false,
+      onChange: (val)=> setState(()=> _pmsBloc.promocion=val ? 1 : 0),
+      text: Translations.of(context).text('recibir_info'),
+      textBold: '',
+      viewWebVal: '',
+      politicas: _politicas,
+    );
+  }
+
+
+  Widget _firma() {
+    _ctrlFirma.addListener(() async {
+      var data = await _ctrlFirma.toPngBytes();
+      if(data != null){
+          _pmsBloc.signTitular = base64.encode(data);
+      }
+    });
+
+    return Container(
       padding: EdgeInsets.all(20.0),
-      child: InfoVuelo(
-        pmsBloc: _pmsBloc,
+      child: SignatureWidget(
+        img: _pmsBloc.signTitular ?? "",
+        title:Translations.of(context).text('ingresa_firma_titular'),
+        controller: _ctrlFirma,
       ),
     );
   }
@@ -145,7 +264,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         color: Theme.of(context).primaryColor,
         padding: EdgeInsets.all(8.0),
         splashColor: Colors.orange,
-        onPressed: () {
+        onPressed: (_pmsBloc.bloquearBoton()) ? null : () {
           if(!_formKey.currentState.validate())
             showAlert(context, Translations.of(context).text("values_invalid"));
           else {

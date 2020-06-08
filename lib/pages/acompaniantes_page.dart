@@ -56,6 +56,7 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(Translations.of(context).text('add_companion')),
         centerTitle: true,
@@ -135,7 +136,6 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
   Widget _firma(){
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal:10.0,vertical: 0.0),
       padding: EdgeInsets.all(5.0),
       child: CardAcompanante(
         acompaniante: _acompaniante,

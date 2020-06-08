@@ -6,7 +6,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/blocs/pms_bloc.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
-import 'package:precheckin/pages/ElegirIdentificacion.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/styles/styles.dart';
@@ -14,13 +13,9 @@ import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/ColumnBuilder.dart';
 import 'package:precheckin/widgets/btn_encuesta_salud_widget.dart';
 import 'package:precheckin/widgets/card_acompanante.dart';
-import 'package:precheckin/widgets/check_text_bold.dart';
-import 'package:precheckin/widgets/custom_signature.dart';
-import 'package:precheckin/widgets/docIdentificacion.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:signature/signature.dart';
 import 'package:precheckin/utils/tools_util.dart' as tools;
-import 'ViewWebView.dart';
 import 'package:precheckin/widgets/signature_widget.dart';
 
 class InformacionAdicional extends StatefulWidget {
@@ -32,11 +27,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   double width;
   double height;
   bool _enableButton = true;
-  bool _reglaHotelBool = true;
-  bool _avisoPrivaBool = true;
-  bool _recibirInfoBool = true;
-  bool _poliProceBool = true;
-  bool _reglasCovid = true;
   bool _bloquear = false;
   bool _agregarAcompaniantes = false;
   PMSBloc _pmsBloc;
@@ -48,27 +38,19 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   Reserva _reserva;  
   Result _result;  
   Map<Acompaniantes,SignatureController> mapControllerSiganture = Map<Acompaniantes,SignatureController>();
-
   final SignatureController _controller = SignatureController();
-
-
 
   @override
   void initState() {
     super.initState();
-    
     _controller.addListener((){});
     _pmsBloc = new PMSBloc();
     _pref    = new UserPreferences();
     _qr      = _persistence.qr;
     _reserva = _pmsBloc.reserva;
     _result  = _pmsBloc.result;
-
     _pmsBloc.initCheckbox = 1;
-    _enableButton = _poliProceBool && _reglaHotelBool & _avisoPrivaBool && _reglasCovid;
   }
-
-  _botonDisable()=> setState(() =>_enableButton = _poliProceBool && _reglaHotelBool && _avisoPrivaBool && _reglasCovid);
 
   @override
   Widget build(BuildContext context) {
@@ -76,38 +58,20 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     width  = MediaQuery.of(context).size.width;
     _agregarAcompaniantes = _pmsBloc.habilitarAddAcompaniantes;
 
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) 
-          currentFocus.unfocus();
-      },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: _appBar(),
-        body: Stack(
-          children: <Widget>[
-            ListView(
-              children: <Widget>[
-                _reglaHotel(),
-                _poliProce(),
-                _avisoPriva(),
-                _reglasCOVID(),
-                _recibirInfo(),
-                _signatureTitular(),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: DocIdentificacion(acompaniantes: _result.titular)
-                ),
-                _tituloAcompa(),
-                _acompanantes(),
-                _agregarAco(),
-                _buttonFinalizar(),
-              ],
-            ),
-            tools.bloqueaPantalla(_bloquear)
-          ],
-        )
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: _appBar(),
+      body: Stack(
+        children: <Widget>[
+          ListView(
+            children: <Widget>[
+              _acompanantes(),
+              _agregarAco(),
+              _buttonFinalizar(),
+            ],
+          ),
+          tools.bloqueaPantalla(_bloquear)
+        ],
       )
     );
   }
@@ -129,214 +93,45 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     );
   }
 
-  Widget _reglaHotel() {
-    return CheckTextBold(
-      width: width,
-      onChange:(boo){
-        setState(() {
-          _reglaHotelBool = !_reglaHotelBool;
-          _pmsBloc.reglamento = toInt(_reglaHotelBool);
-        });
-        _botonDisable();
-      } ,
-      value: _reglaHotelBool,
-      text: Translations.of(context).text('acepto_deacuerdo'),
-      textBold: Translations.of(context).text('reglamento_hotel'),
-      onTap: () {
-        Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: 
-              (context, animation1, animation2) => 
-              ViewWebView(
-                valor : 'reglamento_hotel',
-                politicas: _reserva.politicas,
-                title: Translations.of(context).text('reglamento_hotel'),
-              ),
-            ));
-      },
-    );
-  }
+  
+  Widget _acompanantes() {
+    this.setState(() => _pmsBloc.acompaniantes = _pmsBloc.acompaniantes ); 
 
-  Widget _poliProce() {
-    return CheckTextBold(
-      width: width,
-      onChange:(boo){
-        setState(() {
-          _poliProceBool = !_poliProceBool;
-          _pmsBloc.politicasProcesos = toInt(_poliProceBool);
-        });
-        _botonDisable();
-      } ,
-      value: _poliProceBool,
-      text: Translations.of(context).text('acepto_deacuerdo'),
-      textBold: Translations.of(context).text('politicas_procedimientos'),
-      onTap: () {
-        Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: 
-              (context, animation1, animation2) => 
-              ViewWebView(
-                valor: 'politicas_procedimientos',
-                politicas: _reserva.politicas,
-                title:Translations.of(context).text('politicas_procedimientos'),
-              ),
-            ));
-      },
-    );
-  }
+    return ColumnBuilder(
+        itemCount: _pmsBloc.acompaniantes.length,
+        itemBuilder: (context,index){
 
-  Widget _avisoPriva() {
-    return CheckTextBold(
-      width: width,
-      onChange:(boo){
-        setState(() {
-          _avisoPrivaBool = !_avisoPrivaBool;
-          _pmsBloc.avisoPrivacidad = toInt(_avisoPrivaBool);
-        });
-        _botonDisable();
-      } ,
-      value: _avisoPrivaBool,
-      text: Translations.of(context).text('acepto_deacuerdo'),
-      textBold: Translations.of(context).text('aviso_privacidad'),
-      onTap: () {
-        Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => 
-              ViewWebView(
-                valor: 'aviso_privacidad',
-                politicas: _reserva.politicas,
-                title: Translations.of(context).text('aviso_privacidad'),
-              ),
-            ));
-      },
-    );
-  }
+          SignatureController _controllerSignature = new SignatureController();
 
-  Widget _reglasCOVID() {
-    return CheckTextBold(
-      width: width,
-      onChange:(boo){
-        setState(() {
-          _reglasCovid = !_reglasCovid;
-          _pmsBloc.reglasCovid = toInt(_reglasCovid);
-        });
-        _botonDisable();
-      } ,
-      value: _reglasCovid,
-      text: Translations.of(context).text('reglameto_covid'),
-      textBold: "",
-      onTap: () {},
-    );
-  }
-
-  Widget _recibirInfo() {
-    return CheckTextBold(
-        width: width,
-        onChange:(boo){
-          setState(() {
-            _recibirInfoBool = !_recibirInfoBool;
-            _pmsBloc.promocion = toInt(_recibirInfoBool);
+          _controllerSignature.addListener(()async{
+            var data = await _controllerSignature.toPngBytes();
+            if(data != null)
+              _pmsBloc.acompaniantes[index].imagesign = base64.encode(data);
           });
-        },
-        textBold: '',
-        text: Translations.of(context).text('recibir_info'),
-        onTap: () {},
-        value: _recibirInfoBool
-    );
+          
+          return Container(
+            margin: EdgeInsets.all(8.0),
+            child: Card(
+              elevation: 15.0,
+              child: CardAcompanante(
+                acompaniante: _pmsBloc.acompaniantes[index],
+                signature:  _firma(_controllerSignature, index),
+                btnEncuesta: _buttonEncuentaCovid(index),
+              ),
+            )
+          );
+        }
+      );
   }
 
-  Widget _signatureTitular() {
-    _controller.addListener(() async {
-        var data = await _controller.toPngBytes();
-        if(data != null)
-          _pmsBloc.signTitular = base64.encode(data);
-    });
-
+  Widget _firma(SignatureController ctrl, int index){
     return Container(
       margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
       child: SignatureWidget(
-        img: _pmsBloc.signTitular ?? "",
-        title:Translations.of(context).text('ingresa_firma_titular'),
-        controller: _controller,
-      ),
-    );
-  }
-
-  Widget _tituloAcompa() {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.only(left: 10, right: 10),
-      width: width - 20,
-      child: Text(
-        Translations.of(context).text('acompanantes'),
-        style: TextStyle(
-          fontSize: 25,
-        ),
-      ));
-  }
-  
-  Widget _acompanantes() {
-    /* List<Widget> widgets = [];
-
-    _pmsBloc.acompaniantes.forEach( (acompaniante){
-      SignatureController _controllerSignature = new SignatureController();
-
-      _controllerSignature.addListener(()async{
-        var data = await _controllerSignature.toPngBytes();
-        if(data != null)
-          acompaniante.imagesign = base64.encode(data);
-      });
-      acompaniante.imagefront = null;
-      Widget widget = CardAcompanante(
-        acompaniante: acompaniante,
-        signature:  Container(
-          margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
-          child: SignatureWidget(
-            img: acompaniante.imagesign ?? "",
-            title:"",
-            controller: _controllerSignature,
-          )
-        )
-      );
-
-      widgets..add(widget);
-
-    } ); */
-    
-    this.setState(() {
-      _pmsBloc.acompaniantes = _pmsBloc.acompaniantes;
-    }); 
-    return ColumnBuilder(
-      itemCount: _pmsBloc.acompaniantes.length,
-      itemBuilder: (context,index){
-        SignatureController _controllerSignature = new SignatureController();
-
-        _controllerSignature.addListener(()async{
-          var data = await _controllerSignature.toPngBytes();
-          if(data != null)
-            _pmsBloc.acompaniantes[index].imagesign = base64.encode(data);
-        });
-        //_pmsBloc.acompaniantes[index].imagefront = null;
-        return Column(
-          children: <Widget>[
-            CardAcompanante(
-              acompaniante: _pmsBloc.acompaniantes[index],
-              signature:  Container(
-                margin: EdgeInsets.symmetric(vertical:10.0, horizontal:10.0),
-                child: SignatureWidget(
-                  img: _pmsBloc.acompaniantes[index].imagesign ?? "",
-                  title:"",
-                  controller: _controllerSignature,
-                )
-              )
-            ),
-            _buttonEncuentaCovid(index)
-          ],
-        ); 
-      }
+        img: _pmsBloc.acompaniantes[index].imagesign ?? "",
+        title:"",
+        controller: ctrl,
+      )
     );
   }
 
@@ -354,7 +149,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
       return Container();
 
     return Container(
-      margin: EdgeInsets.all(10.0),
+      margin: EdgeInsets.only(top:25.0, bottom: 25.0),
       alignment: Alignment.center,
       child: MaterialButton(
         color: Color.fromRGBO(0, 165, 227, 1),
@@ -370,8 +165,8 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   Widget _buttonFinalizar() {
     return Container(
       width: width - 20,
-      padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-      margin: EdgeInsets.symmetric(vertical: 30),
+      margin: EdgeInsets.only(bottom: 30),
+      padding: EdgeInsets.symmetric(horizontal: 30),
       color: Colors.white,
       child: FlatButton(
         color: Theme.of(context).primaryColor,
@@ -521,12 +316,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         title: "Agregar acompañante",
         content: Column(
           children: <Widget>[
-            CardAcompanante(
-              acompaniante: _aco,
-              signature: CustomSignature(
-                controller: _sigController,
-              ),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -548,19 +337,13 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
             onPressed: () {
               setState(() {
                 
-                //if(_condicionAgregarAcom(_aco.edad)){
                   mapControllerSiganture[_aco] =_sigController;
                   _aco.istitular = false;
                   _result.acompaniantes.add(_aco);
                   mapControllerSiganture[_aco] =_sigController;
-                //}
                 
               });
               Navigator.pop(context);
-              /*if(_condicionAgregarAcom(_aco.edad))
-                Fluttertoast(
-
-                );*/
             } ,
             child: Text(
               Translations.of(context).text('agregar'),
@@ -568,44 +351,5 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
             ),
           )
         ]).show();
-  }
-
-  Widget _docuTitular() {
-    return Container(
-        color: Colors.white,
-        padding: EdgeInsets.only(left: 10, right: 10),
-        width: width - 20,
-        child: Row(
-          children: <Widget>[
-            Container(
-                width: ((width - 20) / 3) * 2,
-                child: Text(
-                  'Documento de identificación',
-                  style: TextStyle(color: Colors.blueAccent, fontSize: 18),
-                )),
-            Container(
-                alignment: Alignment.centerRight,
-                width: (width - 20) / 3,
-                child: InkWell(
-                  splashColor: Colors.grey,
-                  onTap: (){
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) => ElegirIdentificacion(
-                          acompaniantes: _reserva.result.titular,
-                        ),
-                      )
-                    );
-                  },
-                  child: Icon(
-                    Icons.camera_alt,
-                    color: Color(0xFFE87200),
-                    size: 30,
-                  )
-                )
-              )
-          ],
-        ));
   }
 }

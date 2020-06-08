@@ -1,5 +1,7 @@
 
 class CovidQuestionsModel {
+  int idcliente;
+  int item;
   String fecha;
   String nombre;
   String apellido;
@@ -19,6 +21,8 @@ class CovidQuestionsModel {
   String otrosSintomas;
 
   CovidQuestionsModel({
+    this.idcliente          = 0,
+    this.item               = 0,
     this.fecha              = "",
     this.nombre             = "",
     this.apellido           = "",
@@ -39,6 +43,8 @@ class CovidQuestionsModel {
   });
 
   factory CovidQuestionsModel.fromJson(Map<String,dynamic> json) => CovidQuestionsModel(
+    idcliente          : json['idcliente'],
+    item               : json['item'],
     fecha              : json['fecha'],
     nombre             : json['nombre'],
     apellido           : json['apellido'],
@@ -46,19 +52,21 @@ class CovidQuestionsModel {
     procedencia        : json['procedencia'],
     email              : json['email'],
     telefono           : json['telefono'],
-    codigoArea         : json['codigoArea'],
-    paisesVisitados    : json['paisesVisitados'],
-    ciudadesVisitadas  : json['ciudadesVisitadas'],
-    enContacto         : json['enContacto'],
-    fechaContacto      : json['fechaContacto'],
+    codigoArea         : json['codigoarea'],
+    paisesVisitados    : json['paisesvisitados'],
+    ciudadesVisitadas  : json['ciudadesvisitadas'],
+    enContacto         : json['encontacto'],
+    fechaContacto      : json['fechacontacto'],
     temperatura        : json['temperatura'],
     tos                : json['tos'],
-    malestarGeneral    : json['malestarGeneral'],
-    dificultadRespirar : json['dificultadRespirar'],
-    otrosSintomas      : json['otrosSintomas'],
+    malestarGeneral    : json['malestargeneral'],
+    dificultadRespirar : json['dificultadrespirar'],
+    otrosSintomas      : json['otrossintomas'],
   );
 
   Map<String, dynamic> toJson() => {
+    "idcliente"          : idcliente,
+    "item"               : item,
     "fecha"              : fecha,
     "nombre"             : nombre,
     "apellido"           : apellido,
@@ -66,15 +74,15 @@ class CovidQuestionsModel {
     "procedencia"        : procedencia,
     "email"              : email,
     "telefono"           : telefono,
-    "codigoArea"         : codigoArea,
-    "paisesVisitados"    : paisesVisitados,
-    "ciudadesVisitadas"  : ciudadesVisitadas,
-    "enContacto"         : enContacto,
-    "fechaContacto"      : fechaContacto,
+    "codigoarea"         : codigoArea,
+    "paisesvisitados"    : paisesVisitados,
+    "ciudadesvisitadas"  : ciudadesVisitadas,
+    "encontacto"         : enContacto,
+    "fechacontacto"      : fechaContacto,
     "temperatura"        : temperatura,
     "tos"                : tos,
-    "malestarGeneral"    : malestarGeneral,
-    "dificultadRespirar" : dificultadRespirar,
-    "otrosSintomas"      : otrosSintomas,
+    "malestargeneral"    : malestarGeneral,
+    "dificultadrespirar" : dificultadRespirar,
+    "otrossintomas"      : otrosSintomas,
   };
 }

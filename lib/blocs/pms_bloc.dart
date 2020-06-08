@@ -1,5 +1,7 @@
 import 'package:age/age.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
+import 'package:precheckin/models/commons/politicas_model.dart';
+export 'package:precheckin/models/commons/politicas_model.dart';
 import 'package:precheckin/models/covid_questions_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
 export 'package:precheckin/models/reserva_model.dart';
@@ -41,6 +43,9 @@ class PMSBloc {
 
   ///Obtiene el result
   Result get result => _result;
+
+  //Obtener el titular
+  Acompaniantes get titular => _result?.titular;
 
   ///Para establecer el origen de los datos en que se va a trabajar.
   set result(Result result) => (result == null ) ? _result = _reserva.result : _result = result;
@@ -141,6 +146,21 @@ class PMSBloc {
     reglamento        = val;
     politicasProcesos = val;
     reglasCovid       = val;
+  }
+
+  //Obtner la lista de politicas
+  List<Politicas> get politicas => _reserva.politicas;
+
+  //Determinar si se debe de bloquear el boton de continuar
+  //por no aceptar los terminos
+  bool bloquearBoton(){
+    bool reg = (reglamento!=1) ? true : false;
+    bool pol = (politicasProcesos!=1) ? true : false;
+    bool avi = (avisoPrivacidad!=1) ? true : false;
+    bool cvd = (reglasCovid!=1) ? true : false;
+    bool fir = (signTitular == null || signTitular.isEmpty) ? true : false;
+
+    return (reg || pol || avi || cvd || fir);
   }
 
   //GET/SET Firma del titular

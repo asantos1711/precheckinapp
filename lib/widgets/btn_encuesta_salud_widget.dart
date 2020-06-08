@@ -19,7 +19,7 @@ class BtnEncuestaSalud extends StatelessWidget {
   Widget build(BuildContext context) {
     if(pmsBloc.verificarEncuenta(posicion)){
       backGround = Color(0xff37a981);
-      icon = Icon(Icons.check_circle_outline, color:Colors.white, size: 30,);
+      icon = Icon(Icons.check_circle_outline, color:Colors.white, size: 30);
     }
 
     return FlatButton(

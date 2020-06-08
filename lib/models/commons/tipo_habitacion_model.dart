@@ -64,8 +64,8 @@ class TipoHabitacion{
     'idtipotc'     : idtipotc,
     'tipo'         : tipo,
     'densidad'     : densidad,
-    'maxOcupantes' : maxOcupantes,
-    'maxAdultos'   : maxAdultos,
-    'maxMenores'   : maxMenores,
+    //'maxOcupantes' : maxOcupantes,
+    //'maxAdultos'   : maxAdultos,
+    //'maxMenores'   : maxMenores,
   };
 }
