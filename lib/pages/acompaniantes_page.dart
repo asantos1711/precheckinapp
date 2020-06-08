@@ -52,6 +52,7 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
         if(data != null)
           _acompaniante.imagesign = base64.encode(data);
     });
+    _pmsBloc.posRoute=3;
   }
 
   @override

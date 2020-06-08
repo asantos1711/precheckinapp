@@ -121,7 +121,17 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
-    return Stack(
+    return WillPopScope(
+    onWillPop: (){
+      if(_pmsBloc.posRoute ==1){
+        Navigator.popAndPushNamed(context, 'infoTitular');
+      }else if(_pmsBloc.posRoute ==2){
+        Navigator.popAndPushNamed(context, 'infoAdicional');
+      }else if(_pmsBloc.posRoute ==3){
+        Navigator.pop(context);
+      }
+    },
+    child:Stack(
         children: <Widget>[
           Scaffold(
             backgroundColor: Colors.white,
@@ -143,7 +153,8 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             )
           :Center()
         ],
-      );
+      )
+    );
   }
 
   Widget _aviso(){
@@ -261,7 +272,13 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           padding: EdgeInsets.only(right: 20.0),
           child: GestureDetector(
             onTap: () {
-              Navigator.pop(context);
+              if(_pmsBloc.posRoute ==1){
+                Navigator.popAndPushNamed(context, 'infoTitular');
+              }else if(_pmsBloc.posRoute ==2){
+                Navigator.popAndPushNamed(context, 'infoAdicional');
+              }else if(_pmsBloc.posRoute ==3){
+                Navigator.pop(context);
+              }
             },
             child: Icon(
               Icons.close,
@@ -439,7 +456,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         imageB = cropImage;
         acompaniantes.imageback =image64B;
         _inProcess =false;
-        func(acompaniantes);
+        //func(acompaniantes);
       });
       
       _alertaFinId();
@@ -598,7 +615,13 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     Alert(
       closeFunction:(){
         print('Se cerró la alerta');
-       Navigator.pop(context);
+       if(_pmsBloc.posRoute ==1){
+          Navigator.popAndPushNamed(context, 'infoTitular');
+        }else if(_pmsBloc.posRoute ==2){
+          Navigator.popAndPushNamed(context, 'infoAdicional');
+        }else if(_pmsBloc.posRoute ==3){
+            Navigator.pop(context);
+          }
       } ,
       context: context,
       style: AlertStyle(titleStyle: greyText.copyWith(fontWeight:FontWeight.bold )),
@@ -622,7 +645,13 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             setState(() {
               Navigator.pop(context);
               _pmsBloc.acompaniantes = _pmsBloc.acompaniantes;
-              Navigator.pop(context);
+              if(_pmsBloc.posRoute ==1){
+                Navigator.popAndPushNamed(context, 'infoTitular');
+              }else if(_pmsBloc.posRoute ==2){
+                Navigator.popAndPushNamed(context, 'infoAdicional');
+              }else if(_pmsBloc.posRoute ==3){
+                Navigator.pop(context);
+              }
             });
             
           } ,
@@ -741,7 +770,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
       acompaniantes.documenttype = _scanerModel.documentTypeReadable??'';
       acompaniantes.imagefront = _scanerModel?.full_image ??'';
       acompaniantes.imageback = _scanerModel?.portrait ??'';
-      func(acompaniantes);
+      //func(acompaniantes);
       //acompaniantes.nombre = _scanerModel.givenNamesReadable;
       log('imagefront: ${acompaniantes.imagefront}');
     });
@@ -755,7 +784,13 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     return Alert(
         closeFunction:(){
           print('Se cerró la alerta');
-          Navigator.pop(context);
+          if(_pmsBloc.posRoute ==1){
+            Navigator.popAndPushNamed(context, 'infoTitular');
+          }else if(_pmsBloc.posRoute ==2){
+            Navigator.popAndPushNamed(context, 'infoAdicional');
+          }else if(_pmsBloc.posRoute ==3){
+            Navigator.pop(context);
+          }
         } ,
         image: new Image.memory(bytes),
         context: context,
@@ -789,7 +824,13 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             color: Colors.white,
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pop(context);
+              if(_pmsBloc.posRoute ==1){
+                Navigator.popAndPushNamed(context, 'infoTitular');
+              }else if(_pmsBloc.posRoute ==2){
+                Navigator.popAndPushNamed(context, 'infoAdicional');
+              }else if(_pmsBloc.posRoute ==3){
+                Navigator.pop(context);
+              }
             } ,
             child: Text(
               Translations.of(context).text('finalizar'),
@@ -827,7 +868,13 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             color: Colors.white,
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pop(context);
+              if(_pmsBloc.posRoute ==1){
+                Navigator.popAndPushNamed(context, 'infoTitular');
+              }else if(_pmsBloc.posRoute ==2){
+                Navigator.popAndPushNamed(context, 'infoAdicional');
+              }else if(_pmsBloc.posRoute ==3){
+            Navigator.pop(context);
+          }
             } ,
             child: Text(
               Translations.of(context).text('finalizar'),

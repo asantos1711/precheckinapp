@@ -49,7 +49,7 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
         ),
         trailing: icono,
         onTap: (){
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             PageRouteBuilder(
               pageBuilder: (context, animation1, animation2) =>

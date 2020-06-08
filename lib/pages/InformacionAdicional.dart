@@ -50,6 +50,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     _reserva = _pmsBloc.reserva;
     _result  = _pmsBloc.result;
     _pmsBloc.initCheckbox = 1;
+    _pmsBloc.posRoute = 2;
   }
 
   @override
