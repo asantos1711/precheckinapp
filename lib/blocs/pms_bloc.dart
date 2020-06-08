@@ -209,10 +209,18 @@ class PMSBloc {
   set incrementarAdultosEquivalencia(int val) => _result.adultosPorEquivalencia = _result.adultosPorEquivalencia + val;
 
   //Establecer la posición del acompañante
+  int getposition() => _position;
   set position(int p) => _position = p;
 
   //Obtener el acompañante o el titular.
-  Acompaniantes getAcompaniante() => (_position == -1) ? _result?.titular : _result?.acompaniantes[_position];
+  Acompaniantes getAcompaniante(){
+     if(_position == -1)
+      return _result?.titular;
+      else if(_position == -2)
+        return null;
+      else
+      return _result?.acompaniantes[_position];
+  }
 
   //Asignar las respuestas al acompañante.
   void setCuestionarioCovid(CovidQuestionsModel q){
@@ -226,7 +234,14 @@ class PMSBloc {
   }
 
   //Verificar si se contestó la encuesta de salud
-  bool verificarEncuenta(int posicion) => (posicion == -1) ? _result?.titular?.responseCovid ?? false : _result?.acompaniantes[posicion]?.responseCovid ?? false;
+  bool verificarEncuenta(int posicion) {
+    if(posicion == -1) 
+      return _result?.titular?.responseCovid ?? false;
+    else if(posicion == -2)
+      return false;
+    else
+    return _result?.acompaniantes[posicion]?.responseCovid ?? false;
+  }
   bool verificarEncuestas(){
     if(_result?.acompaniantes == null || _result.acompaniantes.isEmpty)
       return true;

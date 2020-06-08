@@ -147,7 +147,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   Widget _agregarAco() {
     if(!_agregarAcompaniantes)
       return Container();
-
+    
     return Container(
       margin: EdgeInsets.only(top:25.0, bottom: 25.0),
       alignment: Alignment.center,
