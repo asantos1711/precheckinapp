@@ -42,7 +42,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     _pmsBloc    = new PMSBloc();
     _pmsBloc.initCheckbox = 1;
     _politicas = _pmsBloc.politicas;
-
+    _pmsBloc.posRoute = 1;
     _ctrlFirma.addListener((){});
   }
 

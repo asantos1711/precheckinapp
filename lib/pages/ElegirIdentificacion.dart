@@ -121,7 +121,15 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
-    return Stack(
+    return WillPopScope(
+    onWillPop: (){
+      if(_pmsBloc.posRoute ==1){
+        Navigator.popAndPushNamed(context, 'infoTitular');
+      }else if(_pmsBloc.posRoute ==2){
+        Navigator.popAndPushNamed(context, 'infoAdicional');
+      }
+    },
+    child:Stack(
         children: <Widget>[
           Scaffold(
             backgroundColor: Colors.white,
@@ -143,7 +151,8 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             )
           :Center()
         ],
-      );
+      )
+    );
   }
 
   Widget _aviso(){
@@ -261,7 +270,11 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           padding: EdgeInsets.only(right: 20.0),
           child: GestureDetector(
             onTap: () {
-              Navigator.pop(context);
+              if(_pmsBloc.posRoute ==1){
+                Navigator.popAndPushNamed(context, 'infoTitular');
+              }else if(_pmsBloc.posRoute ==2){
+                Navigator.popAndPushNamed(context, 'infoAdicional');
+              }
             },
             child: Icon(
               Icons.close,
@@ -598,7 +611,11 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     Alert(
       closeFunction:(){
         print('Se cerró la alerta');
-       Navigator.pop(context);
+       if(_pmsBloc.posRoute ==1){
+          Navigator.popAndPushNamed(context, 'infoTitular');
+        }else if(_pmsBloc.posRoute ==2){
+          Navigator.popAndPushNamed(context, 'infoAdicional');
+        }
       } ,
       context: context,
       style: AlertStyle(titleStyle: greyText.copyWith(fontWeight:FontWeight.bold )),
@@ -622,7 +639,11 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             setState(() {
               Navigator.pop(context);
               _pmsBloc.acompaniantes = _pmsBloc.acompaniantes;
-              Navigator.pop(context);
+              if(_pmsBloc.posRoute ==1){
+                Navigator.popAndPushNamed(context, 'infoTitular');
+              }else if(_pmsBloc.posRoute ==2){
+                Navigator.popAndPushNamed(context, 'infoAdicional');
+              }
             });
             
           } ,
@@ -755,7 +776,11 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     return Alert(
         closeFunction:(){
           print('Se cerró la alerta');
-          Navigator.pop(context);
+          if(_pmsBloc.posRoute ==1){
+            Navigator.popAndPushNamed(context, 'infoTitular');
+          }else if(_pmsBloc.posRoute ==2){
+            Navigator.popAndPushNamed(context, 'infoAdicional');
+          }
         } ,
         image: new Image.memory(bytes),
         context: context,
@@ -789,7 +814,11 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             color: Colors.white,
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pop(context);
+              if(_pmsBloc.posRoute ==1){
+                Navigator.popAndPushNamed(context, 'infoTitular');
+              }else if(_pmsBloc.posRoute ==2){
+                Navigator.popAndPushNamed(context, 'infoAdicional');
+              }
             } ,
             child: Text(
               Translations.of(context).text('finalizar'),
@@ -827,7 +856,11 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             color: Colors.white,
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pop(context);
+                      if(_pmsBloc.posRoute ==1){
+                Navigator.popAndPushNamed(context, 'infoTitular');
+              }else if(_pmsBloc.posRoute ==2){
+                Navigator.popAndPushNamed(context, 'infoAdicional');
+              }
             } ,
             child: Text(
               Translations.of(context).text('finalizar'),
