@@ -73,11 +73,6 @@ class PMSProvider {
     };
 
     try {
-      print(uri);
-      //TODO: parametrizar el servicio de actulizacion.
-      uri = "http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app/actualizaHospedajeJsonII";
-
-
       SaveData saveModel = SaveData.fromResult(result);
       final body         = saveModel.toJson();
       String data        = jsonEncode(body);
@@ -87,7 +82,9 @@ class PMSProvider {
         body: data,
         encoding: Encoding.getByName("utf-8")
       );
-      status = json.decode(response.body);
+
+      final decodedData = json.decode(response.body);
+      status = decodedData['estatus'];
     }  catch (e) {
       print("No fue posible Guardar la información de la reservación!. Se genero la siguinte excepcion:\n$e");
       status = false;

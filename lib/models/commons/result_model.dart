@@ -70,18 +70,30 @@ class Result {
     if(json['vecaco'] != null){
       List<Acompaniantes> huespedes = List<Acompaniantes>.from( json['vecaco'].map( (v) => Acompaniantes.fromJson(v) ) );
       huespedes.forEach((huesped) {
+
         if(huesped.istitular) {
           titular.idacompaniantes = huesped?.idacompaniantes;
           titular.imagefront      = huesped?.imagefront;
           titular.imageback       = huesped?.imageback;
           titular.imagesign       = huesped?.imagesign;
           titular.fechanac        = huesped?.fechanac;
+          titular.covidQuestions  = huesped?.covidQuestions;
           titular.covidQuestions.idcliente = titular?.idcliente;
           titular.covidQuestions.item = titular?.idacompaniantes;
+
+          if(huesped?.covidQuestions?.fecha != null){
+            if(huesped.covidQuestions.fecha.isNotEmpty)
+              titular.responseCovid = true;
+          }
+
         } else {
           huesped.covidQuestions.idcliente = huesped?.idcliente;
           huesped.covidQuestions.item = huesped?.idacompaniantes;
           acompaniantes.add(huesped);
+          if(huesped?.covidQuestions?.fecha != null){
+            if(huesped.covidQuestions.fecha.isNotEmpty)
+              huesped.responseCovid = true;
+          }
         }
       });
     }

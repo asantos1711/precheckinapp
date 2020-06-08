@@ -5,6 +5,7 @@ import 'package:precheckin/pages/ViewWebView.dart';
 import 'package:precheckin/styles/styles.dart';
 class CheckTextBold extends StatelessWidget {
  
+  BuildContext context;
   final bool value;
   final double width;
   final Function onChange;
@@ -13,7 +14,7 @@ class CheckTextBold extends StatelessWidget {
   final String viewWebVal;
   final List<Politicas> politicas;
 
-  CheckTextBold({
+  CheckTextBold(this.context, {
     @required this.value,
     @required this.onChange,
     @required this.width,
@@ -24,7 +25,7 @@ class CheckTextBold extends StatelessWidget {
   });
  
   @override
-  Widget build(BuildContext context) {
+  Widget build( context) {
     return Container(
       color: Colors.white,
       width: width,
