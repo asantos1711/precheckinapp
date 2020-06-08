@@ -51,10 +51,10 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
 
     _pais         = _pmsBloc?.pais;
     _acompaniante = _pmsBloc.getAcompaniante();
-    _questions    = _acompaniante.covidQuestions ?? new CovidQuestionsModel();
+    _questions    = _acompaniante?.covidQuestions ?? new CovidQuestionsModel();
     _nacimiento   = fechaByString(_acompaniante?.fechanac);
     _edad         = getEdad(_nacimiento);
-    _email        = _acompaniante.istitular ? _pmsBloc.emailTitular : (_questions?.email ?? '');
+    _email        = _questions?.email ?? '';
     _tel          = _acompaniante.istitular ? _pmsBloc.telefonoTitular : (_questions?.telefono ?? '');
     _fContacto    = splitFecha(_questions?.fechaContacto).split("-");
 
@@ -71,7 +71,6 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
     _ctrlFechaContacto  = new TextEditingController(text: (_fContacto.isEmpty || _fContacto.length<2) ? '' : '${_fContacto[2]}-${_fContacto[1]}-${_fContacto[0]}');
     _temp               = _questions?.temperatura ?? false;
 
-    print("TOS: ${_questions?.tos}");
 
     _ts                 = _questions?.tos ?? false;
     _mal                = _questions?.malestarGeneral ?? false;
@@ -82,9 +81,6 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
     _questions.fecha = "${_ahora.year}-${_ahora.month}-${_ahora.day}";
     _questions.edad  = _edad;
     _questions.email = _email;
-
-    print("TEMPERATURA: $_temp");
-
   }
   
   @override
@@ -341,7 +337,7 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
     final DateTime picked = await showDatePicker(
       context: context,
       locale: Translations.of(context).locale,
-      initialDate: (_questions?.fechaContacto.isNotEmpty) ? fechaByString(_questions?.fechaContacto): ahora,
+      initialDate: (_questions?.fechaContacto != null && _questions.fechaContacto.isNotEmpty) ? fechaByString(_questions?.fechaContacto): ahora,
       firstDate: firstDate,
       lastDate: lastDate
     );
@@ -475,7 +471,11 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
         splashColor: Colors.orange,
         onPressed: (){
           _pmsBloc.setCuestionarioCovid(_questions);
-          Navigator.pop(context);
+
+          if(_pmsBloc.getposition() == -1)
+            Navigator.pushReplacementNamed(context, 'infoTitular');
+          else
+            Navigator.pushReplacementNamed(context, 'infoAdicional');
         },
         child: Text(
           Translations.of(context).text('save'),

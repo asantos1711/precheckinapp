@@ -38,7 +38,7 @@ class BtnEncuestaSalud extends StatelessWidget {
       ),
       onPressed: (){
         pmsBloc.position = posicion;
-        Navigator.pushNamed(context, "questionsCovid");
+        Navigator.pushReplacementNamed(context, "questionsCovid");
       },
     );
   }
