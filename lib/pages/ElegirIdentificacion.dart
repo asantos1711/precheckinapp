@@ -127,6 +127,8 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         Navigator.popAndPushNamed(context, 'infoTitular');
       }else if(_pmsBloc.posRoute ==2){
         Navigator.popAndPushNamed(context, 'infoAdicional');
+      }else if(_pmsBloc.posRoute ==3){
+        Navigator.pop(context);
       }
     },
     child:Stack(
@@ -274,6 +276,8 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
                 Navigator.popAndPushNamed(context, 'infoTitular');
               }else if(_pmsBloc.posRoute ==2){
                 Navigator.popAndPushNamed(context, 'infoAdicional');
+              }else if(_pmsBloc.posRoute ==3){
+                Navigator.pop(context);
               }
             },
             child: Icon(
@@ -452,7 +456,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         imageB = cropImage;
         acompaniantes.imageback =image64B;
         _inProcess =false;
-        func(acompaniantes);
+        //func(acompaniantes);
       });
       
       _alertaFinId();
@@ -615,7 +619,9 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           Navigator.popAndPushNamed(context, 'infoTitular');
         }else if(_pmsBloc.posRoute ==2){
           Navigator.popAndPushNamed(context, 'infoAdicional');
-        }
+        }else if(_pmsBloc.posRoute ==3){
+            Navigator.pop(context);
+          }
       } ,
       context: context,
       style: AlertStyle(titleStyle: greyText.copyWith(fontWeight:FontWeight.bold )),
@@ -643,6 +649,8 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
                 Navigator.popAndPushNamed(context, 'infoTitular');
               }else if(_pmsBloc.posRoute ==2){
                 Navigator.popAndPushNamed(context, 'infoAdicional');
+              }else if(_pmsBloc.posRoute ==3){
+                Navigator.pop(context);
               }
             });
             
@@ -762,7 +770,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
       acompaniantes.documenttype = _scanerModel.documentTypeReadable??'';
       acompaniantes.imagefront = _scanerModel?.full_image ??'';
       acompaniantes.imageback = _scanerModel?.portrait ??'';
-      func(acompaniantes);
+      //func(acompaniantes);
       //acompaniantes.nombre = _scanerModel.givenNamesReadable;
       log('imagefront: ${acompaniantes.imagefront}');
     });
@@ -780,6 +788,8 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             Navigator.popAndPushNamed(context, 'infoTitular');
           }else if(_pmsBloc.posRoute ==2){
             Navigator.popAndPushNamed(context, 'infoAdicional');
+          }else if(_pmsBloc.posRoute ==3){
+            Navigator.pop(context);
           }
         } ,
         image: new Image.memory(bytes),
@@ -818,6 +828,8 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
                 Navigator.popAndPushNamed(context, 'infoTitular');
               }else if(_pmsBloc.posRoute ==2){
                 Navigator.popAndPushNamed(context, 'infoAdicional');
+              }else if(_pmsBloc.posRoute ==3){
+                Navigator.pop(context);
               }
             } ,
             child: Text(
@@ -856,11 +868,13 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             color: Colors.white,
             onPressed: () {
               Navigator.pop(context);
-                      if(_pmsBloc.posRoute ==1){
+              if(_pmsBloc.posRoute ==1){
                 Navigator.popAndPushNamed(context, 'infoTitular');
               }else if(_pmsBloc.posRoute ==2){
                 Navigator.popAndPushNamed(context, 'infoAdicional');
-              }
+              }else if(_pmsBloc.posRoute ==3){
+            Navigator.pop(context);
+          }
             } ,
             child: Text(
               Translations.of(context).text('finalizar'),
