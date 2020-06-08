@@ -87,7 +87,9 @@ class PMSProvider {
         body: data,
         encoding: Encoding.getByName("utf-8")
       );
-      status = json.decode(response.body);
+
+      final decodedData = json.decode(response.body);
+      status = decodedData['estatus'];
     }  catch (e) {
       print("No fue posible Guardar la información de la reservación!. Se genero la siguinte excepcion:\n$e");
       status = false;

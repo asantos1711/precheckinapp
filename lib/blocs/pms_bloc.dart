@@ -158,9 +158,8 @@ class PMSBloc {
     bool pol = (politicasProcesos!=1) ? true : false;
     bool avi = (avisoPrivacidad!=1) ? true : false;
     bool cvd = (reglasCovid!=1) ? true : false;
-    bool fir = (signTitular == null || signTitular.isEmpty) ? true : false;
 
-    return (reg || pol || avi || cvd || fir);
+    return (reg || pol || avi || cvd);
   }
 
   //GET/SET Firma del titular

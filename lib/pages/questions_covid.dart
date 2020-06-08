@@ -70,15 +70,20 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
     _enContacto         = _questions?.enContacto ?? false;
     _ctrlFechaContacto  = new TextEditingController(text: (_fContacto.isEmpty || _fContacto.length<2) ? '' : '${_fContacto[2]}-${_fContacto[1]}-${_fContacto[0]}');
     _temp               = _questions?.temperatura ?? false;
+
+    print("TOS: ${_questions?.tos}");
+
     _ts                 = _questions?.tos ?? false;
     _mal                = _questions?.malestarGeneral ?? false;
     _dificultad         = _questions?.dificultadRespirar ?? false;
-    _otrosSintomas      = _questions?.otrosSintomas.isNotEmpty ? true : false;
+    _otrosSintomas      = (_questions?.otrosSintomas!= null && _questions?.otrosSintomas.isNotEmpty) ? true : false;
     _ctrlSintomas       = new TextEditingController(text: _questions?.otrosSintomas ?? '');
     
     _questions.fecha = "${_ahora.year}-${_ahora.month}-${_ahora.day}";
     _questions.edad  = _edad;
     _questions.email = _email;
+
+    print("TEMPERATURA: $_temp");
 
   }
   
