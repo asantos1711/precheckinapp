@@ -73,11 +73,6 @@ class PMSProvider {
     };
 
     try {
-      print(uri);
-      //TODO: parametrizar el servicio de actulizacion.
-      uri = "http://apihtl.sunset.com.mx:9085/GroupSunsetPMSProxyServices/app/actualizaHospedajeJsonII";
-
-
       SaveData saveModel = SaveData.fromResult(result);
       final body         = saveModel.toJson();
       String data        = jsonEncode(body);
