@@ -122,28 +122,28 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     return Stack(
-      children: <Widget>[
-        Scaffold(
-          backgroundColor: Colors.white,
-          appBar: _appbar(),
-          body: Column(
-          children: <Widget>[
-              _headerText(),
-              _lista(),
-              _aviso(),
-              _buttonContinuar()
-            ],
-          )
-        ),
-        (_inProcess)?
-          Container(
-            height: MediaQuery.of(context).size.height,
-            color: Colors.white.withOpacity(0.5),
-            child: Center(child: CircularProgressIndicator(),),
-          )
-        :Center()
-      ],
-    );
+        children: <Widget>[
+          Scaffold(
+            backgroundColor: Colors.white,
+            appBar: _appbar(),
+            body: Column(
+            children: <Widget>[
+                _headerText(),
+                _lista(),
+                _aviso(),
+                _buttonContinuar()
+              ],
+            )
+          ),
+          (_inProcess)?
+            Container(
+              height: MediaQuery.of(context).size.height,
+              color: Colors.white.withOpacity(0.5),
+              child: Center(child: CircularProgressIndicator(),),
+            )
+          :Center()
+        ],
+      );
   }
 
   Widget _aviso(){
@@ -594,10 +594,11 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
   } */
 
   _alertaFinId(){
+    _inProcess =false;
     Alert(
       closeFunction:(){
         print('Se cerró la alerta');
-        Navigator.pop(context);
+       Navigator.pop(context);
       } ,
       context: context,
       style: AlertStyle(titleStyle: greyText.copyWith(fontWeight:FontWeight.bold )),
@@ -617,11 +618,11 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
       buttons: [
         DialogButton(
           color: Colors.white,
-          onPressed: ()async {
-            Navigator.pop(context);
-            Navigator.pop(context);
+          onPressed: () {
             setState(() {
+              Navigator.pop(context);
               _pmsBloc.acompaniantes = _pmsBloc.acompaniantes;
+              Navigator.pop(context);
             });
             
           } ,

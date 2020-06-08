@@ -115,8 +115,8 @@ class _InfoVueloState extends State<InfoVuelo> {
     final DateTime picked = await showDatePicker(
       context: context,
       locale: Translations.of(context).locale,
-      initialDate: _fechaVuelo,
-      firstDate: (_fechaVuelo.isBefore(firstDate)) ? _fechaVuelo : firstDate,
+      initialDate: (_fechaVuelo.isBefore(DateTime.now()))?DateTime.now():_fechaVuelo,//_fechaVuelo,
+      firstDate: DateTime.now(),//(_fechaVuelo.isBefore(firstDate)) ? _fechaVuelo : firstDate,
       lastDate: lastDate
     );
      

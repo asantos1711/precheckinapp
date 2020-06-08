@@ -235,7 +235,7 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(Translations.of(context).text('code_area'), style: greyText.copyWith(fontWeight: FontWeight.w200),),
+                    Text(Translations.of(context).text('code_country'), style: greyText.copyWith(fontWeight: FontWeight.w200),),
                     TextFormField(
                       keyboardType: TextInputType.number,
                       controller: _ctrlCode,
