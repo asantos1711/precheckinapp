@@ -49,7 +49,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     _reserva = _pmsBloc.reserva;
     _result  = _pmsBloc.result;
     _pmsBloc.initCheckbox = 1;
-    _pmsBloc.posRoute = 2;
     super.initState();
   }
 
@@ -59,7 +58,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     width  = MediaQuery.of(context).size.width;
     _agregarAcompaniantes = _pmsBloc.habilitarAddAcompaniantes;
     //setState(()=>_pmsBloc.posRoute = 2);
-    _pmsBloc.posRoute = 2;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _appBar(),

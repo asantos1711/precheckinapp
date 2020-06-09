@@ -51,22 +51,25 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
         ),
         trailing: icono,
         onTap: (){
-          Navigator.pushReplacement(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) =>
-                ElegirIdentificacion(
-                  posi: posi,
-                  acompaniantes: acompaniantes,
-                  func:(aco){
-                    setState(() {
-                      acompaniantes=aco;
-                      condicion = _condicionIcono();
-                    });
-                  }
-                ),
-            )
-          ); 
+          
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) =>
+                  ElegirIdentificacion(
+                    posi: posi,
+                    acompaniantes: acompaniantes,
+                    func:(aco){
+                      setState(() {
+                        acompaniantes=aco;
+                        condicion = _condicionIcono();
+                      });
+                    }
+                  ),
+              )
+            ); 
+          
+          
         },
       ),
     );

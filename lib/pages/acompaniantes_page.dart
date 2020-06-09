@@ -50,14 +50,11 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
           _acompaniante.imagesign = base64.encode(data);
     });
 
-    _pmsBloc.posRoute = 3;
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    setState(()=>_pmsBloc.posRoute = 3);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

@@ -127,11 +127,11 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     return WillPopScope(
     onWillPop: (){
       if(posi ==1){
-        Navigator.popAndPushNamed(context, 'infoTitular');
+        Navigator.pushReplacementNamed(context, 'infoTitular');
       }else if(posi ==2){
-        Navigator.popAndPushNamed(context, 'infoAdicional');
+        Navigator.pushReplacementNamed(context, 'infoAdicional');
       }else if(posi ==3){
-        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, 'addHuesped');
       }
     },
     child:Stack(
@@ -276,11 +276,11 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           child: GestureDetector(
             onTap: () {
               if(posi ==1){
-                Navigator.popAndPushNamed(context, 'infoTitular');
+                Navigator.pushReplacementNamed(context, 'infoTitular');
               }else if(posi ==2){
-                Navigator.popAndPushNamed(context, 'infoAdicional');
+                Navigator.pushReplacementNamed(context, 'infoAdicional');
               }else if(posi ==3){
-                Navigator.pop(context);
+                 Navigator.pushReplacementNamed(context, 'addHuesped');
               }
             },
             child: Icon(
@@ -619,11 +619,11 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
       closeFunction:(){
         print('Se cerró la alerta');
        if(posi ==1){
-          Navigator.popAndPushNamed(context, 'infoTitular');
+          Navigator.pushReplacementNamed(context, 'infoTitular');
         }else if(posi ==2){
-          Navigator.popAndPushNamed(context, 'infoAdicional');
+          Navigator.pushReplacementNamed(context, 'infoAdicional');
         }else if(posi ==3){
-            Navigator.pop(context);
+             Navigator.pushReplacementNamed(context, 'addHuesped');
           }
       } ,
       context: context,
@@ -649,11 +649,11 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
               Navigator.pop(context);
               _pmsBloc.acompaniantes = _pmsBloc.acompaniantes;
               if(posi ==1){
-                Navigator.popAndPushNamed(context, 'infoTitular');
+                Navigator.pushReplacementNamed(context, 'infoTitular');
               }else if(posi ==2){
-                Navigator.popAndPushNamed(context, 'infoAdicional');
+                Navigator.pushReplacementNamed(context, 'infoAdicional');
               }else if(posi ==3){
-                Navigator.pop(context);
+                 Navigator.pushReplacementNamed(context, 'addHuesped');
               }
             });
             
@@ -788,11 +788,11 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         closeFunction:(){
           print('Se cerró la alerta');
           if(posi ==1){
-            Navigator.popAndPushNamed(context, 'infoTitular');
+            Navigator.pushReplacementNamed(context, 'infoTitular');
           }else if(posi ==2){
-            Navigator.popAndPushNamed(context, 'infoAdicional');
+            Navigator.pushReplacementNamed(context, 'infoAdicional');
           }else if(posi ==3){
-            Navigator.pop(context);
+             Navigator.pushReplacementNamed(context, 'addHuesped');
           }
         } ,
         image: new Image.memory(bytes),
@@ -828,11 +828,11 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             onPressed: () {
               Navigator.pop(context);
               if(posi ==1){
-                Navigator.popAndPushNamed(context, 'infoTitular');
+                Navigator.pushReplacementNamed(context, 'infoTitular');
               }else if(posi ==2){
-                Navigator.popAndPushNamed(context, 'infoAdicional');
+                Navigator.pushReplacementNamed(context, 'infoAdicional');
               }else if(posi ==3){
-                Navigator.pop(context);
+                 Navigator.pushReplacementNamed(context, 'addHuesped');
               }
             } ,
             child: Text(
@@ -872,12 +872,12 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             onPressed: () {
               Navigator.pop(context);
               if(posi ==1){
-                Navigator.popAndPushNamed(context, 'infoTitular');
+                Navigator.pushReplacementNamed(context, 'infoTitular');
               }else if(posi ==2){
-                Navigator.popAndPushNamed(context, 'infoAdicional');
+                Navigator.pushReplacementNamed(context, 'infoAdicional');
               }else if(posi ==3){
-            Navigator.pop(context);
-          }
+                 Navigator.pushReplacementNamed(context, 'addHuesped');
+              }
             } ,
             child: Text(
               Translations.of(context).text('finalizar'),
