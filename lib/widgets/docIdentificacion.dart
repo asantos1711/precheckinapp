@@ -7,8 +7,9 @@ import 'package:precheckin/tools/translation.dart';
 
 class DocIdentificacion extends StatefulWidget {
   Acompaniantes acompaniantes;
-
+  int posi;
   DocIdentificacion({
+    @required this.posi,
     this.acompaniantes
   });
 
@@ -18,6 +19,7 @@ class DocIdentificacion extends StatefulWidget {
 
 class _DocIdentificacionState extends State<DocIdentificacion> {
   bool condicion = false;
+  int posi;
   Acompaniantes acompaniantes;
   String fullImage;
   Icon icono = Icon(Icons.camera_alt, color: Color.fromRGBO(0, 165, 227, 1), size: 30);
@@ -26,7 +28,7 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
   void initState() {
     acompaniantes = this.widget.acompaniantes; //.acompaniantes[index];
     condicion = _condicionIcono();
-
+    posi =  this.widget.posi;
     if(condicion)
       icono = Icon(Icons.check_circle_outline, color:Colors.green, size: 30,);
     
@@ -54,6 +56,7 @@ class _DocIdentificacionState extends State<DocIdentificacion> {
             PageRouteBuilder(
               pageBuilder: (context, animation1, animation2) =>
                 ElegirIdentificacion(
+                  posi: posi,
                   acompaniantes: acompaniantes,
                   func:(aco){
                     setState(() {

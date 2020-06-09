@@ -310,4 +310,8 @@ class PMSBloc {
 
   //Actualizar la información de la reserva
   Future<bool> actualizaHospedaje() async => await _provider.actualizaHospedaje(_result);
+
+  //pos route
+  int getpos() => posRoute;
+  set pos(int p) => posRoute = p;
 }

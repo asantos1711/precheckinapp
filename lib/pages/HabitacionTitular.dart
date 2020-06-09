@@ -40,7 +40,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     _pmsBloc    = new PMSBloc();
     _pmsBloc.initCheckbox = 1;
     _politicas = _pmsBloc.politicas;
-    _pmsBloc.posRoute = 1;
+    _pmsBloc.posRoute=1;
     _ctrlFirma.addListener((){});
     super.initState();
   }
@@ -133,7 +133,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   Widget _documentos(){
     return Container(
       padding: EdgeInsets.all(20.0),
-      child: DocIdentificacion(acompaniantes: _pmsBloc.titular)
+      child: DocIdentificacion(acompaniantes: _pmsBloc.titular, posi:1)
     );
   }
   

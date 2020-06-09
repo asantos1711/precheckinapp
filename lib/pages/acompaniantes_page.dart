@@ -141,6 +141,7 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
       width: double.infinity,
       padding: EdgeInsets.all(5.0),
       child: CardAcompanante(
+        posi:3,
         acompaniante: _acompaniante,
         adultos: !(_maxAdultos > 0),
         menores: !( _maxMenores > 0),
