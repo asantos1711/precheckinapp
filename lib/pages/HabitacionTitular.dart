@@ -264,18 +264,12 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         padding: EdgeInsets.all(8.0),
         splashColor: Colors.orange,
         onPressed: (_pmsBloc.bloquearBoton()) ? null : () {
-          if(_pmsBloc.verificarEncuenta(-1))
+          if(_pmsBloc.fnTituar == null || _pmsBloc.nombreTitular == null)
+            showAlert(context, Translations.of(context).text("name_age_invalid"));
+          else if(_pmsBloc.verificarEncuenta(-1))
             Navigator.pushNamed(context, 'infoAdicional');
           else
             showAlert(context, Translations.of(context).text("cuestionary_required"));
-          /*if(!_formKey.currentState.validate())
-            showAlert(context, Translations.of(context).text("values_invalid"));
-          else {
-            if(_pmsBloc.verificarEncuenta(-1))
-              Navigator.pushNamed(context, 'infoAdicional');
-            else
-              showAlert(context, Translations.of(context).text("cuestionary_required"));
-          }*/
         },
         child: Text(
           Translations.of(context).text('continuar'),
