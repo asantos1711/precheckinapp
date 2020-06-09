@@ -100,7 +100,7 @@
   "date": "Date",
   "email_tel": "E-mail and phone number with area code:",
   "e_mail": "E-mail",
-  "code_area": "Code Area",
+  "code_country": "Country Code",
   "pais_visitado":"What countries or cities have you visited the last 15 days?",
   "paises":"Countries",
   "ciudades":"Cities",

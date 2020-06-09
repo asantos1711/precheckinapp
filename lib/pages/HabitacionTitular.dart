@@ -36,22 +36,21 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
   @override
   void initState() {
-    super.initState();
-   
     _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
     _pmsBloc    = new PMSBloc();
     _pmsBloc.initCheckbox = 1;
     _politicas = _pmsBloc.politicas;
-
+    _pmsBloc.posRoute = 1;
     _ctrlFirma.addListener((){});
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     _opcionesFloat["1"] = Translations.of(context).text('opcion_duda').toString();
     _opcionesFloat["2"] = Translations.of(context).text('opcion_error').toString();
-
     _screenWidth = (MediaQuery.of(context).size.width) - 40;
+    setState(()=>_pmsBloc.posRoute = 1);
 
     return Scaffold(
       backgroundColor: Colors.white,

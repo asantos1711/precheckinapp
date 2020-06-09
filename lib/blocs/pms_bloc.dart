@@ -20,6 +20,7 @@ class PMSBloc {
   Result  _result;
   PMSProvider _provider;
   int _position;
+  int posRoute;
 
 
   ///Inicializa la instancia de Reserva
