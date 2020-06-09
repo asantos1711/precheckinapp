@@ -20,7 +20,7 @@ class PMSBloc {
   Result  _result;
   PMSProvider _provider;
   int _position;
-  int posRoute;
+  Acompaniantes _nuevoAcompaniante;
 
 
   ///Inicializa la instancia de Reserva
@@ -179,7 +179,31 @@ class PMSBloc {
   int get idCliente => _result.idCliente;
 
   //Determinar si la habitación tiene capacidad para mas acompañantes.
-  bool get habilitarAddAcompaniantes => ((_result.getTotalAdultos() < _result?.tipoHabitacion?.maxAdultos) || (_result.getTotalMenores() < _result?.tipoHabitacion?.maxMenores)) ? true : false;
+  bool get habilitarAddAcompaniantes {
+    int densidadAdultos =  _result?.tipoHabitacion?.maxAdultos;
+    int densidadMenores = _result?.tipoHabitacion?.maxMenores;
+    int adultosReserva  = _result.getTotalAdultos();
+    int menoresReserva  = _result.getTotalMenores();
+
+    if(densidadMenores <= 0){
+      adultosReserva = (adultosReserva + menoresReserva);
+      adultosEquivalencia = menoresReserva;
+    }
+    else if(densidadMenores < menoresReserva){
+      adultosReserva = adultosReserva + (menoresReserva - densidadMenores);
+      adultosEquivalencia = (menoresReserva - densidadMenores);
+    }
+
+    if(adultosReserva > densidadAdultos){
+      menoresReserva = menoresReserva + (adultosReserva - densidadAdultos);
+      menoresEquivalencia = (adultosReserva - densidadAdultos) * 2;
+    }
+
+    return ((adultosReserva < densidadAdultos) || (menoresReserva < densidadMenores)) ? true : false;
+  }
+  //Establecer adultos y menores por equivalencia.
+  set adultosEquivalencia(int adultos) => _result.adultosPorEquivalencia = adultos;
+  set menoresEquivalencia(int menores) => _result.menoresPorEquivalencia = menores;
 
   //GET Lista de Acompañantes.
   List<Acompaniantes> get acompaniantes => _result?.acompaniantes;
@@ -205,7 +229,7 @@ class PMSBloc {
   set incrementarAdolecentes(int val) => _result.numeroAdolecentes = _result.numeroAdolecentes + val;
   set incrementarNinios(int val) => _result.numeroNinios = _result.numeroNinios + val;
 
-  //Incrementar Menores por Equivalencia
+  //Incrementar Menores y adultos por Equivalencia
   set incrementarMenoresEquivalencia(int val) => _result.menoresPorEquivalencia = _result.menoresPorEquivalencia + val ;
   set incrementarAdultosEquivalencia(int val) => _result.adultosPorEquivalencia = _result.adultosPorEquivalencia + val;
 
@@ -217,9 +241,9 @@ class PMSBloc {
   Acompaniantes getAcompaniante(){
      if(_position == -1)
       return _result?.titular;
-      else if(_position == -2)
-        return null;
-      else
+    else if(_position == -2)
+      return _nuevoAcompaniante;
+    else
       return _result?.acompaniantes[_position];
   }
 
@@ -228,6 +252,9 @@ class PMSBloc {
     if(_position == -1) {
       _result?.titular?.responseCovid = true;
       _result?.titular?.covidQuestions = q;
+    } else if(_position == -2){
+      _nuevoAcompaniante.responseCovid = true;
+      _nuevoAcompaniante.covidQuestions = q;
     } else {
        _result?.acompaniantes[_position]?.responseCovid = true;
        _result?.acompaniantes[_position]?.covidQuestions = q;
@@ -239,10 +266,12 @@ class PMSBloc {
     if(posicion == -1) 
       return _result?.titular?.responseCovid ?? false;
     else if(posicion == -2)
-      return false;
+      return _nuevoAcompaniante?.responseCovid ?? false;
     else
     return _result?.acompaniantes[posicion]?.responseCovid ?? false;
   }
+
+  //Verificar si las encuestas de los acompañantes estan contestadas.
   bool verificarEncuestas(){
     if(_result?.acompaniantes == null || _result.acompaniantes.isEmpty)
       return true;
@@ -259,6 +288,21 @@ class PMSBloc {
     return status;
   }
 
+  //Inicializar el objeto para el nuevo acompañante
+  void inicializarAcompaniante() {
+    _nuevoAcompaniante                 = new Acompaniantes();
+    _nuevoAcompaniante.fechanac        = new DateTime.now().toString();
+    _nuevoAcompaniante.edad            = '0';
+    _nuevoAcompaniante.club            = int.parse(idHotel);
+    _nuevoAcompaniante.idcliente       = idCliente;
+    _nuevoAcompaniante.idacompaniantes = 0;
+    _nuevoAcompaniante.istitular       = false;
+  }
+
+  //Regresar el objeto del nuevo acompañante.
+  Acompaniantes get nuevoAcompaniante => _nuevoAcompaniante;
+
   //Actualizar la información de la reserva
   Future<bool> actualizaHospedaje() async => await _provider.actualizaHospedaje(_result);
+
 }

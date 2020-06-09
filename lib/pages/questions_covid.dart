@@ -118,6 +118,7 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
 
   Widget _appBar(){
     return AppBar(
+      backgroundColor: Color(0xff37a981),
       leading: Container(),
       title:Container(
         width: MediaQuery.of(context).size.width/0.7,
@@ -474,6 +475,8 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
 
           if(_pmsBloc.getposition() == -1)
             Navigator.pushReplacementNamed(context, 'infoTitular');
+          else if(_pmsBloc.getposition() == -2)
+            Navigator.pushReplacementNamed(context, 'addHuesped');
           else
             Navigator.pushReplacementNamed(context, 'infoAdicional');
         },

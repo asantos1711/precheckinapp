@@ -127,8 +127,8 @@ class Result {
   }
 
   //Obtiene el numero total de menores
-  int getTotalMenores() => numeroAdolecentes + numeroNinios + menoresPorEquivalencia;
+  int getTotalMenores() => numeroNinios + menoresPorEquivalencia;
 
   //Obtiene el total de los adultos
-  int getTotalAdultos() => numeroAdultos + adultosPorEquivalencia;
+  int getTotalAdultos() => numeroAdultos + numeroAdolecentes + adultosPorEquivalencia;
 }

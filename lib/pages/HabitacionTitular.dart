@@ -36,21 +36,18 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
 
   @override
   void initState() {
-    super.initState();
-   
     _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
     _pmsBloc    = new PMSBloc();
     _pmsBloc.initCheckbox = 1;
     _politicas = _pmsBloc.politicas;
-    _pmsBloc.posRoute = 1;
     _ctrlFirma.addListener((){});
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     _opcionesFloat["1"] = Translations.of(context).text('opcion_duda').toString();
     _opcionesFloat["2"] = Translations.of(context).text('opcion_error').toString();
-
     _screenWidth = (MediaQuery.of(context).size.width) - 40;
 
     return Scaffold(
@@ -134,7 +131,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   Widget _documentos(){
     return Container(
       padding: EdgeInsets.all(20.0),
-      child: DocIdentificacion(acompaniantes: _pmsBloc.titular)
+      child: DocIdentificacion(acompaniantes: _pmsBloc.titular, posi:1)
     );
   }
   
@@ -265,18 +262,12 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         padding: EdgeInsets.all(8.0),
         splashColor: Colors.orange,
         onPressed: (_pmsBloc.bloquearBoton()) ? null : () {
-          if(_pmsBloc.verificarEncuenta(-1))
+          if(_pmsBloc.fnTituar == null || _pmsBloc.nombreTitular == null)
+            showAlert(context, Translations.of(context).text("name_age_invalid"));
+          else if(_pmsBloc.verificarEncuenta(-1))
             Navigator.pushNamed(context, 'infoAdicional');
           else
             showAlert(context, Translations.of(context).text("cuestionary_required"));
-          /*if(!_formKey.currentState.validate())
-            showAlert(context, Translations.of(context).text("values_invalid"));
-          else {
-            if(_pmsBloc.verificarEncuenta(-1))
-              Navigator.pushNamed(context, 'infoAdicional');
-            else
-              showAlert(context, Translations.of(context).text("cuestionary_required"));
-          }*/
         },
         child: Text(
           Translations.of(context).text('continuar'),

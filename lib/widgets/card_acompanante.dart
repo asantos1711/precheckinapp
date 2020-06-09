@@ -15,10 +15,12 @@ class CardAcompanante extends StatefulWidget {
   bool adultos;
   bool menores;
   bool nuevo;
+  int posi;
   Widget btnEncuesta;
 
   CardAcompanante({
     @required this.signature,
+    @required this.posi,
     this.primaryColor,
     @required this.acompaniante,
     this.adultos = true,
@@ -34,6 +36,7 @@ class CardAcompanante extends StatefulWidget {
 class _CardAcompananteState extends State<CardAcompanante> {
   double width;
   Widget _signature;
+  int posi;
   Acompaniantes _acompaniante;
   DateTime _date = DateTime.now();
   DateTime _fecaNac = DateTime.now();
@@ -44,7 +47,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
   @override
   void initState() {
     super.initState();
-
+    posi =  this.widget.posi;
     _signature    = this.widget.signature;
     _acompaniante = this.widget.acompaniante;
     _btnEncuesta  = this.widget.btnEncuesta;
@@ -80,7 +83,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
 
         Container(
           padding: EdgeInsets.only(left:20.0, right:20.0, top:15.0),
-          child: DocIdentificacion(acompaniantes:_acompaniante),
+          child: DocIdentificacion(acompaniantes:_acompaniante, posi: posi,),
         ),
 
         Container(

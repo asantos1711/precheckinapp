@@ -42,7 +42,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   @override
   void initState() {
-    super.initState();
     _controller.addListener((){});
     _pmsBloc = new PMSBloc();
     _pref    = new UserPreferences();
@@ -50,7 +49,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     _reserva = _pmsBloc.reserva;
     _result  = _pmsBloc.result;
     _pmsBloc.initCheckbox = 1;
-    _pmsBloc.posRoute = 2;
+    super.initState();
   }
 
   @override
@@ -58,7 +57,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     height = MediaQuery.of(context).size.height;
     width  = MediaQuery.of(context).size.width;
     _agregarAcompaniantes = _pmsBloc.habilitarAddAcompaniantes;
-
+    //setState(()=>_pmsBloc.posRoute = 2);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _appBar(),
@@ -115,6 +114,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
             child: Card(
               elevation: 15.0,
               child: CardAcompanante(
+                posi : 2,
                 acompaniante: _pmsBloc.acompaniantes[index],
                 signature:  _firma(_controllerSignature, index),
                 btnEncuesta: _buttonEncuentaCovid(index),
@@ -158,7 +158,10 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         child: Icon(FontAwesomeIcons.plus,size: 24,),
         padding: EdgeInsets.all(16),
         shape: CircleBorder(),
-        onPressed: () => Navigator.pushNamed(context, "addHuesped")
+        onPressed: (){
+          _pmsBloc.inicializarAcompaniante();
+          Navigator.pushNamed(context, "addHuesped");
+        }
       )
     );
   }

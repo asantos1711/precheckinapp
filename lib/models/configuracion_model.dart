@@ -8,6 +8,11 @@ class Configuracion {
   String getReservationServiceUrl;
   String updateReservationServiceUrl;
   String licenciaScaner;
+  String licenciaScanerIos;
+  String groupsAdultsAge;
+  String groupsMinorsAge;
+  String adultsEquivalence;
+  String minorsEquivalence;
   String validityCodesServiceUrl;
 
   Configuracion({
@@ -20,6 +25,11 @@ class Configuracion {
     this.getReservationServiceUrl    = '',
     this.updateReservationServiceUrl = '',
     this.licenciaScaner              = '',
+    this.licenciaScanerIos           = '',
+    this.groupsAdultsAge             = '',
+    this.groupsMinorsAge             = '',
+    this.adultsEquivalence           = '',
+    this.minorsEquivalence           = '',
     this.validityCodesServiceUrl     = '',
   });
 
@@ -33,6 +43,39 @@ class Configuracion {
     getReservationServiceUrl    : json['getReservationServiceUrl'],
     updateReservationServiceUrl : json['updateReservationServiceUrl'],
     licenciaScaner              : json['licenciaScaner'],
+    licenciaScanerIos           : json['licenciaScanerIos'],
+    groupsAdultsAge             : json['groupsAdultsAge'],
+    groupsMinorsAge             : json['groupsMinorsAge'],
+    adultsEquivalence           : json['adultsEquivalence'],
+    minorsEquivalence           : json['minorsEquivalence'],
     validityCodesServiceUrl     : json['validityCodesServiceUrl'],
   );
+
+  int adultAge(){
+    int age = 0;
+    if(groupsAdultsAge != null && groupsAdultsAge.isNotEmpty)
+      age = int.parse(groupsAdultsAge);
+    return age;
+  }
+
+  int minorAge(){
+    int age = 0;
+    if(groupsMinorsAge != null && groupsMinorsAge.isNotEmpty)
+      age = int.parse(groupsMinorsAge);
+    return age;
+  }
+
+  int adultEquivalence(){
+    int adult = 0;
+    if(adultsEquivalence != null && adultsEquivalence.isNotEmpty)
+      adult = int.parse(adultsEquivalence);
+    return adult;
+  }
+
+  int minorEquivalence(){
+    int minor = 0;
+    if(minorsEquivalence != null && minorsEquivalence.isNotEmpty)
+      minor = int.parse(minorsEquivalence);
+    return minor;
+  }
 }

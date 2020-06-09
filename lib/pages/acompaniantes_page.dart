@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:precheckin/blocs/pms_bloc.dart';
+import 'package:precheckin/providers/configuracion_provider.dart';
 
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/styles/styles.dart';
@@ -10,6 +11,7 @@ import 'package:precheckin/widgets/btn_encuesta_salud_widget.dart';
 import 'package:precheckin/widgets/card_acompanante.dart';
 import 'package:precheckin/widgets/custom_signature.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
+export 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:signature/signature.dart';
 
 class AcompaniantesPage extends StatefulWidget {
@@ -26,25 +28,20 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
   int _maxMenores;
   Acompaniantes _acompaniante;
   SignatureController _sigController;
+  ConfiguracionProvider _configProvider;
+  Configuracion _config;
 
   @override
   void initState() {
-    super.initState();
-
+    _configProvider = new ConfiguracionProvider();
+    _config       = _configProvider.configuracion;
     _pmsBloc      = new PMSBloc();    
     _totalAdultos = _pmsBloc.totalAdoultos;
     _totalMenores = _pmsBloc.totalMenores;
     _maxAdultos   = _totalAdultos + ((_totalMenores > 0) ? _totalMenores ~/ 2 : 0);
     _maxMenores   = _totalMenores + _totalAdultos;
 
-    
-    _acompaniante                 = new Acompaniantes();
-    _acompaniante.fechanac        = new DateTime.now().toString();
-    _acompaniante.edad            = '0';
-    _acompaniante.club            = int.parse(_pmsBloc.idHotel);
-    _acompaniante.idcliente       = _pmsBloc.idCliente;
-    _acompaniante.idacompaniantes = 0;
-    _acompaniante.istitular       = false;
+    _acompaniante = _pmsBloc.nuevoAcompaniante;
 
     _sigController = new SignatureController();
     _sigController.addListener(() async {
@@ -52,7 +49,8 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
         if(data != null)
           _acompaniante.imagesign = base64.encode(data);
     });
-    _pmsBloc.posRoute=3;
+
+    super.initState();
   }
 
   @override
@@ -140,11 +138,12 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
       width: double.infinity,
       padding: EdgeInsets.all(5.0),
       child: CardAcompanante(
+        posi:3,
         acompaniante: _acompaniante,
         adultos: !(_maxAdultos > 0),
         menores: !( _maxMenores > 0),
         nuevo: true,
-        //btnEncuesta: _buttonEncuentaCovid(),
+        btnEncuesta: _buttonEncuentaCovid(),
         signature: CustomSignature(
           controller: _sigController,
         ),
@@ -206,23 +205,18 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
   void _saveData(){
     int edad = int.parse(_acompaniante.edad);
 
-    if(edad >= 18) {
+    if(edad >= _config.adultAge()) {
       _pmsBloc.incrementarAdultos = 1;
 
       if(_totalAdultos <= 0)
-        _pmsBloc.incrementarMenoresEquivalencia = 2;
-    } else if(edad >= 12 && edad < 18){
-      _pmsBloc.incrementarAdolecentes = 1;
-
-      if(_totalMenores <= 0)
-        _pmsBloc.incrementarAdultosEquivalencia = 1;
-    } else if(edad < 12){
+        _pmsBloc.incrementarMenoresEquivalencia = _config.adultEquivalence();
+    } else {
       _pmsBloc.incrementarNinios = 1;
 
       if(_totalMenores <= 0)
-        _pmsBloc.incrementarAdultosEquivalencia = 1;
+        _pmsBloc.incrementarAdultosEquivalencia = _config.minorEquivalence();
     }
-     
+
     _pmsBloc.addAcompaniante = _acompaniante;
 
     Navigator.pushReplacementNamed(context, 'infoAdicional');
