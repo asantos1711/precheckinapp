@@ -42,7 +42,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
 
   @override
   void initState() {
-    super.initState();
     _controller.addListener((){});
     _pmsBloc = new PMSBloc();
     _pref    = new UserPreferences();
@@ -50,7 +49,8 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     _reserva = _pmsBloc.reserva;
     _result  = _pmsBloc.result;
     _pmsBloc.initCheckbox = 1;
-    _pmsBloc.posRoute = 2;
+    setState(()=>_pmsBloc.posRoute = 2);
+    super.initState();
   }
 
   @override
@@ -58,6 +58,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     height = MediaQuery.of(context).size.height;
     width  = MediaQuery.of(context).size.width;
     _agregarAcompaniantes = _pmsBloc.habilitarAddAcompaniantes;
+    setState(()=>_pmsBloc.posRoute = 2);
 
     return Scaffold(
       backgroundColor: Colors.white,

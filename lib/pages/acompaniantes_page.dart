@@ -29,8 +29,6 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
 
   @override
   void initState() {
-    super.initState();
-
     _pmsBloc      = new PMSBloc();    
     _totalAdultos = _pmsBloc.totalAdoultos;
     _totalMenores = _pmsBloc.totalMenores;
@@ -53,10 +51,12 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
           _acompaniante.imagesign = base64.encode(data);
     });
     _pmsBloc.posRoute=3;
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    setState(()=>_pmsBloc.posRoute = 3);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
