@@ -178,7 +178,31 @@ class PMSBloc {
   int get idCliente => _result.idCliente;
 
   //Determinar si la habitación tiene capacidad para mas acompañantes.
-  bool get habilitarAddAcompaniantes => ((_result.getTotalAdultos() < _result?.tipoHabitacion?.maxAdultos) || (_result.getTotalMenores() < _result?.tipoHabitacion?.maxMenores)) ? true : false;
+  bool get habilitarAddAcompaniantes {
+    int densidadAdultos =  _result?.tipoHabitacion?.maxAdultos;
+    int densidadMenores = _result?.tipoHabitacion?.maxMenores;
+    int adultosReserva  = _result.getTotalAdultos();
+    int menoresReserva  = _result.getTotalMenores();
+
+    if(densidadMenores <= 0){
+      adultosReserva = (adultosReserva + menoresReserva);
+      adultosEquivalencia = menoresReserva;
+    }
+    else if(densidadMenores < menoresReserva){
+      adultosReserva = adultosReserva + (menoresReserva - densidadMenores);
+      adultosEquivalencia = (menoresReserva - densidadMenores);
+    }
+
+    if(adultosReserva > densidadAdultos){
+      menoresReserva = menoresReserva + (adultosReserva - densidadAdultos);
+      menoresEquivalencia = (adultosReserva - densidadAdultos) * 2;
+    }
+
+    return ((adultosReserva < densidadAdultos) || (menoresReserva < densidadMenores)) ? true : false;
+  }
+  //Establecer adultos y menores por equivalencia.
+  set adultosEquivalencia(int adultos) => _result.adultosPorEquivalencia = adultos;
+  set menoresEquivalencia(int menores) => _result.menoresPorEquivalencia = menores;
 
   //GET Lista de Acompañantes.
   List<Acompaniantes> get acompaniantes => _result?.acompaniantes;
@@ -204,7 +228,7 @@ class PMSBloc {
   set incrementarAdolecentes(int val) => _result.numeroAdolecentes = _result.numeroAdolecentes + val;
   set incrementarNinios(int val) => _result.numeroNinios = _result.numeroNinios + val;
 
-  //Incrementar Menores por Equivalencia
+  //Incrementar Menores y adultos por Equivalencia
   set incrementarMenoresEquivalencia(int val) => _result.menoresPorEquivalencia = _result.menoresPorEquivalencia + val ;
   set incrementarAdultosEquivalencia(int val) => _result.adultosPorEquivalencia = _result.adultosPorEquivalencia + val;
 
