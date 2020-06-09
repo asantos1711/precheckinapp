@@ -8,6 +8,11 @@ class Configuracion {
   String getReservationServiceUrl;
   String updateReservationServiceUrl;
   String licenciaScaner;
+  String licenciaScanerIos;
+  String groupsAdultsAge;
+  String groupsMinorsAge;
+  String adultsEquivalence;
+  String minorsEquivalence;
   String validityCodesServiceUrl;
 
   Configuracion({
@@ -20,6 +25,11 @@ class Configuracion {
     this.getReservationServiceUrl    = '',
     this.updateReservationServiceUrl = '',
     this.licenciaScaner              = '',
+    this.licenciaScanerIos           = '',
+    this.groupsAdultsAge             = '',
+    this.groupsMinorsAge             = '',
+    this.adultsEquivalence           = '',
+    this.minorsEquivalence           = '',
     this.validityCodesServiceUrl     = '',
   });
 
@@ -33,6 +43,11 @@ class Configuracion {
     getReservationServiceUrl    : json['getReservationServiceUrl'],
     updateReservationServiceUrl : json['updateReservationServiceUrl'],
     licenciaScaner              : json['licenciaScaner'],
+    licenciaScanerIos           : json['licenciaScanerIos'],
+    groupsAdultsAge             : json['groupsAdultsAge'],
+    groupsMinorsAge             : json['groupsMinorsAge'],
+    adultsEquivalence           : json['adultsEquivalence'],
+    minorsEquivalence           : json['minorsEquivalence'],
     validityCodesServiceUrl     : json['validityCodesServiceUrl'],
   );
 }
