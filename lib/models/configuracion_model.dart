@@ -50,4 +50,32 @@ class Configuracion {
     minorsEquivalence           : json['minorsEquivalence'],
     validityCodesServiceUrl     : json['validityCodesServiceUrl'],
   );
+
+  int adultAge(){
+    int age = 0;
+    if(groupsAdultsAge != null && groupsAdultsAge.isNotEmpty)
+      age = int.parse(groupsAdultsAge);
+    return age;
+  }
+
+  int minorAge(){
+    int age = 0;
+    if(groupsMinorsAge != null && groupsMinorsAge.isNotEmpty)
+      age = int.parse(groupsMinorsAge);
+    return age;
+  }
+
+  int adultEquivalence(){
+    int adult = 0;
+    if(adultsEquivalence != null && adultsEquivalence.isNotEmpty)
+      adult = int.parse(adultsEquivalence);
+    return adult;
+  }
+
+  int minorEquivalence(){
+    int minor = 0;
+    if(minorsEquivalence != null && minorsEquivalence.isNotEmpty)
+      minor = int.parse(minorsEquivalence);
+    return minor;
+  }
 }

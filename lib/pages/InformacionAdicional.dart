@@ -159,7 +159,10 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         child: Icon(FontAwesomeIcons.plus,size: 24,),
         padding: EdgeInsets.all(16),
         shape: CircleBorder(),
-        onPressed: () => Navigator.pushNamed(context, "addHuesped")
+        onPressed: (){
+          _pmsBloc.inicializarAcompaniante();
+          Navigator.pushNamed(context, "addHuesped");
+        }
       )
     );
   }

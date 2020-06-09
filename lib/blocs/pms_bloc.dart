@@ -21,6 +21,8 @@ class PMSBloc {
   PMSProvider _provider;
   int _position;
   int posRoute;
+  CovidQuestionsModel _covidQuestions;
+  Acompaniantes _nuevoAcompaniante;
 
 
   ///Inicializa la instancia de Reserva
@@ -241,9 +243,9 @@ class PMSBloc {
   Acompaniantes getAcompaniante(){
      if(_position == -1)
       return _result?.titular;
-      else if(_position == -2)
-        return null;
-      else
+    else if(_position == -2)
+      return _nuevoAcompaniante;
+    else
       return _result?.acompaniantes[_position];
   }
 
@@ -252,21 +254,29 @@ class PMSBloc {
     if(_position == -1) {
       _result?.titular?.responseCovid = true;
       _result?.titular?.covidQuestions = q;
+    } else if(_position == -2){
+      _nuevoAcompaniante.responseCovid = true;
+      _nuevoAcompaniante.covidQuestions = q;
     } else {
        _result?.acompaniantes[_position]?.responseCovid = true;
        _result?.acompaniantes[_position]?.covidQuestions = q;
     }
   }
 
+  //Obtener el resultado de las preguntas para el nuevo acompañante.
+  CovidQuestionsModel get covidQuestions => _covidQuestions;
+
   //Verificar si se contestó la encuesta de salud
   bool verificarEncuenta(int posicion) {
     if(posicion == -1) 
       return _result?.titular?.responseCovid ?? false;
     else if(posicion == -2)
-      return false;
+      return _nuevoAcompaniante?.responseCovid ?? false;
     else
     return _result?.acompaniantes[posicion]?.responseCovid ?? false;
   }
+
+  //Verificar si las encuestas de los acompañantes estan contestadas.
   bool verificarEncuestas(){
     if(_result?.acompaniantes == null || _result.acompaniantes.isEmpty)
       return true;
@@ -282,6 +292,21 @@ class PMSBloc {
 
     return status;
   }
+
+  //Inicializar el objeto para el nuevo acompañante
+  void inicializarAcompaniante() {
+    _nuevoAcompaniante = new Acompaniantes();
+    _nuevoAcompaniante                 = new Acompaniantes();
+    _nuevoAcompaniante.fechanac        = new DateTime.now().toString();
+    _nuevoAcompaniante.edad            = '0';
+    _nuevoAcompaniante.club            = int.parse(idHotel);
+    _nuevoAcompaniante.idcliente       = idCliente;
+    _nuevoAcompaniante.idacompaniantes = 0;
+    _nuevoAcompaniante.istitular       = false;
+  }
+
+  //Regresar el objeto del nuevo acompañante.
+  Acompaniantes get nuevoAcompaniante => _nuevoAcompaniante;
 
   //Actualizar la información de la reserva
   Future<bool> actualizaHospedaje() async => await _provider.actualizaHospedaje(_result);

@@ -475,6 +475,8 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
 
           if(_pmsBloc.getposition() == -1)
             Navigator.pushReplacementNamed(context, 'infoTitular');
+          else if(_pmsBloc.getposition() == -2)
+            Navigator.pushReplacementNamed(context, 'addHuesped');
           else
             Navigator.pushReplacementNamed(context, 'infoAdicional');
         },
