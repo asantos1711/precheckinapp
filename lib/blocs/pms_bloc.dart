@@ -21,7 +21,6 @@ class PMSBloc {
   PMSProvider _provider;
   int _position;
   int posRoute;
-  CovidQuestionsModel _covidQuestions;
   Acompaniantes _nuevoAcompaniante;
 
 
@@ -263,9 +262,6 @@ class PMSBloc {
     }
   }
 
-  //Obtener el resultado de las preguntas para el nuevo acompañante.
-  CovidQuestionsModel get covidQuestions => _covidQuestions;
-
   //Verificar si se contestó la encuesta de salud
   bool verificarEncuenta(int posicion) {
     if(posicion == -1) 
@@ -295,7 +291,6 @@ class PMSBloc {
 
   //Inicializar el objeto para el nuevo acompañante
   void inicializarAcompaniante() {
-    _nuevoAcompaniante = new Acompaniantes();
     _nuevoAcompaniante                 = new Acompaniantes();
     _nuevoAcompaniante.fechanac        = new DateTime.now().toString();
     _nuevoAcompaniante.edad            = '0';
