@@ -45,6 +45,8 @@ class _InfoTitularState extends State<InfoTitular> {
     _ctrlEdad        = new TextEditingController(text: _pmsBloc.edadTitular.toString());
     _ctrlCiudad      = new TextEditingController(text: _pmsBloc.ciudad);
     _ctrlCP          = new TextEditingController(text: _pmsBloc.codigoPostal);
+
+    print("PAIS: $_pais");
   }
 
 
