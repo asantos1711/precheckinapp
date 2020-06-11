@@ -20,7 +20,6 @@ class PMSBloc {
   Result  _result;
   PMSProvider _provider;
   int _position;
-  int posRoute;
   Acompaniantes _nuevoAcompaniante;
 
 
@@ -337,4 +336,5 @@ class PMSBloc {
 
   //Actualizar la información de la reserva
   Future<bool> actualizaHospedaje() async => await _provider.actualizaHospedaje(_result);
+
 }
