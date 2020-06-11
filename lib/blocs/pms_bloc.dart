@@ -180,8 +180,8 @@ class PMSBloc {
 
   //Determinar si la habitación tiene capacidad para mas acompañantes.
   bool get habilitarAddAcompaniantes {
-    int densidadAdultos =  _result?.tipoHabitacion?.maxAdultos;
-    int densidadMenores = _result?.tipoHabitacion?.maxMenores;
+    int densidadAdultos =  _result?.tipoHabitacion?.maxAdultos ?? 0;
+    int densidadMenores = _result?.tipoHabitacion?.maxMenores ?? 0;
     int adultosReserva  = _result.getTotalAdultos();
     int menoresReserva  = _result.getTotalMenores();
 

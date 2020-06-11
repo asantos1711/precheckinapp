@@ -197,7 +197,7 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
           Text(Translations.of(context).text('procedencia'), style: greyText.copyWith(fontWeight: FontWeight.w200),),
           PaisesWidget(
             hotel:_pmsBloc.idHotel,
-            valorInicial: _pais ?? "MEX",
+            valorInicial: (_pais.isEmpty) ? "MEX" : _pais,
             change: (pais) => setState(() {
               _pais         = pais;
               _pmsBloc.paisByPosicion = pais;
