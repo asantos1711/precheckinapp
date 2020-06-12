@@ -10,6 +10,8 @@ class TipoHabitacion{
   int maxOcupantes;
   int maxAdultos;
   int maxMenores;
+  String descripreservaesp;
+  String descripreservaing;
 
   TipoHabitacion({
     this.club,
@@ -23,6 +25,8 @@ class TipoHabitacion{
     this.maxOcupantes = 0,
     this.maxAdultos = 0,
     this.maxMenores = 0,
+    this.descripreservaesp = '',
+    this.descripreservaing = ''
   });
 
   factory TipoHabitacion.fromJson(Map<String,dynamic> json){
@@ -52,6 +56,8 @@ class TipoHabitacion{
       maxOcupantes : maxDensidad,
       maxAdultos   : maxAd,
       maxMenores   : maxMn,  
+      descripreservaesp: json['descripreservaesp'],
+      descripreservaing: json['descripreservaing'],
     );
   }
 
@@ -64,6 +70,8 @@ class TipoHabitacion{
     'idtipotc'     : idtipotc,
     'tipo'         : tipo,
     'densidad'     : densidad,
+    'descripreservaesp':descripreservaesp,
+    'descripreservaing':descripreservaing
     //'maxOcupantes' : maxOcupantes,
     //'maxAdultos'   : maxAdultos,
     //'maxMenores'   : maxMenores,
