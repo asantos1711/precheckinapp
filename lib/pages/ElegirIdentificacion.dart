@@ -881,7 +881,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             } ,
             child: Text(
               Translations.of(context).text('finalizar'),
-              style: lightBlueText.copyWith(fontSize: 20),
+              style: lightBlueText.copyWith(fontSize: 15),
             ),
           ),
           DialogButton(
@@ -892,7 +892,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             } ,
             child: Text(
               Translations.of(context).text('intentar_nuevo'),
-              style: lightBlueText.copyWith(fontSize: 20),
+              style: lightBlueText.copyWith(fontSize: 15),
             ),
           ),
         ]
