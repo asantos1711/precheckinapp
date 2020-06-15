@@ -742,9 +742,9 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     String scannerResult;
     ScanerModel res;
     try {
-      Mrzflutterplugin.setIDActive(true);
+      //Mrzflutterplugin.setIDActive(true);
       Mrzflutterplugin.setPassportActive(true);
-      Mrzflutterplugin.setVisaActive(true);
+      //Mrzflutterplugin.setVisaActive(true);
 
       String jsonResultString = await Mrzflutterplugin.startScanner;
 
@@ -797,8 +797,8 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         } ,
         image: new Image.memory(bytes),
         context: context,
-        title: '',
-        content: Column(
+        title: Translations.of(context).text('fin_escaneo_titulo') + "\n" + Translations.of(context).text('fin_escaneo_body'),
+        /* content: Column(
           children: <Widget>[
             Container(
               height: 70,
@@ -821,7 +821,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
               )
             ),
           ],
-        ),
+        ), */
         buttons: [
           DialogButton(
             color: Colors.white,
@@ -851,13 +851,13 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           Navigator.pop(context);
         } ,
         context: context,
-        title: '',
-        content: Column(
+        title: Translations.of(context).text("no_passport"),
+        /* content: Column(
           children: <Widget>[
             Container(
               height: 70,
               child: AutoSizeText(
-                'No se encontró pasaporte',
+                Translations.of(context).text("no_passport"),
                 style: greyText.copyWith(fontWeight: FontWeight.bold),
                 //maxLines: 2,
                 maxFontSize: 25.0 ,
@@ -865,7 +865,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
               )
             ),
           ],
-        ),
+        ), */
         buttons: [
           DialogButton(
             color: Colors.white,

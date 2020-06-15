@@ -120,5 +120,6 @@
   "cuestionary_required":"It is necessary to answer the health survey",
   "all_cuestionary_required":"It is necessary to answer all the health surveys",
   "values_invalid" :"Some fields are required or invalid",
-  "idioma":"EN"
+  "idioma":"EN",
+  "no_passport": "No passport found. Capture the requested document."
 }

@@ -122,5 +122,6 @@
   "cuestionary_required":"Es necesario contestar la encuesta de sanidad",
   "all_cuestionary_required":"Es necesario contestar todas las encuesta de sanidad",
   "values_invalid" :"Algunos campos son obligatorios o inválidos",
-  "idioma":"ES"
+  "idioma":"ES",
+  "no_passport": "No se encontró pasaporte. Capture el documento solicitado."
 }
