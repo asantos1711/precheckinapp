@@ -70,7 +70,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     if (Platform.isAndroid) {
       Mrzflutterplugin.registerWithLicenceKey(config.configuracion.licenciaScaner);
     } else if (Platform.isIOS) {
-      Mrzflutterplugin.registerWithLicenceKey(config?.configuracion?.licenciaScanerIos);
+      Mrzflutterplugin.registerWithLicenceKey("C500C89F1E88DC48B05981B3CB55CEB287CB42CEC4886223D30555F0DE9B7C036E6C0BB2563CB6B933376B3590FA5FA52B5AAC55F8FA6F90777EAC1474E360655681C3AA91770BEBC3E2C524BBFB05E8");
     }
     super.initState();
   }
@@ -349,8 +349,8 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
       } ,
       context: context,
       image: Image.asset('assets/images/id_front.png'),
-      title: '',
-      content: Column(
+      title: Translations.of(context).text('foto_titulo_uno') +'\n'+ Translations.of(context).text('foto_body_uno'),
+      /* content: Column(
         children: <Widget>[
         Container(
           height: 70,
@@ -373,7 +373,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           )
         ),
         ],
-      ),
+      ), */
       buttons: [
         DialogButton(
           color: Colors.white,
@@ -479,8 +479,8 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
       } ,
       context: context,
       image: Image.asset('assets/images/id_back.png'),
-      title: '',
-      content: Column(
+      title: Translations.of(context).text('foto_titulo_dos')+'\n'+Translations.of(context).text('foto_body_dos'),
+      /* content: Column(
         children: <Widget>[
         Container(
           height: 70,
@@ -503,7 +503,7 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
           )
         ),
         ],
-      ),
+      ), */
       buttons: [
         DialogButton(
           color: Colors.white,
@@ -673,18 +673,18 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
         print('Se cerró la alerta');
       } ,
       context: context,
-      image: Image.network('https://image.shutterstock.com/image-vector/vector-illustration-passport-biometric-data-260nw-761890669.jpg'),
-      title: "",
-      content: Container(
-          height: 70,
-          child: AutoSizeText(
-            Translations.of(context).text('instruccion_scanner'),
-            style: greyText.copyWith(fontWeight: FontWeight.w700),
-            //maxLines: 2,
-            maxFontSize: 25.0 ,
-            minFontSize: 10.0 ,
-          )
-        ),
+      image: Image.network('https://image.shutterstock.com/image-vector/vector-illustration-passport-biometric-data-260nw-761890669.jpg' ),
+      title: Translations.of(context).text('instruccion_scanner'),
+     /* content: Expanded(
+        //height: 70,
+        child: AutoSizeText(
+          Translations.of(context).text('instruccion_scanner'),
+          style: greyText.copyWith(fontWeight: FontWeight.w700),
+          maxLines: 2,
+          maxFontSize: 25.0 ,
+          minFontSize: 10.0 ,
+        )
+      ),  */
       buttons: [
         DialogButton(
           color: Colors.white,
