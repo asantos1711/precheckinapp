@@ -848,7 +848,6 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
     return Alert(
         closeFunction:(){
           print('Se cerró la alerta');
-          Navigator.pop(context);
         } ,
         context: context,
         title: Translations.of(context).text("no_passport"),
@@ -871,13 +870,13 @@ class _ElegirIdentificacionState extends State<ElegirIdentificacion> {
             color: Colors.white,
             onPressed: () {
               Navigator.pop(context);
-              if(posi ==1){
+              /* if(posi ==1){
                 Navigator.pushReplacementNamed(context, 'infoTitular');
               }else if(posi ==2){
                 Navigator.pushReplacementNamed(context, 'infoAdicional');
               }else if(posi ==3){
                  Navigator.pushReplacementNamed(context, 'addHuesped');
-              }
+              } */
             } ,
             child: Text(
               Translations.of(context).text('finalizar'),
