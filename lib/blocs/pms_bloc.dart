@@ -180,8 +180,8 @@ class PMSBloc {
 
   //Determinar si la habitación tiene capacidad para mas acompañantes.
   bool get habilitarAddAcompaniantes {
-    int densidadAdultos =  _result?.tipoHabitacion?.maxAdultos;
-    int densidadMenores = _result?.tipoHabitacion?.maxMenores;
+    int densidadAdultos =  _result?.tipoHabitacion?.maxAdultos ?? 0;
+    int densidadMenores = _result?.tipoHabitacion?.maxMenores ?? 0;
     int adultosReserva  = _result.getTotalAdultos();
     int menoresReserva  = _result.getTotalMenores();
 
@@ -269,6 +269,38 @@ class PMSBloc {
       return _nuevoAcompaniante?.responseCovid ?? false;
     else
     return _result?.acompaniantes[posicion]?.responseCovid ?? false;
+  }
+
+  String get paisByPosicion {
+    String pais = _result?.pais;
+
+    if(_position == -1) {
+      if(_result.titular.pais != null)
+        pais =_result.titular.pais;
+
+    } else if(_position == -2){
+      if(_nuevoAcompaniante.pais != null)
+        pais = _nuevoAcompaniante.pais ?? 'USA';
+
+    } else {
+      if(_result?.acompaniantes[_position]?.pais != null)
+        pais = _result?.acompaniantes[_position]?.pais;
+        
+    }
+
+    return pais;
+  }
+
+  set paisByPosicion(String pais){
+    if(_position == -1) {
+      _result?.titular?.pais = pais;
+      _result?.pais = pais;
+      _result?.estado = '';
+    } else if(_position == -2){
+      _nuevoAcompaniante.pais = pais;
+    } else {
+       _result?.acompaniantes[_position]?.pais = pais;
+    }
   }
 
   //Verificar si las encuestas de los acompañantes estan contestadas.

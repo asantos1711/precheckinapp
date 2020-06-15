@@ -137,6 +137,12 @@ class InfoHospedaje extends StatelessWidget {
   }
 
   Widget _tipoHabitacion(BuildContext context, Result result){
+    String tipo = result.tipoHabitacion?.descripreservaesp;
+    if(Translations.of(context).text('idioma') == "EN")
+      tipo = result.tipoHabitacion?.descripreservaing;
+
+    print(tipo);
+
     return Container(
       width: double.infinity,
       decoration: boxDecorationDefault,
@@ -146,7 +152,8 @@ class InfoHospedaje extends StatelessWidget {
         children: <Widget>[
           Text(Translations.of(context).text('tipo_habitacion'),style: greyText.copyWith(fontWeight: FontWeight.w200)),
           SizedBox(height: 5,),
-          Text(result.tipoHabitacion?.descripcion ?? '', style: valor),
+          //Text(result.tipoHabitacion?.descripcion ?? '', style: valor),
+          Text(tipo ?? '', style: valor),
           SizedBox(height: 5,)
         ],
       )

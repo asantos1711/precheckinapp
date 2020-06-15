@@ -49,7 +49,7 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
     _pmsBloc = new PMSBloc();
     _ahora   = new DateTime.now();
 
-    _pais         = _pmsBloc?.pais;
+    _pais         = _pmsBloc?.paisByPosicion;
     _acompaniante = _pmsBloc.getAcompaniante();
     _questions    = _acompaniante?.covidQuestions ?? new CovidQuestionsModel();
     _nacimiento   = fechaByString(_acompaniante?.fechanac);
@@ -78,6 +78,7 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
     _otrosSintomas      = (_questions?.otrosSintomas!= null && _questions?.otrosSintomas.isNotEmpty) ? true : false;
     _ctrlSintomas       = new TextEditingController(text: _questions?.otrosSintomas ?? '');
     
+    _questions.nombre =  _acompaniante?.nombre;
     _questions.fecha = "${_ahora.year}-${_ahora.month}-${_ahora.day}";
     _questions.edad  = _edad;
     _questions.email = _email;
@@ -196,10 +197,10 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
           Text(Translations.of(context).text('procedencia'), style: greyText.copyWith(fontWeight: FontWeight.w200),),
           PaisesWidget(
             hotel:_pmsBloc.idHotel,
-            valorInicial: _pais ?? "MEX",
+            valorInicial: (_pais.isEmpty) ? "MEX" : _pais,
             change: (pais) => setState(() {
               _pais         = pais;
-              _pmsBloc.pais = pais;
+              _pmsBloc.paisByPosicion = pais;
               _questions.procedencia = pais;
             })
           )
