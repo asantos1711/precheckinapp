@@ -6,6 +6,7 @@ import 'package:precheckin/models/covid_questions_model.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/utils/fecha_util.dart';
+import 'package:precheckin/widgets/check_text_bold.dart';
 import 'package:precheckin/widgets/paises_widget.dart';
 
 class QuestionsCovidPage extends StatefulWidget {
@@ -17,6 +18,7 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
   PMSBloc _pmsBloc;
   Acompaniantes _acompaniante;
   CovidQuestionsModel _questions;
+  List<Politicas> _politicas;
 
   DateTime _ahora;
   DateTime _nacimiento;
@@ -82,6 +84,8 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
     _questions.fecha = "${_ahora.year}-${_ahora.month}-${_ahora.day}";
     _questions.edad  = _edad;
     _questions.email = _email;
+
+    _politicas = _pmsBloc.politicas;
   }
   
   @override
@@ -110,6 +114,7 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
             _malestar(),
             _respirar(),
             _sintomas(),
+            _terminos(),
             _buttonGuardar()
           ],
         ),
@@ -459,6 +464,18 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
     );
   }
 
+  Widget _terminos(){
+    return CheckTextBold( context,
+      width: _screenWidth,
+      value: (_questions.avisoPrivacidad==1) ? true : false,
+      onChange: (val)=> setState(()=>_questions.avisoPrivacidad = val ? 1 : 0),
+      text: Translations.of(context).text('acepto_deacuerdo'),
+      textBold: Translations.of(context).text('aviso_privacidad'),
+      viewWebVal: 'seg_avi_privapp',
+      politicas: _politicas,
+    );
+  }
+
    Widget  _buttonGuardar(){
     return Container(
       width: double.infinity - 20,
@@ -471,7 +488,7 @@ class _QuestionsCovidPageState extends State<QuestionsCovidPage> {
         color: Theme.of(context).primaryColor,
         padding: EdgeInsets.all(8.0),
         splashColor: Colors.orange,
-        onPressed: (){
+        onPressed: _questions.avisoPrivacidad!=1 ? null : (){
           _pmsBloc.setCuestionarioCovid(_questions);
 
           if(_pmsBloc.getposition() == -1)

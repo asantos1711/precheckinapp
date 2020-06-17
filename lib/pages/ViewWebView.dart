@@ -88,6 +88,9 @@ class _ViewWebViewState extends State<ViewWebView> {
           dataHtml += """<div>${poli.seg_acu_est}</div>""";
           dataHtml += """<div>${poli.seg_san_amb}</div>""";
         break;
+      case 'seg_avi_privapp':
+        dataHtml = """<div>${poli.seg_avi_privapp}</div>""";
+      break;
       default: dataHtml = """<div>Hola</div>""";
     }  
   }
