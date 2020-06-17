@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPreferences {
@@ -12,10 +13,13 @@ class UserPreferences {
 
 
   SharedPreferences _pref;
+  bool _apple = false;
 
   initPref() async {
     _pref = await SharedPreferences.getInstance();
 
+    if(Platform.isIOS)
+      _apple = true;
   }
 
   String get idioma {
@@ -41,4 +45,6 @@ class UserPreferences {
   set tieneLigadas(bool value){
     _pref.setBool("tieneLigadas", value);
   }
+
+  bool get isApple => _apple;
 }

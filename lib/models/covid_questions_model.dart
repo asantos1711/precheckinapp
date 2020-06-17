@@ -19,6 +19,7 @@ class CovidQuestionsModel {
   bool malestarGeneral;
   bool dificultadRespirar;
   String otrosSintomas;
+  int avisoPrivacidad;
 
   CovidQuestionsModel({
     this.idcliente          = 0,
@@ -39,7 +40,8 @@ class CovidQuestionsModel {
     this.tos                = false,
     this.malestarGeneral    = false,
     this.dificultadRespirar = false,
-    this.otrosSintomas      = ""
+    this.otrosSintomas      = "",
+    this.avisoPrivacidad    = 1
   });
 
   factory CovidQuestionsModel.fromJson(Map<String,dynamic> json) => CovidQuestionsModel(
@@ -62,6 +64,7 @@ class CovidQuestionsModel {
     malestarGeneral    : json['malestargeneral'],
     dificultadRespirar : json['dificultadrespirar'],
     otrosSintomas      : json['otrossintomas'],
+    avisoPrivacidad    : json['estaviprivapp'] ?? 1,
   );
 
   Map<String, dynamic> toJson() => {
@@ -84,5 +87,6 @@ class CovidQuestionsModel {
     "malestargeneral"    : malestarGeneral,
     "dificultadrespirar" : dificultadRespirar,
     "otrossintomas"      : otrosSintomas,
+    "estaviprivapp"      : avisoPrivacidad,
   };
 }

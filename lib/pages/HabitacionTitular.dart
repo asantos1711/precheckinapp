@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:precheckin/models/commons/politicas_model.dart';
+import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/utils/tools_util.dart';
@@ -29,6 +30,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
   double _screenWidth;
   List<Politicas> _politicas;
   SignatureController _ctrlFirma = SignatureController();
+  UserPreferences _pref = new UserPreferences();
   
   AnimationController _controller;
   static const List<String> _funcionList = const [ "1","2" ];
@@ -264,7 +266,7 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
         onPressed: (_pmsBloc.bloquearBoton()) ? null : () {
           if(_pmsBloc.fnTituar == null || _pmsBloc.nombreTitular == null)
             showAlert(context, Translations.of(context).text("name_age_invalid"));
-          else if(_pmsBloc.verificarEncuenta(-1))
+          else if(_pmsBloc.verificarEncuenta(-1) || _pref.isApple)
             Navigator.pushNamed(context, 'infoAdicional');
           else
             showAlert(context, Translations.of(context).text("cuestionary_required"));

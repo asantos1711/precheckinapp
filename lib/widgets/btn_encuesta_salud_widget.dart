@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:precheckin/blocs/pms_bloc.dart';
 import 'package:precheckin/tools/translation.dart';
+import 'package:precheckin/preferences/user_preferences.dart';
 
 class BtnEncuestaSalud extends StatelessWidget {
   PMSBloc pmsBloc;
@@ -8,6 +9,7 @@ class BtnEncuestaSalud extends StatelessWidget {
   Color textColor = Colors.white;
   Color backGround = Color(0xff3F5AA6);
   Widget icon = Container();
+  UserPreferences pref = new UserPreferences();
 
   BtnEncuestaSalud({
     @required this.pmsBloc,
@@ -22,7 +24,7 @@ class BtnEncuestaSalud extends StatelessWidget {
       icon = Icon(Icons.check_circle_outline, color:Colors.white, size: 30);
     }
 
-    return FlatButton(
+    Widget widget = FlatButton(
       textColor: textColor,
       color: backGround,
       padding: EdgeInsets.all(8.0),
@@ -41,5 +43,10 @@ class BtnEncuestaSalud extends StatelessWidget {
         Navigator.pushReplacementNamed(context, "questionsCovid");
       },
     );
+
+    if(pref.isApple)
+      widget = Container();
+
+    return widget;
   }
 }

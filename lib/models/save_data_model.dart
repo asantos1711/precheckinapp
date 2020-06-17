@@ -4,6 +4,7 @@ import 'package:precheckin/models/commons/tipo_habitacion_model.dart';
 import 'package:precheckin/models/commons/vuelos_model.dart';
 import 'package:precheckin/models/commons/acuerdos_model.dart';
 import 'package:precheckin/models/covid_questions_model.dart';
+import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/utils/fecha_util.dart' as futil;
 
 class SaveData {
@@ -61,6 +62,7 @@ class Rh {
   List<Vecaco> vecaco;
   List<Vuelos> vuelos;
   TipoHabitacion tipoHabitacion;
+  UserPreferences pref = new UserPreferences();
 
   Rh({
       this.idreserva,
@@ -111,6 +113,7 @@ class Rh {
   }
 
   Map<String, dynamic> toJson() => {
+    "isIos"           : pref.isApple,
     "idreserva"       : idreserva,
     "idcliente"       : idcliente,
     "uclub"           : uclub,

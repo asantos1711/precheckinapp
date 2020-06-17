@@ -183,11 +183,12 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
         child: Text(Translations.of(context).text('finalizar'),
           style: TextStyle(fontSize: 20.0, fontFamily: 'Montserrat',fontWeight: FontWeight.bold),
         ),
-      ));
+      )
+    );
   }
 
   Future _saveData() async {
-    if(!_pmsBloc.verificarEncuestas())
+    if(!_pmsBloc.verificarEncuestas() || _pref.isApple)
       tools.showAlert(context, Translations.of(context).text("all_cuestionary_required"));
     else{
 
