@@ -51,7 +51,7 @@ class _CardAcompananteState extends State<CardAcompanante> {
     _signature    = this.widget.signature;
     _acompaniante = this.widget.acompaniante;
     _btnEncuesta  = this.widget.btnEncuesta;
-    _fecaNac      = DateTime.parse(_acompaniante.fechanac.replaceAll('-', ""));
+    _fecaNac      = _acompaniante.fechanac != null ? DateTime.parse(_acompaniante.fechanac.replaceAll('-', "")) :  DateTime.now();
     _date         = _fecaNac;
     _controllerText.text = _acompaniante?.nombre;
   }
