@@ -30,10 +30,10 @@ class SaveData {
     }
 
     Map<String, dynamic> toJson() => {
-      "dbdatostmp" : dbdatostmp.toJson(),
+      "dbdatostmp" : dbdatostmp==null ? null:dbdatostmp.toJson(),
       "iduser"     : iduser,
       "idhotel"    : idhotel,
-      "rh"         : rh.toJson(),
+      "rh"         : rh==null ? null:rh.toJson(),
     };
 }
 
@@ -127,10 +127,10 @@ class Rh {
     "estado"          : estado,
     "cpsocio"         : cpsocio,
     "usuarioregistro" : usuarioregistro,
-    "tarreg"          : acuerdos.toJson(),
-    "vecaco"          : List<dynamic>.from(vecaco.map((x) => x.toJson())),
-    "vuelos"          : List<dynamic>.from(vuelos.map((v) => v.toJson())),
-    "tipohabitacion"  : tipoHabitacion.toJson(),
+    "tarreg"          : acuerdos==null?null:acuerdos.toJson(),
+    "vecaco"          : vecaco==null || vecaco.isEmpty ? []:List<dynamic>.from(vecaco.map((x) => x==null?null:x.toJson())),
+    "vuelos"          : vuelos ==null || vuelos.isEmpty?[]:List<dynamic>.from(vuelos.map((v) => v==null?null:v.toJson())),
+    "tipohabitacion"  : tipoHabitacion==null?null:tipoHabitacion.toJson(),
   };
 }
 

@@ -41,6 +41,7 @@ class _QRProvider{
 
     try
     {
+      print(body);
       final response = await http.post(
         uri, 
         headers: headers, 
@@ -49,7 +50,9 @@ class _QRProvider{
       );
 
       final decodedData = json.decode(response.body);
-      codigos = _setPersistenceQR(decodedData["codigos"]);
+      //print("decodeData " + decodedData.toString());
+      
+      codigos = decodedData["codigos"]==null?[]:_setPersistenceQR(decodedData["codigos"]);
     }
     catch (e)
     {

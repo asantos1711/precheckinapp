@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:precheckin/providers/idiomas_provider.dart';
 import 'package:precheckin/persitence/qr_persistence.dart';
+import 'package:precheckin/providers/qr_provider.dart';
 import 'package:precheckin/tools/application.dart';
 
 ///Widget Idiomas
@@ -48,7 +49,7 @@ class Idimonas extends StatelessWidget {
           ),
           child: Image.asset(idioma['img']),
         ),
-        onTap: (){
+        onTap: ()async{
           applic.onLocaleChanged(new Locale(idioma['languageCode'], idioma['countryCode']));
           
           //_persitence.qr = ["MC0yMTE0NjA1","MC0yMTE0NjA3","MC0yMTE0NjAz", "MC0yMTE0NjA0"];
@@ -56,8 +57,14 @@ class Idimonas extends StatelessWidget {
           if(_persitence.qr.isNotEmpty){
              if(_persitence.qr.length == 1)
               Navigator.pushNamed(context, "verQR", arguments: _persitence.qr[0]);
-             else
-              Navigator.pushNamed(context, 'codigosQR', arguments: _persitence.qr);
+             else{
+               List<dynamic> lista = await qrProvider.validarCodigos();
+
+              if(lista.isEmpty)
+                Navigator.pushNamed(context, 'nuevoCodigo');
+              else
+                Navigator.pushNamed(context, 'codigosQR', arguments: _persitence.qr);
+            }
           }
           else
             Navigator.pushNamed(context, 'nuevoCodigo');

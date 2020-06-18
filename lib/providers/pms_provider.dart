@@ -73,11 +73,10 @@ class PMSProvider {
     };
 
     try {
-      print("result $result");
       SaveData saveModel = SaveData.fromResult(result);
-      print("saveModel $saveModel");
       final body         = saveModel.toJson();
       String data        = jsonEncode(body);
+      //ssprint("data  $dsata");
       final response     = await http.post(
         uri, 
         headers: headers, 
