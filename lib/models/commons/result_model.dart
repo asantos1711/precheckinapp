@@ -61,10 +61,12 @@ class Result {
   });
 
   factory Result.fromJson( Map<String,dynamic> json ){
+    
     String estado = json['estado'] ?? "";
     estado = (estado.isEmpty || estado.trim() == "NIN") ? "-" : estado;
 
     Acompaniantes titular = Acompaniantes.fromResultJSON(json);
+    String pais = (titular!= null) ? (titular?.pais??'') : '';
     List<Acompaniantes> acompaniantes = [];
     
     if(json['vecaco'] != null){
@@ -89,6 +91,7 @@ class Result {
         } else {
           huesped.covidQuestions.idcliente = huesped?.idcliente;
           huesped.covidQuestions.item = huesped?.idacompaniantes;
+          huesped.pais = pais;
           acompaniantes.add(huesped);
           if(huesped?.covidQuestions?.fecha != null){
             if(huesped.covidQuestions.fecha.isNotEmpty)
