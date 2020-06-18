@@ -41,7 +41,7 @@ class _QRProvider{
 
     try
     {
-      print(body);
+      //print(body);
       final response = await http.post(
         uri, 
         headers: headers, 
