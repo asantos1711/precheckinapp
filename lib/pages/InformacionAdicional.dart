@@ -66,8 +66,8 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
           ListView(
             children: <Widget>[
               _acompanantes(),
-             //_agregarAco(),
-              //_buttonFinalizar(),
+              _agregarAco(),
+              _buttonFinalizar(),
             ],
           ),
           tools.bloqueaPantalla(_bloquear)
