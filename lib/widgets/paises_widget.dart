@@ -59,12 +59,18 @@ class PaisesWidget extends StatelessWidget {
   List<DropdownMenuItem<String>> _getItems() {
     List<DropdownMenuItem<String>> lista = new List();
 
-    _paises.forEach( (pais) {
-      lista.add(DropdownMenuItem(
-        child: Text(pais.nombrepais),
-        value: pais.clavepais,
-      ));
-    });
+    try {
+      _paises.forEach( (pais) {
+        lista.add(DropdownMenuItem(
+          child: Text(pais.nombrepais ?? ''),
+          value: pais.clavepais ?? '',
+        ));
+      });
+    } catch(e) {
+      print("Error en la lista de paises: $e");
+      lista = [];
+    }
+   
 
     return lista;
   }
