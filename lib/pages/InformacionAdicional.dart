@@ -188,7 +188,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   }
 
   Future _saveData() async {
-    if(!_pmsBloc.verificarEncuestas() || _pref.isApple)
+    if(!_pmsBloc.verificarEncuestas() && !_pref.isApple)
       tools.showAlert(context, Translations.of(context).text("all_cuestionary_required"));
     else{
 
