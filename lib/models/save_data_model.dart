@@ -208,6 +208,6 @@ class Vecaco {
       "documentexpdate" : documentexpdate,
       "istitular"       : istitular,
       //"responseCovid"   : responseCovid,
-      "cuestionariocovid"  : covidQuestions.toJson()
+      "cuestionariocovid"  : covidQuestions!= null ? covidQuestions.toJson(): null
   };
 }
