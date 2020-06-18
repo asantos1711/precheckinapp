@@ -73,7 +73,9 @@ class PMSProvider {
     };
 
     try {
+      print("result $result");
       SaveData saveModel = SaveData.fromResult(result);
+      print("saveModel $saveModel");
       final body         = saveModel.toJson();
       String data        = jsonEncode(body);
       final response     = await http.post(

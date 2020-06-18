@@ -170,7 +170,7 @@
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = BVF4H9RLCJ;
+						DevelopmentTeam = RCAVNLB3PC;
 						LastSwiftMigration = 1100;
 					};
 				};
@@ -541,7 +541,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = 5;
-				DEVELOPMENT_TEAM = BVF4H9RLCJ;
+				DEVELOPMENT_TEAM = RCAVNLB3PC;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
