@@ -3,7 +3,6 @@ import 'package:precheckin/models/commons/result_model.dart';
 import 'package:precheckin/models/commons/tipo_habitacion_model.dart';
 import 'package:precheckin/models/commons/vuelos_model.dart';
 import 'package:precheckin/models/commons/acuerdos_model.dart';
-import 'package:precheckin/models/covid_questions_model.dart';
 import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/utils/fecha_util.dart' as futil;
 
@@ -150,7 +149,6 @@ class Vecaco {
     String documentexpdate;
     int istitular;
     bool responseCovid;
-    CovidQuestionsModel covidQuestions;
 
     Vecaco({
       this.club,
@@ -168,7 +166,6 @@ class Vecaco {
       this.documentexpdate,
       this.istitular,
       this.responseCovid,
-      this.covidQuestions
     });
 
     factory Vecaco.fromAcompaniante(Acompaniantes acompaniante) {
@@ -187,8 +184,6 @@ class Vecaco {
         documenttype    : acompaniante.documenttype,
         documentexpdate : futil.splitFecha(acompaniante.documentexpdate),
         istitular       : acompaniante.istitular ? 1 : 0,
-        responseCovid   : acompaniante.responseCovid,
-        covidQuestions  : acompaniante.covidQuestions
       );
     }
 
@@ -207,7 +202,5 @@ class Vecaco {
       "documenttype"    : documenttype,
       "documentexpdate" : documentexpdate,
       "istitular"       : istitular,
-      //"responseCovid"   : responseCovid,
-      "cuestionariocovid"  : covidQuestions!= null ? covidQuestions.toJson(): null
   };
 }

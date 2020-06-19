@@ -79,24 +79,9 @@ class Result {
           titular.imageback       = huesped?.imageback;
           titular.imagesign       = huesped?.imagesign;
           titular.fechanac        = huesped?.fechanac;
-          titular.covidQuestions  = huesped?.covidQuestions;
-          titular.covidQuestions.idcliente = titular?.idcliente;
-          titular.covidQuestions.item = titular?.idacompaniantes;
-
-          if(huesped?.covidQuestions?.fecha != null){
-            if(huesped.covidQuestions.fecha.isNotEmpty)
-              titular.responseCovid = true;
-          }
-
         } else {
-          huesped.covidQuestions.idcliente = huesped?.idcliente;
-          huesped.covidQuestions.item = huesped?.idacompaniantes;
           huesped.pais = pais;
           acompaniantes.add(huesped);
-          if(huesped?.covidQuestions?.fecha != null){
-            if(huesped.covidQuestions.fecha.isNotEmpty)
-              huesped.responseCovid = true;
-          }
         }
       });
     }

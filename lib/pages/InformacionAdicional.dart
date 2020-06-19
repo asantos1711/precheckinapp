@@ -11,7 +11,6 @@ import 'package:precheckin/preferences/user_preferences.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/widgets/ColumnBuilder.dart';
-import 'package:precheckin/widgets/btn_encuesta_salud_widget.dart';
 import 'package:precheckin/widgets/card_acompanante.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:signature/signature.dart';
@@ -57,7 +56,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     height = MediaQuery.of(context).size.height;
     width  = MediaQuery.of(context).size.width;
     _agregarAcompaniantes = _pmsBloc.habilitarAddAcompaniantes;
-    //setState(()=>_pmsBloc.posRoute = 2);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _appBar(),
@@ -117,7 +115,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
                 posi : 2,
                 acompaniante: _pmsBloc.acompaniantes[index],
                 signature:  _firma(_controllerSignature, index),
-                btnEncuesta: _buttonEncuentaCovid(index),
               ),
             )
           );
@@ -136,15 +133,6 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
     );
   }
 
-  Widget  _buttonEncuentaCovid(int position){
-    return Center(
-      child:  BtnEncuestaSalud(
-        pmsBloc: _pmsBloc,
-        posicion: position,
-      ),
-    );
-  }
- 
   Widget _agregarAco() {
     if(!_agregarAcompaniantes)
       return Container();
@@ -188,9 +176,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
   }
 
   Future _saveData() async {
-    if(!_pmsBloc.verificarEncuestas() && !_pref.isApple)
-      tools.showAlert(context, Translations.of(context).text("all_cuestionary_required"));
-    else{
+    
 
       _bloquearPantalla(true);
       
@@ -218,7 +204,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
           Navigator.pushNamed(context, 'litaReserva', arguments: _reserva);
         }
       }
-    }
+    
 
   }
 

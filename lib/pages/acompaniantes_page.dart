@@ -7,7 +7,6 @@ import 'package:precheckin/providers/configuracion_provider.dart';
 import 'package:precheckin/tools/translation.dart';
 import 'package:precheckin/styles/styles.dart';
 import 'package:precheckin/utils/tools_util.dart' as tools;
-import 'package:precheckin/widgets/btn_encuesta_salud_widget.dart';
 import 'package:precheckin/widgets/card_acompanante.dart';
 import 'package:precheckin/widgets/custom_signature.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
@@ -143,7 +142,6 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
         adultos: !(_maxAdultos > 0),
         menores: !( _maxMenores > 0),
         nuevo: true,
-        btnEncuesta: _buttonEncuentaCovid(),
         signature: CustomSignature(
           controller: _sigController,
         ),
@@ -151,15 +149,6 @@ class _AcompaniantesPageState extends State<AcompaniantesPage> {
     );
   }
 
-  /**
-   * Para agregar el botón de acompañantes
-   */
-  Widget  _buttonEncuentaCovid() => Center(
-    child: BtnEncuestaSalud(
-      pmsBloc: _pmsBloc,
-      posicion: -2,
-    ),
-  );
 
   /**
    * Muestr la leyenda que informa del

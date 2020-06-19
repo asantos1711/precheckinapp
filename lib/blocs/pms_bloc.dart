@@ -2,7 +2,6 @@ import 'package:age/age.dart';
 import 'package:precheckin/models/commons/acompaniantes_model.dart';
 import 'package:precheckin/models/commons/politicas_model.dart';
 export 'package:precheckin/models/commons/politicas_model.dart';
-import 'package:precheckin/models/covid_questions_model.dart';
 import 'package:precheckin/models/reserva_model.dart';
 export 'package:precheckin/models/reserva_model.dart';
 import 'package:precheckin/providers/pms_provider.dart';
@@ -247,29 +246,6 @@ class PMSBloc {
       return _result?.acompaniantes[_position];
   }
 
-  //Asignar las respuestas al acompañante.
-  void setCuestionarioCovid(CovidQuestionsModel q){
-    if(_position == -1) {
-      _result?.titular?.responseCovid = true;
-      _result?.titular?.covidQuestions = q;
-    } else if(_position == -2){
-      _nuevoAcompaniante.responseCovid = true;
-      _nuevoAcompaniante.covidQuestions = q;
-    } else {
-       _result?.acompaniantes[_position]?.responseCovid = true;
-       _result?.acompaniantes[_position]?.covidQuestions = q;
-    }
-  }
-
-  //Verificar si se contestó la encuesta de salud
-  bool verificarEncuenta(int posicion) {
-    if(posicion == -1) 
-      return _result?.titular?.responseCovid ?? false;
-    else if(posicion == -2)
-      return _nuevoAcompaniante?.responseCovid ?? false;
-    else
-    return _result?.acompaniantes[posicion]?.responseCovid ?? false;
-  }
 
   String get paisByPosicion {
     String pais = _result?.pais;
@@ -303,22 +279,6 @@ class PMSBloc {
     }
   }
 
-  //Verificar si las encuestas de los acompañantes estan contestadas.
-  bool verificarEncuestas(){
-    if(_result?.acompaniantes == null || _result.acompaniantes.isEmpty)
-      return true;
-
-    bool status = true;
-
-    for (var i = 0; i < _result.acompaniantes.length; i++) {
-      if(!(_result.acompaniantes[i].responseCovid)){
-        status = false;
-        break;
-      }
-    }
-
-    return status;
-  }
 
   //Inicializar el objeto para el nuevo acompañante
   void inicializarAcompaniante() {

@@ -1,5 +1,3 @@
-import 'package:precheckin/models/covid_questions_model.dart';
-
 class Acompaniantes{
   int club;
   int idcliente;
@@ -27,8 +25,6 @@ class Acompaniantes{
   bool istitular;
   String estado;
   String codigoPostal;
-  bool responseCovid;
-  CovidQuestionsModel covidQuestions;
 
   Acompaniantes({
     this.club,
@@ -57,13 +53,9 @@ class Acompaniantes{
     this.istitular = false,
     this.estado = '',
     this.codigoPostal = '',
-    this.covidQuestions,
-    this.responseCovid = false
   });
 
   factory Acompaniantes.fromJson(Map<String,dynamic> json){
-    //print(json['istitular']);
-    //print(json['cuestionariocovid']);
 
     return Acompaniantes(
     club            : json['club'],
@@ -92,7 +84,6 @@ class Acompaniantes{
     istitular       : json['istitular'] ?? false,
     estado          : json['estado'] ?? '',
     codigoPostal    : json['cpsocio'] ?? '',
-    covidQuestions  : json['cuestionariocovid']!=null ? CovidQuestionsModel.fromJson(json['cuestionariocovid']): new CovidQuestionsModel()
   );
   }
 
@@ -112,8 +103,6 @@ class Acompaniantes{
       istitular       : true,
       estado          : estado,
       codigoPostal    : json['cpsocio'] ?? "",
-      responseCovid   : json['responseCovid'],
-      covidQuestions  : json['cuestionariocovid']!= null ? CovidQuestionsModel.fromJson(json['cuestionariocovid']) : new CovidQuestionsModel(),
     );
   }
 }
