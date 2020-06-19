@@ -123,5 +123,6 @@
   "all_cuestionary_required":"Es necesario contestar todas las encuesta de sanidad",
   "values_invalid" :"Algunos campos son obligatorios o inválidos",
   "idioma":"ES",
-  "no_passport": "No se encontró pasaporte. Capture el documento solicitado."
+  "no_passport": "No se encontró pasaporte. Capture el documento solicitado.",
+  "not_save_data": "No es posible guardar datos en este momento"
 }

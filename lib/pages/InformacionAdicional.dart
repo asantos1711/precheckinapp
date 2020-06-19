@@ -185,7 +185,7 @@ class _InformacionAdicionalState extends State<InformacionAdicional> {
       _bloquearPantalla(false);
 
       if(!status)
-        tools.showAlert(context, "No se logro guardar los datos");
+        tools.showAlert(context, Translations.of(context).text("not_save_data"));
       else {
         if(!_qr.contains(_reserva.codigo))
           _qr.add(_reserva.codigo);

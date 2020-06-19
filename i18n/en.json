@@ -121,5 +121,6 @@
   "all_cuestionary_required":"It is necessary to answer all the health surveys",
   "values_invalid" :"Some fields are required or invalid",
   "idioma":"EN",
-  "no_passport": "No passport found. Capture the requested document."
+  "no_passport": "No passport found. Capture the requested document.",
+  "not_save_data": "Is not possible save data at this time"
 }
