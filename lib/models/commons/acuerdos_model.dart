@@ -16,7 +16,6 @@ class Acuerdos {
     this.estobjdes       = 0,
     this.estsanamb       = 0,
     this.idcliente       = 0,
-    this.reglamentoCOVID = 0,
   });
 
   factory Acuerdos.fromJson(Map<String, dynamic> json) => Acuerdos(
@@ -27,7 +26,6 @@ class Acuerdos {
     estobjdes       : json['estobjdes']  ?? 0,
     estsanamb       : json['estsanamb']  ?? 0,
     idcliente       : json['idcliente']  ?? 0,
-    reglamentoCOVID : json['idcliente']  ?? 0,
   );
 
   Map<String,dynamic> toJson() => {
@@ -38,6 +36,5 @@ class Acuerdos {
     'estobjdes'  : estobjdes,
     'estsanamb'  : estsanamb,
     'idcliente'  : idcliente,
-    'covid'      : reglamentoCOVID,
   };
 }

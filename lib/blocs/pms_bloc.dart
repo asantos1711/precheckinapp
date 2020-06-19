@@ -129,9 +129,6 @@ class PMSBloc {
   int get avisoPrivacidad => _result?.acuerdos?.avisoPrivacidad;
   set avisoPrivacidad(int val) => _result?.acuerdos?.avisoPrivacidad = val;
 
-  //GET/SET reglas COVID.
-  int get reglasCovid => _result?.acuerdos?.reglamentoCOVID;
-  set reglasCovid(int val) => _result?.acuerdos?.reglamentoCOVID = val;
 
   //GET/SET politicas y procesos.
   int get politicasProcesos => _result?.acuerdos?.estsanamb;
@@ -145,7 +142,6 @@ class PMSBloc {
     avisoPrivacidad   = val;
     reglamento        = val;
     politicasProcesos = val;
-    reglasCovid       = val;
   }
 
   //Obtner la lista de politicas
@@ -157,9 +153,8 @@ class PMSBloc {
     bool reg = (reglamento!=1) ? true : false;
     bool pol = (politicasProcesos!=1) ? true : false;
     bool avi = (avisoPrivacidad!=1) ? true : false;
-    bool cvd = (reglasCovid!=1) ? true : false;
 
-    return (reg || pol || avi || cvd);
+    return (reg || pol || avi);
   }
 
   //GET/SET Firma del titular

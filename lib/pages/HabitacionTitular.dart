@@ -153,7 +153,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
           _reglamentoHotel(),
           _politicasProcedimientos(),
           _avisoProvacidad(),
-          _reglamentoCovid(),
           _recibirInformacion(),
         ],
       ),
@@ -196,17 +195,6 @@ class _HabitacionTitularState extends State<HabitacionTitular> with TickerProvid
     );
   }
 
-  Widget _reglamentoCovid(){
-    return CheckTextBold( context,
-      width: _screenWidth,
-      value: (_pmsBloc.reglasCovid==1) ? true : false,
-      onChange: (val)=> setState(()=> _pmsBloc.reglasCovid=val ? 1 : 0),
-      text: Translations.of(context).text('reglameto_covid'),
-      textBold: '',
-      viewWebVal: '',
-      politicas: _politicas,
-    );
-  }
 
   Widget _recibirInformacion(){
     return CheckTextBold( context,
